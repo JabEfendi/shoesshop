@@ -1,0 +1,416 @@
+
+================================================================================
+FILE: Dokumen Pertanyaan & jawaban Kebutuhan Website Sepatu Kulit (done).pdf
+================================================================================
+
+--- Halaman 1 ---
+
+DAFTAR PERTANYAAN & ALASAN ANALISIS KEBUTUHAN WEBSITE
+Pengembangan E-Commerce & Modul Custom Shoes (Foot Fashion - Sepatu Kulit)
+1. KONSEP & ALUR KUSTOMISASI (CUSTOMIZER ENGINE)
+1.1 Elemen Komponen Produk
+Pertanyaan: Apa saja komponen sepatu yang dapat dikustomisasi secara bebas oleh pembeli (misal: upper
+leather, lining, jenis sol, warna jahitan, aksesoris gesper, hingga grafir nama)?
+Penjelasan: Pendataan seluruh pilihan variasi visual dan material yang ditawarkan kepada calon pembeli pada
+modul kustomisasi.
+Alasan Teknis/Bisnis: Menentukan struktur basis data (database schema), relasi atribut produk, serta berapa
+banyak lapisan gambar (image layers) yang harus disiapkan oleh pengembang.
+(JAWABAN)
+1. BOOTS 2. CHELSEA BOOTS
+3. PANTOFEL 4. DOCMART
+5. LOAFERS
+Dokumen Analisis Kebutuhan Website E-Commerce & Custom Leather Shoes Halaman 1 dari 8
+
+--- Halaman 2 ---
+
+“Notes” : jadi untuk setiap model, elemen-elemen yang bisa di customized itu berbeda-beda mas jap (seperti gambar
+di setiap model yang udah saya kasih diatas). Karena ada elemen yang di model sepatu satu terpasang, tapi di model
+sepatu lainnya tidak ada. Begitupula sebaliknya, tapi kalo pertanyaannya “elemen-elemen apa aja yang bisa di
+customized?” elemen-elemen nya saya jabarin dibawah yaa…
+“btw model-model sepatu diatas itu yang bakal dimasukan untuk produk customized.”
+ELEMEN-ELEMEN CUSTOMIZED:
+- motif kulit sapi
+- warna benang jahitan kulit sapi
+- warna benang jahitan outsole
+- warna eyelet (ring besi pada lubang tali)
+- warna panel elastis (hanya di model Chelsea boots)
+- warna tali sepatu
+- motif storm welt
+- bentuk outsole
+“Elemen-elemen yang terpasang di sepatu menyesuaikan kebutuhan dari setiap model yaa mas jap.”
+1.2 Visualisasi Modul Kustomisasi
+Pertanyaan: Apakah visualisasi kustomisasi cukup berupa preview gambar 2D bertumpuk (PNG/SVG Layer)
+atau membutuhkan render 3D interaktif yang bisa diputar 360 derajat?
+Penjelasan: Preview 2D menggunakan metode image overlaying dinamis, sedangkan 3D menggunakan
+teknologi WebGL yang memungkinkan produk diputar dari berbagai sudut.
+Alasan Teknis/Bisnis: Menentukan kompleksitas teknologi, biaya pembuatan aset visual, durasi pengerjaan
+proyek, serta performa kecepatan pemuatan website pada perangkat seluler.
+(JAWABAN)
+*render 3D (360 DERAJAT)*
+“Notes” : Tapi kembali lagi ke mas jap untuk sanggup atau tidak nya. Kalau tidak bisa menyanggupi yaa pakai
+yang 2D juga gapapa. Saya ingetin sekali lagi mas jap, saya ngga ngejar mas nya untuk nyelesain ini cepet cepet.
+Jadi waktu yang dipakai bisa Panjang dan bisa dipakai untuk memaksimalkan pengerjaan nya. Toh mas jap juga
+belom pernah buat model web yang seperti permintaan saya ini. Tapi lumayan lo mas semisal bisa berhasil buat
+web ini pakai render 3D, kan bisa buat tambah-tambah portofolio. Apalagi sepertinya belom ada yang buat web
+modelan kek gini. SEMANGAT!!!
+Dokumen Analisis Kebutuhan Website E-Commerce & Custom Leather Shoes Halaman 2 dari 8
+
+--- Halaman 3 ---
+
+1.3 Aturan Kombinasi Produksi (Validation Rules)
+Pertanyaan: Apakah ada kombinasi bahan atau bentuk sol tertentu yang secara teknis tidak dapat diproduksi dan
+harus dibatasi pada sistem?
+Penjelasan: Logika pembatasan pada menu kustomisasi agar pelanggan tidak bisa memilih kombinasi
+komponen yang tidak sesuai standar produksi.
+Alasan Teknis/Bisnis: Mencegah terjadinya kesalahan pesanan dari pelanggan yang tidak bisa diproduksi oleh
+pengrajin/pabrik, sehingga menghindari pembatalan pesanan secara manual.
+(JAWABAN)
+*bahan kulit (TIDAK ADA), bentuk outsole (ADA)*
+“Notes” : Jadi gini mas, setiap model sepatu itu nanti bentuk outsole nya berbeda beda, tapi ada yang bisa sama
+juga sih bentuk outsole nya. Aku kasih contoh model sepatu boots (1) dengan model docmart (4), dua model itu
+bentuk outsole nya bisa dipakai samaan. Karena memang untuk hitungan ukuran bagian dasar sepatu nya sama.
+Terus untuk model Chelsea boots (2), Pantofel (3), & Loafers (5) itu mereka bisa pakai outsole yang sama. Jadi
+disini terbagi jadi dua tipe sepatu, tipe formal (2, 3, 5) & tipe casual (1 dan 4). Sepatu yang tipe nya sama bisa
+pakai bentuk outsole yang sama. Sementara itu untuk masalah bahan kulit, sepertinya menurutku fleksibilitas nya
+cukup tinggi sih mas. jadi bisa dipakai di semua model sepatu.
+1.4 Formula Perhitungan Harga Dinamis
+Pertanyaan: Bagaimana alur perhitungan harga untuk sepatu kustomisasi? Apakah berbasis harga dasar (base
+price) ditambah opsi komponen, atau menggunakan skema harga tetap (flat rate)?
+Penjelasan: Menentukan bagaimana total biaya dihitung secara otomatis saat pelanggan menambah aksesoris
+premium atau menggunakan material khusus.
+Alasan Teknis/Bisnis: Mengatur logika perhitungan sistem di bagian backend serta memastikan transparansi
+rincian biaya pada halaman checkout.
+(JAWABAN)
+*BERBASIS HARGA DASAR (BASE PRICE) DITAMBAH OPSI KOMPONEN*
+“Notes”: Jadi nanti di setiap elemen-elemen customized ada harga nya sendiri-sendiri mas. Setiap buyer nambah
+elemen nya, harga nya nambah juga sesuai harga elemen nya. Sama setiap model sepatu (boots, Chelsea boots,
+pantofel, docmart, & loafers) harga nya berbeda-beda. Jadi nanti pas buyer sudah pilih salah satu model sepatu,
+harga nya langsung keluar gitu. Sama beda bentuk di setiap elemen harga nya juga bervariasi. Contohnya elemen
+outsole, begitu buyer pencet outsole nanti kan langsung keluar pilihan-pilihan bentuk outsole nya. Nah di bagian
+itu nanti harga setiap outsole nya bervariasi mas. Ini berlaku juga untuk elemen-elemen yang lain.
+Dokumen Analisis Kebutuhan Website E-Commerce & Custom Leather Shoes Halaman 3 dari 8
+
+--- Halaman 4 ---
+
+2. FITUR E-COMMERCE & PENGUKURAN (SIZING)
+2.1 Katalog Produk Ready-to-Wear
+Pertanyaan: Apakah selain sepatu kustom, website juga menjual produk katalog sepatu ready stock yang bisa
+langsung dibeli?
+Penjelasan: Menentukan apakah sistem membutuhkan dua alur belanja yang berbeda: transaksi langsung untuk
+barang ready stock dan alur pemesanan pre-order untuk barang kustom.
+Alasan Teknis/Bisnis: Memengaruhi arsitektur sistem keranjang belanja (shopping cart), manajemen inventaris
+stok, serta penyusunan filter pencarian katalog produk.
+(JAWABAN)
+*IYA*
+“Notes”: Tapi lebih baik gimana menurut mas jap? “Alasan Teknis/Bisnis: memengaruhi arsitektur sistem
+keranjang belanja (shopping cart), manajemen inventaris stok, serta penyusunan filter pencarian katalog produk.”
+Apakah nanti jadi mempersulit berjalannya system web tersebut? Kalo iya berarti gausah ada produk ready, tapi
+kita menyediakan model sepatu yang sudah kita desain sendiri sehingga buyer nda perlu lagi untuk customized
+sepatu nya. Jadi buyer tinggal klik salah satu dari produk desain yang sudah jadi, terus pilih ukuran sepatunya (tapi
+tetep harus kasih pilihan, mau pakai gambar kaki dia atau mau langsung pakai ukuran sepatu yang udah tertera
+aja).
+2.2 Fitur Panduan Ukuran & Sampel Bahan (Sample Kit)
+Pertanyaan: Apakah dibutuhkan modul petunjuk ukur kaki mandiri di rumah dan opsi pemesanan sampel bahan
+kulit sebelum transaksi kustom?
+Penjelasan: Menyediakan kalkulator panjang/lebar kaki (dalam milimeter) serta opsi pengiriman sampel
+potongan fisik bahan kulit ke alamat pembeli.
+Alasan Teknis/Bisnis: Meningkatkan tingkat konversi penjualan serta menekan risiko pengembalian barang
+akibat salah pilih ukuran atau ketidaksesuaian warna bahan secara fisik.
+(JAWABAN)
+* petunjuk ukur kaki mandiri (?), opsi pemesanan sampel bahan kulit (TIDAK)
+“Notes”: Buyer kan udah disuruh untuk nge gambar bentuk telapak kaki dia, jadi menurut aku mereka ga perlu
+untuk ngukur Panjang kaki mereka sendiri, tapi gaada salah nya juga sih minta buyer untuk ngukur Panjang kaki
+mereka. Biar bisa ngurangin resiko salah ukuran. Untuk sampel kulit kaya nya gausah ga sih, yang penting nama
+& gambar kulit di katalog nya udah jelas
+Dokumen Analisis Kebutuhan Website E-Commerce & Custom Leather Shoes Halaman 4 dari 8
+
+--- Halaman 5 ---
+
+3. MANAJEMEN OPERASIONAL & PEMESANAN
+3.1 Manajemen Pre-Order (PO) & Tracking Status Produksi
+Pertanyaan: Berapa estimasi durasi pengerjaan pesanan kustom, dan bagaimana alur penampil visual status
+progresnya kepada pembeli?
+Penjelasan: Menampilkan status tahapan pengerjaan secara transparan di dashboard pembeli (Pola/Cutting,
+Jahit/Stitching, Soling, Quality Control, Delivery).
+Alasan Teknis/Bisnis: Mengurangi beban layanan pelanggan (customer service) dari pertanyaan status pesanan
+serta memberikan transparansi proses pengerjaan kepada pembeli.
+(JAWABAN)
+*lama pengerjaan (1 MINGGU), status progres (?)
+“Notes”: Untuk lama pengerjaan nya 1 minggu, tapi aku masih ga paham sama status progres nya. Itu kaya di
+shopee gitu kah? yang ngeliatin Riwayat pengiriman nya udah sampai mana, kalo di kasus sepatu ini progress apa
+yang mau diliatin? Apa udah ready atau belum nya pesenan sepatu si buyer kah atau gimana?
+3.2 Kebijakan Garansi & Penyesuaian Ukuran (Resizing Policy)
+Pertanyaan: Bagaimana alur dan kebijakan retur atau resizing jika sepatu kustom yang sampai tidak pas di kaki
+pembeli?
+Penjelasan: Mekanisme penanganan klaim garansi produk kustom, seperti jaminan perbaikan ukuran gratis atau
+penggantian komponen tertentu.
+Alasan Teknis/Bisnis: Membutuhkan perancangan formulir pengajuan retur/garansi khusus di halaman akun
+pengguna dan sistem penanganan di bagian admin backend.
+(JAWABAN)
+*harus ada video unboxing sebagai bukti, ongkir retur ditanggung buyer*
+“Notes”: Nanti dikasih waktu 3 hari garansi kalo sepatu yang dateng ukuran/kriteria nya ga sesuai.
+Dokumen Analisis Kebutuhan Website E-Commerce & Custom Leather Shoes Halaman 5 dari 8
+
+--- Halaman 6 ---
+
+4. SISTEM PEMBAYARAN & PENGIRIMAN
+4.1 Skema Pembayaran (Down Payment vs Full Payment)
+Pertanyaan: Apakah pesanan kustomisasi wajib dibayar lunas di awal, atau diperbolehkan menggunakan sistem
+Uang Muka / Down Payment (DP)?
+Penjelasan: Pengaturan pembayaran dua tahap: DP pada saat pemesanan dan pelunasan saat produk selesai
+diproduksi dan siap dikirim.
+Alasan Teknis/Bisnis: Sistem DP membutuhkan logika pembayaran bertahap (split payment) pada gerbang
+pembayaran (payment gateway) serta sistem penagihan otomatis.
+(JAWABAN)
+*DP 50%
+“Notes”: Saat PO harus dp 50%, setelah sepatu sudah jadi baru buyer pelunasan payment. Tapi nanti untuk
+ngingetin buyer kalo sepatu nya udah jadi gimana ya mas jap? Mending lewat wa atau email yang otomatis dikirim
+seminggu setelah buyer PO? Tapi kalo lewat email gabisa kirim foto sepatu pesenan buyer yang udah jadi yaa…
+4.2 Payment Gateway & Ekspedisi Pengiriman
+Pertanyaan: Layanan Payment Gateway dan kurir logistik apa saja yang ingin terintegrasi secara otomatis di
+website?
+Penjelasan: Integrasi metode pembayaran otomatis (Virtual Account, QRIS, Kartu Kredit) dan penghitungan
+ongkos kirim ekspedisi secara real-time.
+Alasan Teknis/Bisnis: Menentukan kebutuhan integrasi API pihak ketiga (seperti Midtrans, Xendit, RajaOngkir)
+serta dokumen legalitas merchant yang diperlukan.
+(JAWABAN)
+*payment (QRIS & Virtual Account), ekspedisi pengiriman (SELAIN J&T, NINJA XPRESS)
+“Notes”: itu nanti untuk harga ekspedisi nya apa bisa langsung tertera di website setelah buyer nentuin lokasi nya?
+Kalo ekspedisi yang langsung muncul mungkin bisa masukin dari ekspedisi JNE, Antareja, ID Express, SiCepat,
+Pos Reguler.
+Dokumen Analisis Kebutuhan Website E-Commerce & Custom Leather Shoes Halaman 6 dari 8
+
+--- Halaman 7 ---
+
+5. DEMOGRAFI & PERSONA TARGET AUDIENS
+5.1 Rentang Usia & Segmentasi Gender Target Pembeli
+Pertanyaan: Berapa rentang usia utama calon pembeli (misal: Gen Z/Millennials 20-35 tahun atau Eksekutif 30-
+50 tahun) dan apa fokus gender produk Anda?
+Penjelasan: Mengidentifikasi profil pengguna utama website untuk menyesuaikan kenyamanan penggunaan
+antarmuka.
+Alasan Teknis/Bisnis: Menentukan ukuran huruf (readability), gaya bahasa teks, kontras tampilan, serta
+kompleksitas navigasi antarmuka pengguna (UX).
+(JAWABAN)
+*gen Z & Millenials, fokus gender pria*
+“Notes”: aku mau fokus ke target pasar gen z & millennials, planning nya nanti gimana cara nya biar 2 gen itu
+bisa tertarik buat beli produk ini. Cara yang baru aku pikirin untuk saat ini, nanti didalem web itu dimasukin model
+yang bukan dari pria muda aja, tapi bapak bapak yang menggambarkan pria matang. Model cowo muda nanti
+untuk sepatu tema casualan, model bapak bapak untuk sepatu tema formal.
+5.2 Gaya Hidup & Segmentasi Ekonomi
+Pertanyaan: Apakah produk diposisikan sebagai luxury/artisan product, daily casual leather, atau boot
+enthusiast?
+Penjelasan: Menentukan tingkat eksklusivitas penyampaian produk pada media digital.
+Alasan Teknis/Bisnis: Produk segmen luxury membutuhkan tata letak yang bersih dengan ruang kosong
+(whitespace) yang dominan, sedangkan segmen casual mengutamakan kejelasan informasi produk.
+(JAWABAN)
+*daily casual leather*
+“Notes”: Aku ngambil daily casual leather karena aku mau orang-orang ngelihat brand ini sebagai brand yang
+punya karakter yang jelas, tapi produknya bisa masuk ke beberapa gaya hidup. Jadi nanti image sepatu brand ini
+tuh bisa ngikutin berbagai cara berpakaian. Terus tiap model sepatu nya punya dunia visualnya sendiri. Contoh
+nya model pantofel Oxford bisa dibawakan pria matang pakai setelan formal, suasana kantor, hotel, atau business
+meeting. Loafer bisa dibawakan pria usia 20 an dengan pembawaannya yang clean, soft boy, smart casual, knitted
+polo, atau trousers. Boots bisa diarahkan ke gaya skena, denim, oversized shirt, workwear, atau streetwear. Chelsea
+boots bisa masuk ke dua dunia. Bisa untuk pria muda pake outfit minimalis, atau pria lebih dewasa dengan smart
+casual.
+Dokumen Analisis Kebutuhan Website E-Commerce & Custom Leather Shoes Halaman 7 dari 8
+
+--- Halaman 8 ---
+
+6. ARAH VISUAL, ESTETIKA & BRANDING (LOOK & FEEL)
+6.1 Visual Mood, Skema Warna & Benchmarking Website
+Pertanyaan: Suasana visual seperti apa yang diinginkan (Classic/Heritage, Modern Minimalist, atau Rustic)?
+Apa skema warna utama & website referensi yang disukai?
+Penjelasan: Menentukan panduan desain visual (UI Style Guide) serta mempelajari acuan tampilan dari website
+kompetitor.
+Alasan Teknis/Bisnis: Menghindari revisi besar desain antarmuka setelah tahap pemrograman dimulai serta
+menyelaraskan persepsi visual antara pengembang dan klien.
+(JAWABAN)
+*jujur aku ga bisa nentuin ini sendiri*
+“Notes”: mungkin poin ini bisa diomongin pas kita ketemu aja mas jap?
+7. FOTOGRAFI, ASSET & STORYTELLING
+7.1 Ketersediaan Aset Fotografi & Halaman Storytelling
+Pertanyaan: Apakah foto produk resolusi tinggi sudah tersedia, dan apakah butuh section khusus Craftsmanship
+/ Brand Story?
+Penjelasan: Menginventarisasi foto produk berkualitas serta penyiapan halaman informasi mengenai proses
+pembuatan dan keahlian pengrajin.
+Alasan Teknis/Bisnis: Foto resolusi tinggi adalah faktor utama dalam penjualan fashion online. Halaman
+Craftsmanship membantu memberikan justifikasi terhadap harga produk kustom.
+(JAWABAN)
+*butuh section khusus Craftsmanship / Brand Story*
+“Notes”: poin ini aku belum ada sama sekali, tapi saat ini aku udah pesen sepatu utuk dibuatkan biar bisa lebih
+cepat untuk mulai proses nya.
+Dokumen Analisis Kebutuhan Website E-Commerce & Custom Leather Shoes Halaman 8 dari 8
+
+
+================================================================================
+FILE: Rangkuman_dan_Pertanyaan_Lanjutan_Website_Sepatu_Kulit.pdf
+================================================================================
+
+--- Halaman 1 ---
+
+RANGKUMAN & PERTANYAAN LANJUTAN
+Analisis Kebutuhan Website E-Commerce & Modul Custom Shoes (Foot Fashion – Sepatu Kulit)
+Dokumen ini merangkum poin-poin jawaban dari dokumen analisis kebutuhan yang sudah diisi klien,
+serta menyusun pertanyaan lanjutan yang dianggap krusial untuk diklarifikasi sebelum masuk ke tahap
+desain sistem (database schema) dan pengembangan. Pertanyaan dikelompokkan mengikuti struktur
+bagian pada dokumen asli.
+1. Konsep & Alur Kustomisasi (Customizer Engine)
+Ringkasan jawaban:
+(cid:127) 5 model produk custom: Boots, Chelsea Boots, Pantofel, Docmart, Loafers.
+(cid:127) 8 elemen yang bisa dikustomisasi: motif kulit sapi, warna benang jahitan kulit, warna benang jahitan
+outsole, warna eyelet, warna panel elastis (khusus Chelsea Boots), warna tali, motif storm welt,
+bentuk outsole — namun elemen yang tersedia berbeda-beda tiap model (menyesuaikan komponen
+fisik model tersebut).
+(cid:127) Visualisasi yang diinginkan: render 3D 360°, tetapi klien fleksibel ke 2D layer jika 3D tidak sanggup
+dikerjakan (tidak ada tekanan deadline ketat).
+(cid:127) Aturan produksi: bahan kulit bebas dipakai di semua model. Bentuk outsole dibatasi per kelompok:
+tipe casual (Boots + Docmart) berbagi bentuk outsole yang sama, tipe formal (Chelsea Boots,
+Pantofel, Loafers) berbagi bentuk outsole lain.
+(cid:127) Skema harga: base price per model + tambahan harga per elemen yang dipilih, termasuk variasi
+harga di dalam satu elemen (misal antar bentuk outsole harganya beda-beda).
+Pertanyaan lanjutan yang krusial:
+1 Bisa dibuatkan matriks lengkap elemen × model? Saat ini baru contoh sebagian (mis. panel elastis
+hanya di Chelsea Boots) — tim developer perlu tahu persis elemen apa saja yang aktif/tidak aktif di
+kelima model agar struktur database (varian produk & relasi atribut) bisa dirancang dengan benar
+sejak awal.
+2 Untuk render 3D 360°: apakah akan menggunakan foto produk asli yang diambil dari banyak sudut
+(photogrammetry), atau model 3D digital (CGI) yang dibuat dari nol? Ini menentukan alat, biaya, dan
+estimasi waktu pengerjaan secara signifikan — perlu diputuskan sebelum jadwal produksi
+ditentukan.
+3 Mengingat kompleksitas 3D interaktif sangat tinggi untuk proyek solo, apakah klien terbuka dengan
+pendekatan bertahap: rilis awal (MVP) memakai 2D layer dulu supaya toko bisa mulai jalan, lalu
+3D 360° menyusul sebagai versi 2.0?
+4 Untuk aturan bentuk outsole: apakah benar-benar hanya 2 kelompok (casual: Boots+Docmart,
+formal: Chelsea Boots+Pantofel+Loafers), atau ada variasi bentuk outsole tambahan khusus di
+dalam satu kelompok yang sama?
+5 Perlu daftar harga lengkap: base price tiap 5 model, serta price list tiap pilihan di 8 elemen
+(termasuk semua varian bentuk outsole). Tanpa ini, logika perhitungan harga di backend belum bisa
+dibangun.
+2. Fitur E-Commerce & Pengukuran (Sizing)
+
+--- Halaman 2 ---
+
+Ringkasan jawaban:
+(cid:127) Awalnya klien menjawab 'iya' untuk produk ready-to-wear, tapi kemudian ragu dan menawarkan
+alternatif: produk desain jadi (bukan stok fisik siap kirim) yang tetap perlu dipilih ukurannya — tanpa
+proses kustomisasi.
+(cid:127) Untuk ukuran: metode utama adalah buyer mengunggah gambar/jejak telapak kaki mereka.
+Pengukuran panjang kaki manual dianggap opsional/tidak wajib. Pengiriman sampel bahan kulit fisik
+tidak diperlukan — cukup foto/nama material yang jelas di katalog.
+Pertanyaan lanjutan yang krusial:
+1 Perlu keputusan final soal model penjualan non-custom: (a) benar-benar tidak ada produk
+ready-stock fisik, hanya varian desain pre-set dari kanvas customizer yang sama; atau (b) tetap ada
+dua alur berbeda (custom + ready). Ini menentukan apakah dibutuhkan sistem manajemen
+stok/inventaris atau tidak sama sekali.
+2 Untuk metode 'gambar kaki': apakah buyer mengunggah foto jejak kaki di atas kertas dengan
+penggaris/patokan skala (metode umum brand custom shoes), lalu ukurannya dihitung manual
+oleh admin/pengrajin? Atau diharapkan otomatis lewat sistem/algoritma? Ini penting karena
+mengukur dari foto secara otomatis butuh effort teknis yang besar, sedangkan verifikasi manual oleh
+admin jauh lebih realistis untuk versi awal.
+3 Apakah tetap perlu disediakan size chart standar (EU/US/UK ke cm) sebagai opsi cepat untuk
+buyer yang tidak ingin repot foto jejak kaki, terutama untuk produk desain jadi (bukan custom)?
+4 Untuk produk desain jadi: siapa yang menentukan variasi desain yang dijual (klien sendiri yang
+membuat preset), dan berapa banyak preset yang direncanakan di awal peluncuran?
+3. Manajemen Operasional & Pemesanan
+Ringkasan jawaban:
+(cid:127) Estimasi pengerjaan pesanan custom: 1 minggu.
+(cid:127) Klien belum yakin bentuk 'status progres' yang ingin ditampilkan — apakah seperti tracking
+pengiriman (riwayat status) ala e-commerce marketplace, atau sekadar info sudah/belum selesai.
+(cid:127) Kebijakan resize/retur: buyer wajib menyertakan video unboxing sebagai bukti klaim, ongkos kirim
+retur ditanggung buyer, dengan masa klaim garansi 3 hari.
+Pertanyaan lanjutan yang krusial:
+1 Disarankan status progres memakai tahapan produksi yang sudah disebutkan di dokumen:
+Pola/Cutting fi Jahit/Stitching fi Soling fi Quality Control fi Delivery. Apakah klien setuju
+kelima tahap ini yang dipakai, atau ada tahap lain yang lebih sesuai dengan alur kerja pengrajin
+sebenarnya?
+2 Siapa yang meng-update status progres tiap pesanan — apakah klien/admin meng-input manual
+satu per satu di dashboard, atau ada rencana integrasi dengan sistem pengrajin/vendor produksi?
+3 Estimasi 1 minggu ini per pesanan tunggal — bagaimana jika pesanan menumpuk (banyak PO
+masuk bersamaan)? Apakah estimasi waktu perlu otomatis menyesuaikan antrian produksi, atau
+tetap fix di depan (dengan risiko molor)?
+4 Untuk klaim garansi 3 hari: dihitung sejak paket diterima buyer (berdasarkan status kurir) atau
+sejak tanggal pengiriman? Dan siapa yang memverifikasi video unboxing serta memutuskan klaim
+diterima/ditolak?
+
+--- Halaman 3 ---
+
+5 Jika klaim resize disetujui, apakah sepatu diperbaiki ulang (dengan biaya produksi tambahan
+ditanggung toko), atau dibuat baru dari awal? Ini memengaruhi SLA waktu penyelesaian klaim yang
+perlu ditampilkan ke buyer.
+4. Sistem Pembayaran & Pengiriman
+Ringkasan jawaban:
+(cid:127) Skema pembayaran: DP 50% saat PO, pelunasan 50% setelah sepatu selesai diproduksi.
+(cid:127) Klien masih mempertimbangkan cara mengingatkan buyer untuk pelunasan — via WhatsApp
+otomatis atau email otomatis (dengan catatan email tidak bisa lampirkan foto produk jadi).
+(cid:127) Payment gateway: QRIS & Virtual Account.
+(cid:127) Ekspedisi: jawaban utama menyebut 'selain J&T dan Ninja Xpress', namun catatan tambahan
+menyebut daftar spesifik JNE, Anteraja, ID Express, SiCepat, dan Pos Reguler — ada sedikit
+ketidaksesuaian antara kedua pernyataan ini.
+Pertanyaan lanjutan yang krusial:
+1 Perlu klarifikasi daftar ekspedisi final: apakah yang dipakai adalah JNE, Anteraja, ID Express,
+SiCepat, dan Pos Reguler seperti di catatan tambahan (bukan sekadar 'selain J&T dan Ninja
+Xpress')? Ini penting karena daftar kurir menentukan integrasi API ongkir yang harus disiapkan.
+2 Untuk notifikasi pelunasan: mengingat email tidak bisa menampilkan foto produk jadi, apakah klien
+setuju memakai WhatsApp API (resmi/business, misal lewat penyedia seperti Twilio atau
+Qontak) yang berbayar per pesan, atau cukup email otomatis + link ke halaman akun buyer yang
+menampilkan foto produk?
+3 Payment gateway pilihan (QRIS & VA) akan disalurkan lewat penyedia apa — Midtrans, Xendit, atau
+lainnya? Apakah klien sudah/berencana mendaftarkan akun merchant di salah satu penyedia
+tersebut, karena verifikasi bisnis biasanya makan waktu beberapa hari sampai minggu?
+4 Untuk skema DP 50%: jika buyer sudah bayar DP lalu ingin membatalkan pesanan sebelum
+produksi dimulai, apakah DP bisa dikembalikan (refund), dan berapa persen jika ada potongan?
+5 Ongkir real-time: apakah akan diintegrasikan lewat penyedia API pengecekan ongkir (misal
+RajaOngkir atau Biteship) supaya biaya kirim otomatis muncul begitu buyer memasukkan alamat?
+5–7. Demografi, Visual/Branding, & Fotografi/Storytelling
+Ringkasan jawaban:
+(cid:127) Target pasar: Gen Z & Millennials, fokus gender pria. Rencana memakai model foto pria muda untuk
+sepatu kasual, dan model pria dewasa untuk sepatu formal.
+(cid:127) Positioning brand: daily casual leather — karakter brand jelas namun bisa masuk ke banyak gaya
+hidup, dengan tiap model sepatu punya 'dunia visual' sendiri (mis. Pantofel untuk kantor/formal,
+Loafers untuk smart casual, Boots untuk streetwear, Chelsea Boots untuk keduanya).
+(cid:127) Mood visual, skema warna, dan referensi website kompetitor: belum ditentukan, klien ingin dibahas
+langsung secara tatap muka.
+(cid:127) Aset fotografi produk: belum tersedia sama sekali. Klien sudah memesan pembuatan sepatu fisik
+agar proses bisa segera dimulai. Dibutuhkan halaman khusus Craftsmanship/Brand Story.
+Pertanyaan lanjutan yang krusial:
+
+--- Halaman 4 ---
+
+1 Kapan sepatu fisik yang sudah dipesan klien diperkirakan selesai dan siap difoto? Ini jadi titik kritis
+jadwal proyek — pengembangan modul visual (apalagi jika 3D berbasis foto asli) tidak bisa dimulai
+penuh sebelum aset foto tersedia.
+2 Untuk sesi pembahasan mood visual & referensi kompetitor: apakah klien ingin mas Jab
+menyiapkan 2–3 opsi moodboard/arah desain terlebih dulu sebagai bahan diskusi saat bertemu,
+supaya pertemuan lebih terarah?
+3 Apakah brand sudah punya nama resmi, logo, dan warna brand (brand identity), atau ini juga
+termasuk bagian yang perlu dikembangkan dalam proyek ini?
+4 Untuk konten Craftsmanship/Brand Story: apakah klien akan menyediakan foto/video proses
+pembuatan sepatu (behind the scenes bersama pengrajin), atau bagian ini juga perlu dibantu
+perencanaan kontennya?
+
+--- Halaman 5 ---
+
+Isu Lintas Bagian yang Perlu Diprioritaskan
+Beberapa poin di bawah ini muncul dari beberapa bagian dokumen sekaligus dan sebaiknya dibahas
+lebih dulu karena berdampak besar ke skala dan timeline proyek secara keseluruhan.
+Skala proyek vs. kapasitas pengerjaan solo
+Kombinasi 3D 360° interaktif + kustomisasi multi-elemen + payment split (DP/pelunasan) + tracking
+status produksi adalah scope yang besar untuk dikerjakan sendiri. Disarankan menyusun MVP (fase 1)
+yang realistis — misalnya 2D layer dulu, sizing manual by admin, status progres sederhana — baru
+menambah fitur lanjutan di fase berikutnya.
+Ambiguitas jawaban yang perlu dikonfirmasi ulang
+Ada dua jawaban yang tampak bertentangan atau belum final: (1) produk ready-to-wear di bagian 2.1
+(jawaban awal 'iya' lalu berubah pikiran), dan (2) daftar ekspedisi di bagian 4.2 (pernyataan 'selain J&T
+& Ninja Xpress' vs daftar kurir spesifik di catatan). Sebaiknya diklarifikasi dulu sebelum masuk tahap
+desain sistem.
+Dependensi ke aset yang belum ada
+Foto produk, video craftsmanship, dan keputusan mood visual/brand identity semuanya belum tersedia.
+Sebaiknya dibuat linimasa terpisah untuk 'kesiapan aset' agar tidak menghambat jadwal
+pengembangan teknis.
+Kebutuhan dokumen turunan
+Untuk lanjut ke tahap desain database & UI, minimal dibutuhkan dua dokumen tambahan dari klien: (a)
+matriks elemen kustomisasi × model sepatu, dan (b) daftar harga lengkap (base price + harga tiap opsi
+elemen).
+Catatan: dokumen ini disusun sebagai bahan diskusi lanjutan berdasarkan isi dokumen "Daftar Pertanyaan &
+Alasan Analisis Kebutuhan Website" yang sudah diisi klien.
+
