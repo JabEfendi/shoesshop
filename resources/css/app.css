@@ -1,0 +1,168 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* ===================== INDUSTRIAL ADMINLTE BASE OVERRIDES ===================== */
+:root {
+    --industrial-bg:      #f4f6f9;
+    --industrial-surface: #ffffff;
+    --industrial-ink:     #22201c;
+    --industrial-muted:   #7c7569;
+    --industrial-border:  #dee2e6;
+    --leather-primary:    #a7671f;
+    --leather-primary-dark:#6b3a0d;
+    --accent-warning:     #ffb74d;
+}
+
+html, body, #app {
+    height: 100%;
+    background: var(--industrial-bg);
+}
+
+/* Small helpers that complement AdminLTE class names */
+.uppercase-header { text-transform: uppercase; letter-spacing: .75px; }
+.text-leather    { color: var(--leather-primary) !important; }
+.bg-industrial-900 { background-color: #181714 !important; }
+
+/* Scrollbar (match industrial dark look) */
+::-webkit-scrollbar { width: 10px; height: 10px; }
+::-webkit-scrollbar-track { background: #e9e7e3; }
+::-webkit-scrollbar-thumb { background: #a8a298; border-radius: 6px; }
+::-webkit-scrollbar-thumb:hover { background: #7c7569; }
+
+/* Price formatting helpers (use in JS too) */
+.rupiah-font { font-variant-numeric: tabular-nums; font-feature-settings: "tnum"; }
+
+/* ===================== SHOE CONFIGURATOR STYLES ===================== */
+.canvas-wrap-3d {
+    position: relative;
+    width: 100%;
+    height: 540px;
+    min-height: 480px;
+    background: #e9e7e3;
+    overflow: hidden;
+}
+.canvas-wrap-3d canvas {
+    width: 100% !important;
+    height: 100% !important;
+    display: block;
+}
+.canvas-wrap-3d .loading-bar {
+    position: absolute;
+    top: 0;
+    left: 0;
+    height: 3px;
+    background: linear-gradient(90deg, #a7671f, #ffb74d);
+    z-index: 10;
+    transition: width .35s ease;
+}
+.canvas-wrap-3d.loading::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background: radial-gradient(ellipse at center, rgba(255,183,77,.05) 0%, rgba(24,23,20,.08) 100%);
+    pointer-events: none;
+}
+
+.card-configurator {
+    border: 1px solid #cac6bf;
+    border-radius: 6px;
+    background: #ffffff;
+    box-shadow: 0 1px 2px rgba(24,23,20,.06);
+}
+.card-configurator .card-header {
+    border-bottom: 1px solid #cac6bf;
+    border-top-left-radius: 6px;
+    border-top-right-radius: 6px;
+}
+.card-configurator .card-footer {
+    border-bottom-left-radius: 6px;
+    border-bottom-right-radius: 6px;
+}
+
+/* Swatches & option cards */
+.option-card {
+    cursor: pointer;
+    border: 1.5px solid transparent;
+    background: #faf9f7;
+    transition: all .15s ease;
+    user-select: none;
+}
+.option-card:hover {
+    border-color: #ffb74d;
+    transform: translateY(-1px);
+    box-shadow: 0 2px 6px rgba(24,23,20,.08);
+}
+.option-card.active {
+    border-color: #a7671f;
+    background: #fffaf0;
+    box-shadow: 0 0 0 2px rgba(167,103,31,.18);
+}
+.swatch-color {
+    width: 42px;
+    height: 42px;
+    border-radius: 50%;
+    border: 2px solid #e9e7e3;
+    box-shadow: inset 0 -4px 8px rgba(0,0,0,.18), 0 1px 2px rgba(0,0,0,.1);
+    transition: transform .15s ease, border-color .15s ease;
+}
+.swatch-color.active {
+    border-color: #a7671f;
+    transform: scale(1.08);
+    box-shadow: inset 0 -4px 8px rgba(0,0,0,.18), 0 0 0 2px rgba(167,103,31,.22);
+}
+
+/* Price breakdown */
+.total-price-box {
+    padding: 14px;
+    background: #181714;
+    border-radius: 6px;
+    color: #e9e7e3;
+}
+.total-price-box .price-line-through {
+    color: #a8a298;
+    text-decoration: line-through;
+    font-size: .85rem;
+}
+.total-price-box .total-price {
+    font-size: 1.6rem;
+    font-weight: 800;
+    color: #ffb74d;
+    letter-spacing: .3px;
+}
+
+/* Buttons */
+.btn-industrial-primary {
+    background: linear-gradient(180deg, #a7671f 0%, #8b5518 100%);
+    border: 1px solid #6b3a0d;
+    color: #ffffff !important;
+    font-weight: 700;
+    letter-spacing: .3px;
+    box-shadow: inset 0 1px 0 rgba(255,255,255,.15), 0 1px 2px rgba(0,0,0,.2);
+    transition: all .15s ease;
+}
+.btn-industrial-primary:hover {
+    background: linear-gradient(180deg, #b9772c 0%, #97601d 100%);
+    transform: translateY(-1px);
+    box-shadow: inset 0 1px 0 rgba(255,255,255,.2), 0 3px 6px rgba(107,58,13,.3);
+}
+.btn-industrial-primary:active {
+    transform: translateY(0);
+    box-shadow: inset 0 2px 4px rgba(0,0,0,.25);
+}
+
+.badge-industrial {
+    font-weight: 600;
+    letter-spacing: .4px;
+}
+
+/* Text colour utilities missing from AdminLTE */
+.text-industrial-300 { color: #cac6bf !important; }
+.text-industrial-400 { color: #a8a298 !important; }
+.text-industrial-500 { color: #7c7569 !important; }
+.text-industrial-600 { color: #5a544c !important; }
+.text-industrial-700 { color: #454039 !important; }
+.text-industrial-800 { color: #302d29 !important; }
+.text-industrial-900 { color: #181714 !important; }
+.bg-industrial-900   { background-color: #181714 !important; }
+

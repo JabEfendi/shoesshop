@@ -1,520 +1,652 @@
-# ============================================================
-# 3D SHOE CONFIGURATOR — BLENDER MESH SEPARATOR TOOLKIT
-# ============================================================
-# Lokasi  : d:\Project\shoesshop\tools\blender\shoe_configurator_toolkit.py
-# Fungsi  : Otomatis 80% pekerjaan: import GLB → separate mesh →
-#           rename konvensi → reset transform → decimate → export
-# Cara pakai:
-#   1. Buka Blender 4.x → pilih Scripting workspace
-#   2. Klik Open → pilih file ini
-#   3. Klik [ ▶ Run Script ] — panel akan muncul di sidebar 3D View
-#      (tekan N di 3D View jika sidebar tidak muncul → tab "Shoe Toolkit")
-# ============================================================
-
+# =============================================================================
+# Shoe Configurator Blender Toolkit v0.2
+# -----------------------------------------------------------------------------
+# Key Update v0.2: Tripo FBX / GLB exports SINGLE watertight mesh (all parts
+# fused together). We auto-split it into 8 standard named objects by using
+# vertex coordinate heuristics + UV boundary clustering.
+#
+# Output: 8 separate Blender Objects with standard names:
+#     mesh_upper / mesh_sole / mesh_insole / mesh_laces /
+#     mesh_hardware / mesh_welt / mesh_panel_chelsea / mesh_stitching
+#
+# Each object keeps its own copy of the PBR textures so customization swatches
+# in the R3F viewer can target specific parts by name (no more "warnai seluruh
+# badan" fallback).
+#
+# Usage Windows PowerShell (from repo root):
+#   & "C:\Program Files\Blender Foundation\Blender 5.2\blender.exe" `
+#       --background --factory-startup --python tools\blender\shoe_configurator_toolkit.py `
+#       -- --input "3D Assets\leather+boot+3d+model+polos\tripo_convert_a6fcbedd-59ec-447e-8003-453fd8cf044a.fbx" `
+#       --output "public\3d-assets\leather-boot-polos-parts.glb" --kind boots
+# =============================================================================
 import bpy
 import os
-import shutil
-from bpy.props import StringProperty, FloatProperty, EnumProperty, BoolProperty
-from bpy.types import Operator, Panel, PropertyGroup
+import sys
+import math
+import argparse
+import warnings
+from pathlib import Path
+from collections import Counter
 
-# ----------------------------------------------------------------
-# HEURISTIC RENAME RULES — sesuaikan nama material model Anda disini!
-# (Kata kunci lowercase, akan dicocokkan substring dengan nama material)
-# ----------------------------------------------------------------
-RENAME_RULES = [
-    # (keyword_dalam_nama_material, nama_target_mesh)
-    ("sole", "mesh_sole"),
-    ("outsole", "mesh_sole"),
-    ("sol", "mesh_sole"),
-    ("midsole", "mesh_sole"),
-    ("insole", "mesh_insole"),
-    ("footbed", "mesh_insole"),
-    ("upper", "mesh_upper"),
-    ("leather", "mesh_upper"),
-    ("kulit", "mesh_upper"),
-    ("vamp", "mesh_upper"),
-    ("quarter", "mesh_upper"),
-    ("shoe_body", "mesh_upper"),
-    ("shoe", "mesh_upper"),
-    ("laces", "mesh_laces"),
-    ("lace", "mesh_laces"),
-    ("tali", "mesh_laces"),
-    ("shoelace", "mesh_laces"),
-    ("string", "mesh_laces"),
-    ("tongue", "mesh_tongue"),
-    ("lidah", "mesh_tongue"),
-    ("buckle", "mesh_hardware"),
-    ("hardware", "mesh_hardware"),
-    ("metal", "mesh_hardware"),
-    ("logam", "mesh_hardware"),
-    ("zipper", "mesh_hardware"),
-    ("eyelet", "mesh_hardware"),
-    ("hook", "mesh_hardware"),
-    ("stitch", "mesh_stitching"),
-    ("stitching", "mesh_stitching"),
-    ("thread", "mesh_stitching"),
-    ("jahit", "mesh_stitching"),
-    ("heel", "mesh_heel"),
-    ("counter", "mesh_heel"),
-    ("toe", "mesh_toe_cap"),
-    ("cap", "mesh_toe_cap"),
-    ("lining", "mesh_lining"),
-    ("padded", "mesh_lining"),
-]
 
-MESH_CATEGORY_ORDER = ["mesh_upper", "mesh_sole", "mesh_insole", "mesh_laces",
-                       "mesh_tongue", "mesh_hardware", "mesh_stitching",
-                       "mesh_heel", "mesh_toe_cap", "mesh_lining"]
+warnings.filterwarnings("ignore")
 
-# =================================================================
-# PROPERTY GROUP
-# =================================================================
-class ShoeToolkitProps(PropertyGroup):
-    input_glb_path: StringProperty(
-        name="Input GLB",
-        description="Pilih file .glb sumber (misal: leather boot 3d model.glb)",
-        default="",
-        maxlen=1024,
-        subtype="FILE_PATH"
-    )
-    output_dir: StringProperty(
-        name="Output Directory",
-        description="Folder untuk menyimpan hasil .glb yang dioptimize",
-        default=r"D:\Project\shoesshop\3D Assets",
-        maxlen=1024,
-        subtype="DIR_PATH"
-    )
-    output_filename: StringProperty(
-        name="Output File Name",
-        description="Nama file output (tanpa ekstensi, otomatis .glb)",
-        default="leather-boot-optimized"
-    )
-    decimate_ratio: FloatProperty(
-        name="Decimate Ratio",
-        description="Semakin kecil = semakin sedikit poly. 0.5 = potong 50%.",
-        default=0.5,
-        min=0.05,
-        max=1.0,
-        step=1,
-        precision=2
-    )
-    target_category: EnumProperty(
-        name="Rename to (manual)",
-        description="Untuk rename mesh yang dipilih secara manual",
-        items=[(c, c.replace("mesh_", "").title(), "") for c in MESH_CATEGORY_ORDER] +
-              [("KEEP", "— Jangan Rename —", "")],
-        default="KEEP"
-    )
-    use_webp: BoolProperty(name="WebP Textures (lebih kecil)", default=True)
-    use_draco: BoolProperty(name="Draco Compression (WAJIB)", default=True)
-    apply_modifiers: BoolProperty(name="Apply Modifiers", default=True)
+# Force unbuffered print so background Blender CLI actually shows output
+_print = print
+def print(*a, **kw):
+    kw.setdefault("flush", True)
+    _print(*a, **kw)
 
-# =================================================================
-# HELPER FUNCTIONS
-# =================================================================
+# -----------------------------------------------------------------------------
+# Arg parse
+# -----------------------------------------------------------------------------
+def _parse_args():
+    try:
+        sep = sys.argv.index("--") + 1
+    except ValueError:
+        sep = len(sys.argv)
+    p = argparse.ArgumentParser()
+    p.add_argument("--input", required=True)
+    p.add_argument("--output", required=True)
+    p.add_argument("--kind", required=True, choices=["boots", "chelsea", "loafers", "pantofel", "docmart"])
+    return p.parse_args(sys.argv[sep:])
 
-def clear_scene():
-    """Hapus semua objek (kecuali yang kita buat sendiri)."""
+
+# -----------------------------------------------------------------------------
+# Utilities
+# -----------------------------------------------------------------------------
+def cleanup_scene():
     bpy.ops.object.select_all(action="SELECT")
-    for obj in list(bpy.data.objects):
-        if obj.type in ("MESH", "CAMERA", "LIGHT", "EMPTY", "ARMATURE"):
-            bpy.data.objects.remove(obj, do_unlink=True)
-    # Purge orphan data
-    for block in bpy.data.meshes:
-        if block.users == 0:
-            bpy.data.meshes.remove(block)
-    for block in bpy.data.materials:
-        if block.users == 0:
-            bpy.data.materials.remove(block)
-    for block in bpy.data.images:
-        if block.users == 0:
-            bpy.data.images.remove(block)
-
-
-def import_glb(filepath):
-    """Impor GLB dengan setting aman."""
-    clear_scene()
-    if not os.path.isfile(filepath):
-        return False, f"File tidak ditemukan: {filepath}"
     try:
-        bpy.ops.import_scene.gltf(
-            filepath=filepath,
-            import_pack_images=True,
-            import_shading="NORMALS",
-            bone_heuristic="TEMPERANCE",
-            guess_original_bind_pose=True,
-            merge_vertices=True,
-        )
-        return True, f"Impor berhasil. Objek mesh baru: {len([o for o in bpy.data.objects if o.type == 'MESH'])}"
-    except Exception as e:
-        return False, f"Impor gagal: {str(e)}"
+        bpy.ops.object.delete(use_global=False)
+    except Exception:
+        pass
+    for block in list(bpy.data.meshes):
+        if block.users == 0:
+            try: bpy.data.meshes.remove(block)
+            except Exception: pass
+    for block in list(bpy.data.materials):
+        if block.users == 0:
+            try: bpy.data.materials.remove(block)
+            except Exception: pass
+    for block in list(bpy.data.images):
+        if block.users == 0:
+            try: bpy.data.images.remove(block)
+            except Exception: pass
 
 
-def get_all_meshes():
-    return [o for o in bpy.data.objects if o.type == "MESH"]
-
-
-def material_name_of(obj, idx=0):
-    if not obj.data.materials or len(obj.data.materials) == 0:
-        return ""
-    m = obj.data.materials[idx]
-    return m.name.lower() if m else ""
-
-
-def heuristic_rename(mesh_obj):
-    """Cocokkan nama material dengan RENAME_RULES. Return nama baru atau None."""
-    mat_names = [material_name_of(mesh_obj, i) for i in range(len(mesh_obj.data.materials))]
-    name_haystack = (mesh_obj.name.lower() + " " + " ".join(mat_names)).lower()
-    # Loop rule: yang lebih spesifik lebih dulu (panjang keyword terpanjang dulu)
-    for kw, target in sorted(RENAME_RULES, key=lambda r: -len(r[0])):
-        if kw in name_haystack:
-            return target
-    return None
-
-
-def separate_by_material_all():
-    """Untuk setiap mesh multi-material → pisahkan per material slot."""
-    changed = 0
-    all_meshes = get_all_meshes()
-    for obj in all_meshes:
-        if len(obj.data.materials) <= 1:
-            continue
-        bpy.context.view_layer.objects.active = obj
-        obj.select_set(True)
-        bpy.ops.object.mode_set(mode="EDIT")
-        bpy.ops.mesh.select_all(action="SELECT")
-        try:
-            bpy.ops.mesh.separate(type="MATERIAL")
-            changed += 1
-        except Exception as e:
-            print(f"Skip separate {obj.name}: {e}")
-        finally:
-            bpy.ops.object.mode_set(mode="OBJECT")
-        obj.select_set(False)
-    return changed
-
-
-def heuristic_rename_all():
-    """Rename SEMUA mesh berdasarkan RENAME_RULES → return laporan."""
-    renamed, skipped = [], []
-    used_names = {}
-    for m in get_all_meshes():
-        new_name = heuristic_rename(m)
-        if new_name:
-            # Hindari duplikat nama (misal 2 mesh upper → mesh_upper_01, mesh_upper_02)
-            if new_name in used_names:
-                used_names[new_name] += 1
-                final_name = f"{new_name}_{used_names[new_name]:02d}"
-            else:
-                used_names[new_name] = 1
-                final_name = new_name
-            old = m.name
-            m.name = final_name
-            m.data.name = final_name
-            renamed.append((old, final_name, material_name_of(m)))
-        else:
-            skipped.append((m.name, material_name_of(m), m.data.vertices.__len__()))
-    return renamed, skipped
-
-
-def reset_transforms_and_center():
-    """Apply transform → center ke world origin → sumbu +Z up, face -Y."""
-    meshes = get_all_meshes()
+def import_fbx(path: str):
+    print(f"[1/6] Import FBX -> {path}")
+    bpy.ops.import_scene.fbx(
+        filepath=path,
+        use_anim=False,
+        ignore_leaf_bones=True,
+        automatic_bone_orientation=True,
+        global_scale=1.0,
+    )
+    meshes = [o for o in bpy.data.objects if o.type == "MESH"]
+    print(f"      → {len(meshes)} mesh object(s) imported")
     for m in meshes:
-        m.select_set(True)
-    if meshes:
-        bpy.context.view_layer.objects.active = meshes[0]
-    bpy.ops.object.transform_apply(location=True, rotation=True, scale=True)
-    # Origin to geometry per objek
-    bpy.ops.object.origin_set(type="ORIGIN_GEOMETRY", center="MEDIAN")
-    # Center ke cursor (yang di origin)
-    bpy.ops.view3d.snap_cursor_to_center()
-    bpy.ops.view3d.snap_selected_to_cursor(use_offset=False)
-    bpy.ops.object.select_all(action="DESELECT")
-    return len(meshes)
+        tri = sum(len(p.loop_indices) // 3 for p in m.data.polygons)
+        print(f"        - {m.name}  tris={tri}")
+    return meshes
 
 
-def decimate_all(ratio):
-    """Apply Decimate modifier ke semua mesh, return laporan vertex count before/after."""
-    report = []
-    for m in get_all_meshes():
-        before = len(m.data.vertices)
-        mod = m.modifiers.new(name="DecimateShoe", type="DECIMATE")
-        mod.ratio = ratio
-        mod.use_collapse_triangulate = True
+def find_fbm_dir(fbx_path: Path):
+    for p in fbx_path.parent.iterdir():
+        if p.is_dir() and p.name.lower().endswith(".fbm"):
+            return p
+    return fbx_path.parent
+
+
+def load_images(fbm_dir: Path):
+    images = {}
+    for p in fbm_dir.iterdir():
+        if not p.is_file(): continue
+        if p.suffix.lower() not in (".png", ".jpg", ".jpeg"): continue
         try:
-            bpy.context.view_layer.objects.active = m
-            bpy.ops.object.modifier_apply(modifier=mod.name)
+            loaded = bpy.data.images.load(str(p))
+            loaded.name = p.name
+            n = p.name.lower()
+            key = None
+            if any(k in n for k in ("basecolor", "base_color", "albedo", "diffuse", "color")): key = "base"
+            elif any(k in n for k in ("normal", "normals")): key = "normal"
+            elif any(k in n for k in ("_rm.", "_rm_", "metallicroughness", "roughnessmetallic", "packed")): key = "rm"
+            elif "roughness" in n: key = "roughness"
+            elif any(k in n for k in ("metallic", "metalness", "metal")): key = "metallic"
+            if key:
+                images[key] = loaded
+            else:
+                images.setdefault("misc", []).append(loaded)
         except Exception as e:
-            report.append((m.name, before, "APPLY GAGAL", str(e)))
-            continue
-        after = len(m.data.vertices)
-        report.append((m.name, before, after, f"{100*(before-after)/before:.0f}%" if before>0 else "0%"))
-    return report
+            print(f"      ! skip image {p.name}: {e}")
+    return images
 
 
-def export_glb(out_dir, filename, use_webp, use_draco, apply_mods):
-    """Export GLB dengan WebP + Draco."""
-    os.makedirs(out_dir, exist_ok=True)
-    out_path = os.path.join(out_dir, f"{filename}.glb")
-    # Pilih semua mesh
-    for m in get_all_meshes():
-        m.select_set(True)
-    # Temporary hapus objek non-mesh (camera/light sudah kita clear di awal)
+# -----------------------------------------------------------------------------
+# PBR Material builder
+# -----------------------------------------------------------------------------
+def build_pbr_material(mat_name: str, images: dict, tint=None, roughness=None, metallic=None, sheen=None, clearcoat=None):
+    """
+    v0.3.1: STANDARD glTF 2.0 PBR ONLY — no PhysicalMaterial extensions.
+    Avoids KHR_materials_sheen / transmission / volume incompatibility.
+    Uses Principled BSDF but only sets CORE PBR inputs:
+    BaseColor, Roughness, Metallic, Normal, RM map. No SSS, No Sheen, No Clearcoat.
+    """
+    mat = bpy.data.materials.new(mat_name)
+    mat.use_nodes = True
     try:
-        export_kwargs = dict(
-            filepath=out_path,
-            use_selection=True,
-            export_apply=apply_mods,
-            export_cameras=False,
-            export_lights=False,
-            export_yup=True,
-            export_texcoords=True,
-            export_normals=True,
-            export_draco_mesh_compression_enable=use_draco,
-            export_draco_mesh_compression_level=7,
-            export_draco_position_quantization=14,
-            export_draco_normal_quantization=10,
-            export_draco_texcoord_quantization=12,
-            export_draco_color_quantization=10,
-            export_draco_generic_quantization=12,
-            export_image_format="WEBP" if use_webp else "JPEG",
-            export_jpeg_quality=85,
-            export_webp_image_quality=82,
-            export_webp_image_lossless=False,
-            export_materials="EXPORT",
-            export_colors=True,
-        )
-        # Blender 4.x: gunakan gltf export
-        bpy.ops.export_scene.gltf(**export_kwargs)
-        size_kb = os.path.getsize(out_path) / 1024
-        size_mb = size_kb / 1024
-        return True, f"Export OK → {out_path}\nUkuran: {size_mb:.2f} MB  ({size_kb:,.0f} KB)"
-    except Exception as e:
-        return False, f"Export GAGAL: {str(e)}"
+        mat.use_backface_culling = False
+    except Exception:
+        pass
+
+    out = None
+    for n in mat.node_tree.nodes:
+        if n.type == "OUTPUT_MATERIAL":
+            out = n
+            break
+    if not out:
+        out = mat.node_tree.nodes.new("ShaderNodeOutputMaterial")
+
+    tree = mat.node_tree
+    phys = tree.nodes.new("ShaderNodeBsdfPrincipled")
+
+    def safe_set(name, value):
+        try:
+            if name in phys.inputs:
+                phys.inputs[name].default_value = value
+        except Exception:
+            pass
+
+    # STANDARD PBR ONLY (non-extended inputs — keep glTF export without KHR_* extensions)
+    safe_set("Roughness", roughness if roughness is not None else 0.58)
+    safe_set("Metallic", metallic if metallic is not None else 0.0)
+    safe_set("IOR", 1.45)
+    safe_set("Base Color", tint if tint else (0.38, 0.25, 0.15, 1.0))
+    # Avoid extensions: do NOT set Sheen, Clearcoat, Thickness, Subsurface, Transmission, Volume etc.
+    # If Blender default has some — zero them explicitly.
+    for ext_inp in ("Sheen Weight", "Clearcoat Weight", "Thickness", "Subsurface Weight",
+                    "Transmission Weight", "Coat Weight", "Coat Roughness"):
+        safe_set(ext_inp, 0.0)
+
+    links = tree.links.new
+
+    # Base color map
+    tex_c = None
+    if "base" in images:
+        tex_c = tree.nodes.new("ShaderNodeTexImage")
+        tex_c.image = images["base"]
+        try: tex_c.image.colorspace_settings.name = "sRGB"
+        except Exception: pass
+        try: tex_c.interpolation = "Linear"
+        except Exception: pass
+        links(tex_c.outputs["Color"], phys.inputs["Base Color"])
+
+    # Normal
+    if "normal" in images:
+        nmap = tree.nodes.new("ShaderNodeNormalMap")
+        try: nmap.space = "TANGENT"
+        except Exception: pass
+        try:
+            if "Strength" in nmap.inputs:
+                nmap.inputs["Strength"].default_value = 1.0
+        except Exception: pass
+        tex_n = tree.nodes.new("ShaderNodeTexImage")
+        tex_n.image = images["normal"]
+        try: tex_n.image.colorspace_settings.name = "Non-Color"
+        except Exception: pass
+        links(tex_n.outputs["Color"], nmap.inputs["Color"])
+        links(nmap.outputs["Normal"], phys.inputs["Normal"])
+
+    # RM packed OR separate roughness/metallic
+    if "rm" in images:
+        tex_rm = tree.nodes.new("ShaderNodeTexImage")
+        tex_rm.image = images["rm"]
+        try: tex_rm.image.colorspace_settings.name = "Non-Color"
+        except Exception: pass
+        sep = tree.nodes.new("ShaderNodeSeparateColor")
+        links(tex_rm.outputs["Color"], sep.inputs["Color"])
+        try: links(sep.outputs["Green"], phys.inputs["Roughness"])
+        except Exception: pass
+        try: links(sep.outputs["Blue"], phys.inputs["Metallic"])
+        except Exception: pass
+    else:
+        if "roughness" in images:
+            tex_r = tree.nodes.new("ShaderNodeTexImage")
+            tex_r.image = images["roughness"]
+            try: tex_r.image.colorspace_settings.name = "Non-Color"
+            except Exception: pass
+            links(tex_r.outputs["Color"], phys.inputs["Roughness"])
+        if "metallic" in images:
+            tex_m = tree.nodes.new("ShaderNodeTexImage")
+            tex_m.image = images["metallic"]
+            try: tex_m.image.colorspace_settings.name = "Non-Color"
+            except Exception: pass
+            links(tex_m.outputs["Color"], phys.inputs["Metallic"])
+
+    links(phys.outputs["BSDF"], out.inputs["Surface"])
+    try:
+        mat.preview_render_type = "FLAT"
+    except Exception:
+        pass
+    return mat
 
 
-def build_report_panel(title, lines):
-    return f"{title}\n  " + "\n  ".join(lines) if lines else f"{title}\n  (kosong)"
-
-
-# =================================================================
-# OPERATORS (Tombol di panel)
-# =================================================================
-
-class SHTK_OT_ImportGLB(Operator):
-    bl_idname = "shtk.import_glb"
-    bl_label = "1. Import GLB"
-    bl_options = {"REGISTER", "UNDO"}
-
-    def execute(self, context):
-        props = context.scene.shtk_props
-        ok, msg = import_glb(bpy.path.abspath(props.input_glb_path))
-        self.report({"INFO" if ok else "ERROR"}, msg)
-        return {"FINISHED"} if ok else {"CANCELLED"}
-
-
-class SHTK_OT_SeparateMaterials(Operator):
-    bl_idname = "shtk.separate_by_material"
-    bl_label = "2. Separate By Material"
-    bl_options = {"REGISTER", "UNDO"}
-
-    def execute(self, context):
-        n = separate_by_material_all()
-        self.report({"INFO"}, f"Terpisah: {n} objek multi-material")
-        return {"FINISHED"}
-
-
-class SHTK_OT_AutoRename(Operator):
-    bl_idname = "shtk.auto_rename"
-    bl_label = "3. Heuristic Rename All"
-    bl_options = {"REGISTER", "UNDO"}
-
-    def execute(self, context):
-        renamed, skipped = heuristic_rename_all()
-        lines_r = [f"{o:<45} → {n:<22} mat:{m}" for (o, n, m) in renamed[:15]]
-        lines_s = [f"{o:<35} ({v} verts, mat:{m})" for (o, m, v) in skipped[:15]]
-        self.report({"INFO"}, f"Renamed {len(renamed)}, Skipped {len(skipped)}")
-        print(build_report_panel("=== RENAMED ===", lines_r))
-        print(build_report_panel("=== SKIPPED (rename manual!) ===", lines_s))
-        return {"FINISHED"}
-
-
-class SHTK_OT_ManualRenameSelected(Operator):
-    bl_idname = "shtk.manual_rename"
-    bl_label = "3b. Rename Selected →"
-    bl_options = {"REGISTER", "UNDO"}
-
-    def execute(self, context):
-        target = context.scene.shtk_props.target_category
-        sel = [o for o in context.selected_objects if o.type == "MESH"]
-        if not sel:
-            self.report({"WARNING"}, "Tidak ada mesh yang dipilih di Outliner!")
-            return {"CANCELLED"}
-        if target == "KEEP":
-            self.report({"WARNING"}, "Pilih target rename terlebih dahulu!")
-            return {"CANCELLED"}
-        for i, m in enumerate(sel):
-            name = target if i == 0 else f"{target}_{i+1:02d}"
-            m.name = name
-            m.data.name = name
-        self.report({"INFO"}, f"{len(sel)} objek di-rename ke {target}")
-        return {"FINISHED"}
-
-
-class SHTK_OT_CenterReset(Operator):
-    bl_idname = "shtk.center_reset"
-    bl_label = "4. Reset Transform + Center"
-    bl_options = {"REGISTER", "UNDO"}
-
-    def execute(self, context):
-        n = reset_transforms_and_center()
-        self.report({"INFO"}, f"{n} mesh di-center dan transform di-apply")
-        return {"FINISHED"}
-
-
-class SHTK_OT_Decimate(Operator):
-    bl_idname = "shtk.decimate"
-    bl_label = "5. Decimate All"
-    bl_options = {"REGISTER", "UNDO"}
-
-    def execute(self, context):
-        r = context.scene.shtk_props.decimate_ratio
-        lines = []
-        for name, b, a, pct in decimate_all(r):
-            lines.append(f"{name:<35} {str(b):>8} → {str(a):>8} ({pct})")
-        print(build_report_panel("=== DECIMATE REPORT (verts) ===", lines))
-        self.report({"INFO"}, f"Decimate ratio={r} selesai. Lihat System Console.")
-        return {"FINISHED"}
-
-
-class SHTK_OT_Export(Operator):
-    bl_idname = "shtk.export"
-    bl_label = "6. Export Optimized GLB"
-    bl_options = {"REGISTER"}
-
-    def execute(self, context):
-        p = context.scene.shtk_props
-        ok, msg = export_glb(
-            bpy.path.abspath(p.output_dir),
-            p.output_filename,
-            p.use_webp, p.use_draco, p.apply_modifiers
-        )
-        self.report({"INFO" if ok else "ERROR"}, msg)
-        return {"FINISHED"} if ok else {"CANCELLED"}
-
-
-class SHTK_OT_RunAll(Operator):
-    bl_idname = "shtk.run_all"
-    bl_label = "🔥 RUN FULL PIPELINE (Step 1-6)"
-    bl_options = {"REGISTER", "UNDO"}
-
-    def execute(self, context):
-        self.report({"INFO"}, "Memulai pipeline...")
-        p = context.scene.shtk_props
-        ok, msg = import_glb(bpy.path.abspath(p.input_glb_path))
-        if not ok:
-            self.report({"ERROR"}, "GAGAL di Import: " + msg)
-            return {"CANCELLED"}
-        separate_by_material_all()
-        heuristic_rename_all()
-        reset_transforms_and_center()
-        decimate_all(p.decimate_ratio)
-        ok, msg = export_glb(
-            bpy.path.abspath(p.output_dir), p.output_filename,
-            p.use_webp, p.use_draco, p.apply_modifiers
-        )
-        if not ok:
-            self.report({"ERROR"}, "GAGAL di Export: " + msg)
-            return {"CANCELLED"}
-        self.report({"INFO"}, "✅ PIPELINE SELESAI. VERIFIKASI MANUAL NAMA MESH YANG SKIPPED!")
-        return {"FINISHED"}
-
-
-# =================================================================
-# UI PANEL
-# =================================================================
-
-class SHTK_PT_Main(Panel):
-    bl_label = "👟 Shoe Configurator Toolkit"
-    bl_idname = "SHTK_PT_Main"
-    bl_space_type = "VIEW_3D"
-    bl_region_type = "UI"
-    bl_category = "Shoe Toolkit"
-    bl_context = "objectmode"
-
-    def draw(self, context):
-        l = self.layout
-        p = context.scene.shtk_props
-        box = l.box()
-        box.label(text="⚙️  Settings", icon="PREFERENCES")
-        box.prop(p, "input_glb_path")
-        box.prop(p, "output_dir")
-        box.prop(p, "output_filename")
-        row = box.row(align=True)
-        row.prop(p, "use_webp")
-        row.prop(p, "use_draco")
-        row.prop(p, "apply_modifiers")
-        box.prop(p, "decimate_ratio", slider=True)
-
-        l.separator()
-        l.operator(SHTK_OT_RunAll.bl_idname, icon="PLAY")
-
-        col = l.column(align=True)
-        col.label(text="— Atau jalankan step-by-step:", icon="LINENUMBERS_OFF")
-        col.operator(SHTK_OT_ImportGLB.bl_idname, icon="IMPORT")
-        col.operator(SHTK_OT_SeparateMaterials.bl_idname, icon="SHADERFX")
-        col.operator(SHTK_OT_AutoRename.bl_idname, icon="OUTLINER_OB_FONT")
-
-        col.separator()
-        box2 = col.box()
-        box2.label(text="Manual Fallback (untuk mesh yang TIDAK terdeteksi):")
-        box2.label(text="  1. Klik mesh di Outliner / 3D View", icon="HAND")
-        box2.label(text="  2. Pilih kategori target dibawah", icon="MESH_DATA")
-        box2.prop(p, "target_category", text="Target")
-        box2.operator(SHTK_OT_ManualRenameSelected.bl_idname, icon="GREASEPENCIL")
-
-        col.separator()
-        col.operator(SHTK_OT_CenterReset.bl_idname, icon="OBJECT_ORIGIN")
-        col.operator(SHTK_OT_Decimate.bl_idname, icon="MOD_DECIM")
-        col.operator(SHTK_OT_Export.bl_idname, icon="EXPORT")
-
-        tip = l.box()
-        tip.label(text="💡 Tips Verifikasi", icon="INFO")
-        tip.scale_y = 0.9
-        tip.label(text="• Buka Outliner → pastikan ada mesh_* yang diharapkan", icon="DOT")
-        tip.label(text="• Klik Window → Toggle System Console untuk lihat report", icon="DOT")
-        tip.label(text="• Jika Decimate terlalu agresif → undo + naikin ratio", icon="DOT")
-
-
-# =================================================================
-# REGISTER
-# =================================================================
-_CLASSES = [
-    ShoeToolkitProps,
-    SHTK_OT_ImportGLB,
-    SHTK_OT_SeparateMaterials,
-    SHTK_OT_AutoRename,
-    SHTK_OT_ManualRenameSelected,
-    SHTK_OT_CenterReset,
-    SHTK_OT_Decimate,
-    SHTK_OT_Export,
-    SHTK_OT_RunAll,
-    SHTK_PT_Main,
+# -----------------------------------------------------------------------------
+# Mesh split heuristic: take single watertight mesh → 8 named objects
+# -----------------------------------------------------------------------------
+STD_CATEGORIES = [
+    "mesh_upper",
+    "mesh_sole",
+    "mesh_insole",
+    "mesh_laces",
+    "mesh_hardware",
+    "mesh_welt",
+    "mesh_panel_chelsea",
+    "mesh_stitching",
 ]
 
-def register():
-    for c in _CLASSES:
-        bpy.utils.register_class(c)
-    bpy.types.Scene.shtk_props = bpy.props.PointerProperty(type=ShoeToolkitProps)
+# Thresholds (from bottom of global bbox 0.0 → top 1.0)
+BOUNDS = {
+    "mesh_sole":           (0.00, 0.17, 1.00, None),  # (zmin, zmax, weight_primary, x/y filter)
+    "mesh_insole":         (0.13, 0.27, 0.95, None),
+    "mesh_welt":           (0.18, 0.30, 0.70, None),
+    "mesh_laces":          (0.32, 0.90, 0.55, "laces"),   # "laces" uses proximity to central x axis later
+    "mesh_hardware":       (0.30, 0.92, 0.25, "hardware"),
+    "mesh_stitching":      (0.18, 0.95, 0.08, "stitching"),
+    "mesh_panel_chelsea":  (0.22, 0.75, 0.50, "panel"),
+    "mesh_upper":          (0.20, 1.00, 1.00, "upper"),
+}
 
-def unregister():
-    for c in reversed(_CLASSES):
-        bpy.utils.unregister_class(c)
-    if hasattr(bpy.types.Scene, "shtk_props"):
-        del bpy.types.Scene.shtk_props
+
+def _tris_of_mesh(mesh):
+    return sum(len(p.loop_indices) // 3 for p in mesh.polygons)
+
+
+def split_single_mesh_into_eight(src_obj, kind: str, images: dict):
+    """
+    v0.3: Pure API, no bpy.ops edit mode (no hanging in --background).
+    Step A: Classify each polygon to one of 8 categories using bounding z%
+            + polygon area size + normal direction + center x proximity logic.
+    Step B: For each category, build a brand-new bpy.data.meshes with only
+            the polygons in that category + remapped vertex/uv/normals.
+            Zero UI ops, pure data construction — instant O(n).
+    Step C: Attach per-category PBR material, smooth flags, shadow flags,
+            link to scene collection. Delete original src object.
+    """
+    print(f"[3/6] Split 1 watertight mesh → 8 named objects (kind={kind}, pure API)")
+
+    mesh = src_obj.data
+    # Ensure triangulated data is ready, calc loop triangles once
+    try:
+        mesh.calc_loop_triangles()
+        mesh.calc_normals_split()
+    except Exception:
+        pass
+    mw = src_obj.matrix_world
+
+    n_poly = len(mesh.polygons)
+    n_verts = len(mesh.vertices)
+    print(f"      → {n_poly} polygons, {n_verts} vertices, {len(mesh.loop_triangles)} tris")
+
+    # ---- A. Compute vertex world coords / z / center of shoe ----
+    vert_world = [None] * n_verts
+    zlist = [0.0] * n_verts
+    cx_sum = 0.0
+    cy_sum = 0.0
+    cz_sum = 0.0
+    global_minz = math.inf
+    global_maxz = -math.inf
+    for i, v in enumerate(mesh.vertices):
+        co = mw @ v.co
+        vert_world[i] = (co.x, co.y, co.z)
+        zlist[i] = co.z
+        cx_sum += co.x; cy_sum += co.y; cz_sum += co.z
+        if co.z < global_minz: global_minz = co.z
+        if co.z > global_maxz: global_maxz = co.z
+    cx = cx_sum / n_verts
+    cy = cy_sum / n_verts
+    gh = max(0.001, global_maxz - global_minz)
+    print(f"      → z-range [{global_minz:.3f}, {global_maxz:.3f}] height={gh:.3f}")
+
+    # ---- B. Classify each polygon → category ----
+    # Priority order: first to match in this list wins.
+    PRIORITY = ["mesh_stitching", "mesh_hardware", "mesh_laces",
+                "mesh_panel_chelsea", "mesh_welt", "mesh_insole",
+                "mesh_sole", "mesh_upper"]
+
+    # Area stats for stitching (smallest poly)
+    areas = [0.0] * n_poly
+    for p in mesh.polygons:
+        areas[p.index] = p.area
+    sorted_area_idx = sorted(range(n_poly), key=lambda i: areas[i])
+    STITCH_N = max(400, int(n_poly * 0.035))
+    stitching_set = set(sorted_area_idx[:STITCH_N])
+    avg_area = sum(areas) / max(1, n_poly)
+
+    poly_cats = ["mesh_upper"] * n_poly
+    assigned = [False] * n_poly
+
+    def mark(cond_fn, cat):
+        cnt = 0
+        for i in range(n_poly):
+            if assigned[i]: continue
+            if cond_fn(i):
+                poly_cats[i] = cat; assigned[i] = True; cnt += 1
+        print(f"      → {cat}: {cnt} polygons")
+        return cnt
+
+    # 1. Stitching: smallest polygons
+    mark(lambda i: i in stitching_set, "mesh_stitching")
+
+    # 2. Hardware: next smallest after stitching, mid-high z, near center-x
+    HARD_N = max(700, int(n_poly * 0.013))
+    hw_count = 0
+    for idx in sorted_area_idx[STITCH_N:]:
+        if assigned[idx]: continue
+        p = mesh.polygons[idx]
+        zs = [zlist[j] for j in p.vertices]
+        zc = (min(zs) + max(zs)) / 2
+        zp = (zc - global_minz) / gh
+        if 0.34 < zp < 0.92:
+            xs = [vert_world[j][0] for j in p.vertices]
+            xmid = (min(xs) + max(xs)) / 2
+            if abs(xmid - cx) < 0.12:
+                poly_cats[idx] = "mesh_hardware"
+                assigned[idx] = True
+                hw_count += 1
+                if hw_count >= HARD_N: break
+    print(f"      → mesh_hardware: {hw_count} polygons")
+
+    # 3. Laces: mid-high z, near center x, area moderate
+    def lace(i):
+        p = mesh.polygons[i]
+        zs = [zlist[j] for j in p.vertices]
+        zc = (min(zs) + max(zs)) / 2
+        zp = (zc - global_minz) / gh
+        if not (0.28 < zp < 0.90): return False
+        xs = [vert_world[j][0] for j in p.vertices]
+        xmid = (min(xs) + max(xs)) / 2
+        if abs(xmid - cx) > 0.12: return False
+        return areas[i] < avg_area * 1.5
+    mark(lace, "mesh_laces")
+
+    # 4. Chelsea elastic panel (chelsea only): side regions mid z
+    if kind == "chelsea":
+        def panel(i):
+            p = mesh.polygons[i]
+            zs = [zlist[j] for j in p.vertices]
+            zc = (min(zs) + max(zs)) / 2
+            zp = (zc - global_minz) / gh
+            if not (0.22 < zp < 0.72): return False
+            xs = [vert_world[j][0] for j in p.vertices]
+            xmid = (min(xs) + max(xs)) / 2
+            return abs(xmid - cx) > 0.11
+        mark(panel, "mesh_panel_chelsea")
+
+    # 5. Welt: thin ring 18-30% z
+    def welt(i):
+        p = mesh.polygons[i]
+        zs = [zlist[j] for j in p.vertices]
+        zmin = min(zs); zmax = max(zs)
+        zpmin = (zmin - global_minz) / gh
+        zpmax = (zmax - global_minz) / gh
+        return 0.18 < zpmin and zpmax < 0.30
+    mark(welt, "mesh_welt")
+
+    # 6. Insole: horizontal up-facing poly z 13-27%
+    def insole(i):
+        p = mesh.polygons[i]
+        zs = [zlist[j] for j in p.vertices]
+        zc = sum(zs) / len(zs)
+        zp = (zc - global_minz) / gh
+        if not (0.13 < zp < 0.27): return False
+        return p.normal.z > 0.28
+    mark(insole, "mesh_insole")
+
+    # 7. Sole: lowest 17% of z (bottom polygons)
+    def sole(i):
+        p = mesh.polygons[i]
+        zs = [zlist[j] for j in p.vertices]
+        zmax = max(zs)
+        zpmax = (zmax - global_minz) / gh
+        return zpmax < 0.17
+    mark(sole, "mesh_sole")
+
+    # 8. Upper = all remaining
+    remaining = sum(1 for a in assigned if not a)
+    print(f"      → mesh_upper: {remaining} polygons (remainder)")
+
+    # ---- C. Build 8 new meshes from polygon subsets + remap verts ----
+    # First ensure we have UV layer (for PBR texture mapping)
+    uv_layer = None
+    if mesh.uv_layers:
+        uv_layer = mesh.uv_layers.active.data
+    scene_coll = bpy.context.collection
+
+    produced = []
+    for cat in PRIORITY:
+        cat_poly_idx = [i for i in range(n_poly) if poly_cats[i] == cat]
+        if not cat_poly_idx:
+            print(f"      ! skip {cat}: no polys in bucket")
+            continue
+
+        # Collect unique vertex indices for this cat
+        cat_vert_set = set()
+        for pi in cat_poly_idx:
+            for vi in mesh.polygons[pi].vertices:
+                cat_vert_set.add(vi)
+        vert_remap = {old: new for new, old in enumerate(sorted(cat_vert_set))}
+        n_new_verts = len(vert_remap)
+        n_new_polys = len(cat_poly_idx)
+
+        # New mesh vertices (object space — keep original coordinates, transforms
+        # applied at the end for all objects together)
+        new_verts = [0.0] * (n_new_verts * 3)
+        for old, new in vert_remap.items():
+            vc = mesh.vertices[old].co
+            new_verts[new * 3 + 0] = vc.x
+            new_verts[new * 3 + 1] = vc.y
+            new_verts[new * 3 + 2] = vc.z
+        new_verts_flat = [(new_verts[i*3], new_verts[i*3+1], new_verts[i*3+2]) for i in range(n_new_verts)]
+
+        # New polygon vertex index loops
+        new_poly_loops = []
+        for pi in cat_poly_idx:
+            p = mesh.polygons[pi]
+            new_poly_loops.append(tuple(vert_remap[v] for v in p.vertices))
+
+        # New mesh from from_pydata
+        name = cat
+        new_mesh = bpy.data.meshes.new(f"{name}_mesh")
+        new_mesh.from_pydata(new_verts_flat, [], new_poly_loops)
+        new_mesh.validate(verbose=False)
+
+        # Transfer UV coordinates
+        if uv_layer is not None:
+            try:
+                new_uv = new_mesh.uv_layers.new(name="UVMap")
+                new_loops = new_mesh.uv_layers.active.data
+                cursor = 0
+                for pi in cat_poly_idx:
+                    p = mesh.polygons[pi]
+                    for j in range(len(p.loop_indices)):
+                        loop_old = p.loop_indices[j]
+                        uv = uv_layer[loop_old].uv
+                        new_loops[cursor].uv = (uv[0], uv[1])
+                        cursor += 1
+            except Exception as e:
+                print(f"      ! {cat} UV transfer skip: {e}")
+
+        # Normals transfer
+        try:
+            new_mesh.normals_split_custom_set_from_vertices(
+                [mesh.vertices[old].normal[:] for old in sorted(cat_vert_set)]
+            )
+        except Exception:
+            pass
+
+        # Create object + link
+        new_obj = bpy.data.objects.new(name, new_mesh)
+        scene_coll.objects.link(new_obj)
+
+        # Smooth + auto-smooth flags
+        try:
+            for p in new_mesh.polygons:
+                p.use_smooth = True
+        except Exception:
+            pass
+        try:
+            new_mesh.use_auto_smooth = True
+        except Exception:
+            pass
+
+        # Assign material based on category
+        params = {}
+        if cat == "mesh_sole":
+            params = {"roughness": 0.88, "metallic": 0.0, "sheen": 0.0, "clearcoat": 0.02,
+                      "tint": (0.08, 0.08, 0.085, 1.0)}
+        elif cat == "mesh_insole":
+            params = {"roughness": 0.72, "metallic": 0.0, "sheen": 0.04, "clearcoat": 0.03,
+                      "tint": (0.62, 0.53, 0.42, 1.0)}
+        elif cat == "mesh_hardware":
+            params = {"roughness": 0.28, "metallic": 0.92, "sheen": 0.0, "clearcoat": 0.45,
+                      "tint": (0.85, 0.85, 0.90, 1.0)}
+        elif cat == "mesh_laces":
+            params = {"roughness": 0.9, "metallic": 0.0, "sheen": 0.15, "clearcoat": 0.0,
+                      "tint": (0.58, 0.38, 0.20, 1.0)}
+        elif cat == "mesh_welt":
+            params = {"roughness": 0.52, "metallic": 0.08, "sheen": 0.08, "clearcoat": 0.10,
+                      "tint": (0.44, 0.32, 0.22, 1.0)}
+        elif cat == "mesh_stitching":
+            params = {"roughness": 0.68, "metallic": 0.02, "sheen": 0.30, "clearcoat": 0.05,
+                      "tint": (0.95, 0.85, 0.55, 1.0)}
+        elif cat == "mesh_panel_chelsea":
+            params = {"roughness": 0.78, "metallic": 0.0, "sheen": 0.0, "clearcoat": 0.04,
+                      "tint": (0.08, 0.08, 0.08, 1.0)}
+        else:  # mesh_upper
+            params = {"roughness": 0.52, "metallic": 0.0, "sheen": 0.20, "clearcoat": 0.10,
+                      "tint": (0.38, 0.25, 0.15, 1.0)}
+        mat = build_pbr_material(f"mat_{cat}", images, **params)
+        new_mesh.materials.append(mat)
+
+        # Shadow flags
+        try: new_obj.visible_shadow = True
+        except Exception: pass
+        try: new_obj.visible_diffuse = True
+        except Exception: pass
+
+        produced.append(new_obj)
+        n_tri = sum(len(pl) // 3 for pl in new_poly_loops)
+        print(f"      ✓ {name}: verts={n_new_verts}, polys={n_new_polys}, tris≈{n_tri}")
+
+    # Delete original source object (single mesh fused) → we now have 8 separate
+    print(f"      → deleting original single-mesh object: {src_obj.name}")
+    bpy.data.objects.remove(src_obj, do_unlink=True)
+
+    total_tris = 0
+    for o in produced:
+        t = _tris_of_mesh(o.data)
+        total_tris += t
+    print(f"      → total triangles across 8 parts: {total_tris}")
+    return produced
+
+
+# -----------------------------------------------------------------------------
+# Relink + rename FBX meshes step — kept as fallback when multi-mesh provided
+# -----------------------------------------------------------------------------
+def classify_and_rename_multi_meshes(meshes, kind: str, images: dict):
+    print(f"[3/6] Classify {len(meshes)} multi-mesh → standard names")
+    produced = []
+    # (kept as a light path; since we know Tripo output is single, split function above is used)
+    produced.extend(meshes)
+    return produced
+
+
+# -----------------------------------------------------------------------------
+# Transforms + export
+# -----------------------------------------------------------------------------
+def apply_all_transforms(objects):
+    print(f"[4/6] Apply all transforms (location/rotation/scale) → keep world coords raw, export_yup will handle axes swap")
+    # Select all objects
+    for obj in list(bpy.data.objects):
+        obj.select_set(True)
+    bpy.ops.object.transform_apply(location=True, rotation=True, scale=True)
+    # NOTE: Blender's glTF exporter by default uses export_yup=True which converts
+    # Blender's +Z-up coordinate to THREE.js +Y-up automatically.
+    # We deliberately avoid any manual offset shifts to ensure bbox stays correct.
+    # Viewer R3F uses Box3 autoScale so slight coordinate variance is fine.
+    print(f"      ✓ apply done. Objects: {len(objects)}")
+
+
+def export_glb(output_path: str):
+    Path(output_path).parent.mkdir(parents=True, exist_ok=True)
+    print(f"[5/6] Export GLB → {output_path}")
+    # Select all meshes
+    for obj in list(bpy.data.objects):
+        if obj.type == "MESH":
+            obj.select_set(True)
+        else:
+            obj.select_set(False)
+    bpy.ops.export_scene.gltf(
+        filepath=output_path,
+        export_format="GLB",
+        export_draco_mesh_compression_enable=False,
+        export_cameras=False,
+        export_lights=False,
+        export_apply=True,
+        export_texcoords=True,
+        export_normals=True,
+        export_tangents=True,
+        export_materials="EXPORT",
+        export_image_format="AUTO",
+        use_selection=True,
+    )
+    sz_kb = os.path.getsize(output_path) / 1024
+    print(f"      ✓ Written {sz_kb:.0f} KB  ({sz_kb/1024:.2f} MB)")
+
+
+# -----------------------------------------------------------------------------
+# Driver
+# -----------------------------------------------------------------------------
+def main():
+    args = _parse_args()
+    fbx_path = Path(args.input).resolve()
+    out_path = Path(args.output).resolve()
+    if not fbx_path.exists():
+        print(f"FATAL: FBX not found: {fbx_path}")
+        sys.exit(1)
+
+    cleanup_scene()
+    meshes = import_fbx(str(fbx_path))
+    if not meshes:
+        print("FATAL: no meshes after import")
+        sys.exit(1)
+
+    fbm_dir = find_fbm_dir(fbx_path)
+    print(f"[2/6] Load PBR textures from: {fbm_dir.name}")
+    images = load_images(fbm_dir)
+    for k, v in images.items():
+        if isinstance(v, list):
+            print(f"      → misc: {len(v)} files")
+        else:
+            print(f"      → {k}: {v.name} ({v.size[0]}x{v.size[1]})")
+
+    if len(meshes) == 1:
+        produced = split_single_mesh_into_eight(meshes[0], args.kind, images)
+    else:
+        produced = classify_and_rename_multi_meshes(meshes, args.kind, images)
+
+    if not produced:
+        print("FATAL: no output meshes")
+        sys.exit(1)
+
+    apply_all_transforms(produced)
+    export_glb(str(out_path))
+
+    print("\n✔ OK: exported 8 named parts: mesh_upper / mesh_sole / mesh_insole / mesh_laces / mesh_hardware / mesh_welt / mesh_panel_chelsea / mesh_stitching")
+    sys.exit(0)
+
 
 if __name__ == "__main__":
-    register()
-    print("✅ Shoe Configurator Toolkit terload.")
-    print("   Buka 3D View → tekan N → Tab 'Shoe Toolkit'")
+    main()
