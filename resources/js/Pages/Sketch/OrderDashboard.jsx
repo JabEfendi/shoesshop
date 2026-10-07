@@ -1,15 +1,22 @@
-import { Link } from '@inertiajs/react';
 import SketchLayout, { fmt } from '../../Components/Sketch/SketchLayout';
+import { Hero, Reveal } from '../../Components/Parallax/index.jsx';
 
 function StatusBadge({ s }) {
-    if (s === 'done')    return <span className="badge badge-success"><i className="fas fa-check mr-1"></i>Selesai</span>;
-    if (s === 'active')  return <span className="badge badge-warning text-dark"><i className="fas fa-gears mr-1 fa-spin"></i>Sedang dikerjakan</span>;
-    return <span className="badge badge-secondary">Menunggu</span>;
+    if (s === 'done') return <span className="hm-tag" style={{ background: 'rgba(74,124,89,.14)', borderColor: 'rgba(74,124,89,.4)', color: '#3d6b4b' }}><i className="fas fa-check" /> Selesai</span>;
+    if (s === 'active') return <span className="hm-tag" style={{ background: 'rgba(201,169,98,.18)', borderColor: 'rgba(201,169,98,.5)', color: '#8a6a1f' }}><i className="fas fa-gears fa-spin" /> Sedang dikerjakan</span>;
+    return <span className="hm-tag" style={{ color: '#8a857b' }}>Menunggu</span>;
 }
 
 export default function OrderDashboard({ orders }) {
+    const stats = [
+        ['Total Order', orders.length, '#14161c'],
+        ['Dalam Produksi', 1, '#a9822f'],
+        ['Sisa Pelunasan', fmt(orders[0].tagihan.pelunasan_sisa), '#b7410e'],
+        ['Garansi Aktif', orders.filter(o => o.garansi.claimable).length, '#4a7c59'],
+    ];
+
     return (
-        <SketchLayout title="Order Dashboard — ShoeShop" active="Orders"
+        <SketchLayout title="Order Dashboard — SHOESHOP.ID" active="Orders"
             breadcrumb={[
                 { label: 'Home', href: '/sketch/home', done: true },
                 { label: 'Account', active: true },
@@ -17,188 +24,129 @@ export default function OrderDashboard({ orders }) {
                 { label: 'Pelunasan' },
                 { label: 'Garansi' },
             ]}>
-            <div className="container-fluid py-4">
-                <div className="row mb-4">
-                    <div className="col">
-                        <span className="badge badge-warning text-dark font-weight-bold px-3 py-1 mb-2">
-                            ACCOUNT · ORDER DASHBOARD
-                        </span>
-                        <h2 style={{ fontWeight: 900 }} className="mb-1">Pesanan, Produksi, & Pelunasan</h2>
-                        <p className="text-industrial-600 mb-0">
-                            Cek status produksi sepatu kamu, bayar pelunasan, dan klaim garansi dari satu tempat.
-                        </p>
-                    </div>
-                </div>
+            <Hero
+                image="/assets/images/products/chelsea-boots/back-side.jpeg"
+                imageSpeed={0.16}
+                height="46vh"
+                minHeight={340}
+                eyebrow="Account · Order Dashboard"
+                kickerIcon="fas fa-clipboard-list"
+                title={<>Pesanan <span className="accent">& Produksi</span></>}
+                subtitle="Pantau status produksi, bayar pelunasan, dan klaim garansi dari satu tempat."
+            />
 
-                <div className="row mb-4">
-                    <div className="col-md-3 mb-2">
-                        <div className="card border-0 shadow-sm">
-                            <div className="card-body p-3">
-                                <div className="text-industrial-500" style={{ fontSize: 12 }}>Total Order</div>
-                                <div style={{ fontSize: 24, fontWeight: 900 }}>{orders.length}</div>
+            <section style={{ background: '#f7f3ec', padding: 'clamp(40px,6vw,72px) 0' }}>
+                <div className="hm-container">
+                    <div className="row mb-4">
+                        {stats.map(([label, val, color], i) => (
+                            <div key={label} className="col-6 col-md-3 mb-3">
+                                <Reveal delay={(i % 4) + 1}>
+                                    <div className="hm-panel p-3 h-100">
+                                        <div className="hm-mono" style={{ fontSize: 10.5, letterSpacing: '.12em', color: '#8a857b', textTransform: 'uppercase' }}>{label}</div>
+                                        <div className="hm-display mt-1" style={{ fontSize: 26, fontWeight: 800, color }}>{val}</div>
+                                    </div>
+                                </Reveal>
                             </div>
-                        </div>
+                        ))}
                     </div>
-                    <div className="col-md-3 mb-2">
-                        <div className="card border-0 shadow-sm">
-                            <div className="card-body p-3">
-                                <div className="text-industrial-500" style={{ fontSize: 12 }}>Dalam Produksi</div>
-                                <div style={{ fontSize: 24, fontWeight: 900, color: '#a7671f' }}>1</div>
-                            </div>
-                        </div>
-                    </div>
-                    <div className="col-md-3 mb-2">
-                        <div className="card border-0 shadow-sm">
-                            <div className="card-body p-3">
-                                <div className="text-industrial-500" style={{ fontSize: 12 }}>Sisa Pelunasan</div>
-                                <div style={{ fontSize: 24, fontWeight: 900, color: '#c64400' }}>
-                                    {fmt(orders[0].tagihan.pelunasan_sisa)}
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div className="col-md-3 mb-2">
-                        <div className="card border-0 shadow-sm">
-                            <div className="card-body p-3">
-                                <div className="text-industrial-500" style={{ fontSize: 12 }}>Garansi Aktif</div>
-                                <div style={{ fontSize: 24, fontWeight: 900, color: '#2e7d32' }}>{orders.filter(o => o.garansi.claimable).length}</div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
 
-                <div className="row">
-                    <div className="col-12">
-                        {orders.map((o, idx) => (
-                            <div key={o.id} className="card border-0 shadow-sm mb-4">
-                                <div className="card-header d-flex flex-wrap justify-content-between align-items-center"
-                                    style={{ background: idx === 0 ? '#181714' : '#f9f6f1', color: idx === 0 ? '#fff' : '#181714' }}>
-                                    <div>
-                                        <span className="badge badge-warning text-dark mr-2 font-weight-bold">
-                                            #{o.id}
-                                        </span>
-                                        <span className="font-weight-bold mr-2">{o.items[0].n}</span>
-                                        <span className={idx === 0 ? 'text-industrial-300' : 'text-industrial-500'} style={{ fontSize: 12 }}>
-                                            <i className="fas fa-calendar mr-1"></i> {o.tgl} · Size EU {o.items[0].size}
+                    {orders.map((o, idx) => (
+                        <Reveal key={o.id} delay={1}>
+                            <div className="hm-panel mb-4" style={{ borderColor: idx === 0 ? 'rgba(201,169,98,.5)' : undefined }}>
+                                <div className="d-flex flex-wrap justify-content-between align-items-center p-3"
+                                    style={{ background: idx === 0 ? '#14161c' : '#faf8f4', color: idx === 0 ? '#fff' : '#14161c', borderTopLeftRadius: 7, borderTopRightRadius: 7 }}>
+                                    <div className="d-flex align-items-center flex-wrap gap-2">
+                                        <span className="hm-tag hm-tag-dark" style={{ background: 'rgba(201,169,98,.16)', color: 'var(--hm-brass-2)' }}>#{o.id}</span>
+                                        <b>{o.items[0].n}</b>
+                                        <span className="hm-mono" style={{ fontSize: 11, color: idx === 0 ? 'rgba(255,255,255,.55)' : '#8a857b' }}>
+                                            <i className="fas fa-calendar mr-1" /> {o.tgl} · Size EU {o.items[0].size}
                                         </span>
                                     </div>
-                                    {idx === 0 && <span className="badge badge-warning text-dark font-weight-bold px-3 py-1"><i className="fas fa-gears mr-1 fa-spin"></i>PRODUKSI BERJALAN</span>}
-                                    {idx === 1 && <span className="badge badge-success font-weight-bold px-3 py-1"><i className="fas fa-check mr-1"></i>SUDAH DITERIMA</span>}
+                                    {idx === 0 && <span className="hm-tag" style={{ background: 'rgba(201,169,98,.2)', color: 'var(--hm-brass-2)', borderColor: 'rgba(201,169,98,.5)' }}><i className="fas fa-gears fa-spin" /> Produksi Berjalan</span>}
+                                    {idx === 1 && <span className="hm-tag" style={{ background: 'rgba(74,124,89,.2)', color: '#a7d6b3', borderColor: 'rgba(74,124,89,.5)' }}><i className="fas fa-check" /> Sudah Diterima</span>}
                                 </div>
-                                <div className="card-body">
+                                <div className="p-4">
                                     <div className="row">
                                         <div className="col-lg-7 mb-4">
-                                            <div className="font-weight-bold mb-2" style={{ fontSize: 13 }}>
-                                                <i className="fas fa-diagram-project mr-1 text-warning"></i>
-                                                Timeline Produksi — <span className="badge badge-info text-white px-2 py-1 ml-1">{o.estimasi}</span>
+                                            <div className="d-flex flex-wrap align-items-center gap-2 mb-3">
+                                                <span className="hm-mono" style={{ fontSize: 10.5, letterSpacing: '.12em', color: '#8a857b', textTransform: 'uppercase' }}>
+                                                    <i className="fas fa-diagram-project mr-1" /> Timeline Produksi
+                                                </span>
+                                                <span className="hm-tag">{o.estimasi}</span>
                                             </div>
-                                            <div className="d-flex flex-column gap-1">
-                                                {o.produksi.map((s, si) => (
-                                                    <div key={s.label} className={`p-2 rounded d-flex align-items-center justify-content-between ${s.status === 'active' ? 'bg-warning bg-opacity-10' : ''}`}
-                                                        style={{ border: s.status === 'active' ? '1px solid #ffd080' : '1px solid transparent' }}>
-                                                        <div className="d-flex align-items-center gap-2">
-                                                            <span className="badge font-weight-bold"
-                                                                style={{
-                                                                    minWidth: 26,
-                                                                    background: s.status === 'done' ? '#2e7d32' : s.status === 'active' ? '#a7671f' : '#cac6bf',
-                                                                    color: '#fff', borderRadius: 14
-                                                                }}>
-                                                                {s.status === 'done' ? <i className="fas fa-check"></i> : si + 1}
-                                                            </span>
-                                                            <span style={{ fontSize: 13, fontWeight: s.status === 'active' ? 800 : 600 }}>{s.label}</span>
-                                                        </div>
-                                                        <StatusBadge s={s.status} />
+                                            {o.produksi.map((s, si) => (
+                                                <div key={s.label} className="d-flex align-items-center justify-content-between p-2 mb-1"
+                                                    style={{
+                                                        borderRadius: 6,
+                                                        background: s.status === 'active' ? 'rgba(201,169,98,.12)' : 'transparent',
+                                                        border: s.status === 'active' ? '1px solid rgba(201,169,98,.45)' : '1px solid transparent',
+                                                    }}>
+                                                    <div className="d-flex align-items-center gap-3">
+                                                        <span className="d-inline-flex align-items-center justify-content-center hm-mono"
+                                                            style={{
+                                                                width: 26, height: 26, borderRadius: '50%', fontSize: 11,
+                                                                background: s.status === 'done' ? '#4a7c59' : s.status === 'active' ? '#c9a962' : 'rgba(20,22,28,.12)',
+                                                                color: s.status === 'done' || s.status === 'active' ? '#fff' : '#8a857b',
+                                                            }}>
+                                                            {s.status === 'done' ? <i className="fas fa-check" style={{ fontSize: 9 }} /> : si + 1}
+                                                        </span>
+                                                        <span style={{ fontSize: 13.5, fontWeight: s.status === 'active' ? 700 : 600 }}>{s.label}</span>
                                                     </div>
-                                                ))}
-                                            </div>
-
+                                                    <StatusBadge s={s.status} />
+                                                </div>
+                                            ))}
                                             {idx === 0 && (
-                                                <div className="mt-4 p-3 rounded" style={{ background: '#eaf5ff', fontSize: 13 }}>
-                                                    <i className="fas fa-clock mr-1 text-primary"></i>
-                                                    <b>Update terakhir (contoh):</b> Pemotongan pola ~50% selesai. Hari Rabu besok masuk tahap jahit upper.
-                                                    <br />
-                                                    <span style={{ fontSize: 12, color: '#6e685f' }}>
-                                                        (Nanti update real akan push notifikasi WA + email otomatis setiap step berganti status)
-                                                    </span>
+                                                <div className="mt-4 p-3" style={{ background: '#eef5fb', borderRadius: 8, fontSize: 13 }}>
+                                                    <i className="fas fa-clock mr-1" style={{ color: '#3a7ca5' }} />
+                                                    <b>Update terakhir:</b> Pemotongan pola ~50% selesai. Besok masuk tahap jahit upper.
                                                 </div>
                                             )}
                                         </div>
 
                                         <div className="col-lg-5">
-                                            <div className="card border-0 shadow-sm h-100">
-                                                <div className="card-header" style={{ background: '#fff4e4', fontWeight: 800 }}>
-                                                    <i className="fas fa-sack-dollar mr-1 text-warning"></i>
-                                                    Tagihan & Pelunasan
+                                            <div className="hm-panel p-0 mb-3" style={{ boxShadow: 'none' }}>
+                                                <div className="p-3" style={{ background: 'rgba(201,169,98,.1)', borderTopLeftRadius: 7, borderTopRightRadius: 7, fontWeight: 800 }}>
+                                                    <i className="fas fa-sack-dollar mr-2" style={{ color: '#a9822f' }} />Tagihan & Pelunasan
                                                 </div>
-                                                <ul className="list-group list-group-flush" style={{ fontSize: 13.5 }}>
-                                                    <li className="list-group-item d-flex justify-content-between">
-                                                        <span>Total Tagihan</span>
-                                                        <b>{fmt(o.tagihan.total)}</b>
-                                                    </li>
-                                                    <li className="list-group-item d-flex justify-content-between">
-                                                        <span>
-                                                            DP {Math.round(o.tagihan.dp / o.tagihan.total * 100)}%
-                                                            <span className="badge badge-success ml-2"><i className="fas fa-check mr-1"></i>LUNAS</span>
-                                                        </span>
-                                                        <b className="text-success">{fmt(o.tagihan.dp)}</b>
-                                                    </li>
-                                                    <li className="list-group-item d-flex justify-content-between bg-white"
-                                                        style={{ background: o.tagihan.pelunasan_sisa > 0 ? '#fff4e4' : '#e9f7ea' }}>
-                                                        <span className="font-weight-bold">
-                                                            {o.tagihan.pelunasan_sisa > 0 ? 'Sisa Pelunasan' : 'Pelunasan'}
-                                                            <span className={`badge ml-2 ${o.tagihan.lunas ? 'badge-success' : 'badge-warning text-dark'}`}>
-                                                                {o.tagihan.lunas ? <><i className="fas fa-check mr-1"></i>LUNAS</> : 'BELUM LUNAS'}
-                                                            </span>
-                                                        </span>
-                                                        <b style={{ color: o.tagihan.lunas ? '#2e7d32' : '#c64400', fontSize: 18 }}>
-                                                            {fmt(o.tagihan.pelunasan_sisa)}
-                                                        </b>
-                                                    </li>
-                                                </ul>
-
-                                                {!o.tagihan.lunas && (
-                                                    <div className="p-3">
-                                                        <button className="btn btn-block font-weight-bold text-white" style={{ background: '#a7671f' }}>
-                                                            <i className="fas fa-credit-card mr-1"></i>
-                                                            Bayar Pelunasan Sekarang
-                                                        </button>
-                                                        <div className="mt-2 text-industrial-500" style={{ fontSize: 11.5 }}>
-                                                            Pelunasan akan tersedia untuk dibayar setelah status "Selesai Produksi".
-                                                            Bayar → order lanjut ke packing & kirim.
-                                                        </div>
+                                                <div className="p-3" style={{ fontSize: 13.5 }}>
+                                                    <div className="d-flex justify-content-between py-2" style={{ borderBottom: '1px solid rgba(20,22,28,.06)' }}>
+                                                        <span>Total Tagihan</span><b>{fmt(o.tagihan.total)}</b>
                                                     </div>
-                                                )}
-                                            </div>
-
-                                            <div className="card border-0 shadow-sm mt-3">
-                                                <div className="card-header d-flex justify-content-between align-items-center" style={{ background: '#181714', color: '#fff' }}>
-                                                    <span style={{ fontWeight: 800 }}><i className="fas fa-shield-halved mr-1 text-warning"></i> Garansi</span>
-                                                    {o.garansi.claimable && (
-                                                        <span className="badge badge-success">
-                                                            Aktif s/d {o.garansi.sampai}
-                                                        </span>
+                                                    <div className="d-flex justify-content-between py-2" style={{ borderBottom: '1px solid rgba(20,22,28,.06)' }}>
+                                                        <span>DP {Math.round(o.tagihan.dp / o.tagihan.total * 100)}% <i className="fas fa-check ml-1" style={{ color: '#4a7c59', fontSize: 10 }} /></span>
+                                                        <b style={{ color: '#4a7c59' }}>{fmt(o.tagihan.dp)}</b>
+                                                    </div>
+                                                    <div className="d-flex justify-content-between py-2">
+                                                        <span className="font-weight-bold">Sisa Pelunasan</span>
+                                                        <b style={{ color: o.tagihan.lunas ? '#4a7c59' : '#b7410e', fontSize: 17 }}>{fmt(o.tagihan.pelunasan_sisa)}</b>
+                                                    </div>
+                                                    {!o.tagihan.lunas && (
+                                                        <button className="hm-btn hm-btn-gold w-100 mt-2" style={{ fontSize: 12 }}>
+                                                            <i className="fas fa-credit-card" /> Bayar Pelunasan
+                                                        </button>
                                                     )}
                                                 </div>
-                                                <div className="card-body" style={{ fontSize: 13 }}>
-                                                    <div className="mb-2">Syarat: {o.garansi.syarat}</div>
-                                                    <div className="d-flex gap-2">
-                                                        <button className="btn btn-sm flex-grow-1" style={{ background: '#181714', color: '#ffb74d' }}>
-                                                            <i className="fas fa-file-invoice mr-1"></i> Klaim Garansi
-                                                        </button>
-                                                        <button className="btn btn-sm flex-grow-1" style={{ background: '#fff', color: '#181714', border: '1px solid #181714' }}>
-                                                            <i className="fas fa-rotate mr-1"></i> Re-Soling Pertama (Gratis!)
-                                                        </button>
-                                                    </div>
+                                            </div>
+
+                                            <div className="hm-panel p-3">
+                                                <div className="d-flex justify-content-between align-items-center mb-2">
+                                                    <b><i className="fas fa-shield-halved mr-2" style={{ color: '#a9822f' }} />Garansi</b>
+                                                    {o.garansi.claimable && <span className="hm-tag">Aktif s/d {o.garansi.sampai}</span>}
+                                                </div>
+                                                <div style={{ fontSize: 12.5, color: '#6b665d' }} className="mb-3">{o.garansi.syarat}</div>
+                                                <div className="d-flex gap-2">
+                                                    <button className="hm-btn hm-btn-navy flex-grow-1" style={{ padding: '10px', fontSize: 11.5 }}><i className="fas fa-file-invoice" /> Klaim</button>
+                                                    <button className="hm-btn hm-btn-outline-dark flex-grow-1" style={{ padding: '10px', fontSize: 11.5 }}><i className="fas fa-rotate" /> Re-Soling</button>
                                                 </div>
                                             </div>
                                         </div>
                                     </div>
                                 </div>
                             </div>
-                        ))}
-                    </div>
+                        </Reveal>
+                    ))}
                 </div>
-            </div>
+            </section>
         </SketchLayout>
     );
 }

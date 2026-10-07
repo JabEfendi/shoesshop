@@ -1,64 +1,75 @@
 import { Link } from '@inertiajs/react';
 import SketchLayout, { fmt } from '../../Components/Sketch/SketchLayout';
+import { Hero, Reveal, ParallaxImage, SectionHeading } from '../../Components/Parallax/index.jsx';
 
 export default function ChooseModel({ models }) {
+    const heroImg = models?.[0]?.image || '/assets/images/products/boots/boots.jpeg';
+
     return (
-        <SketchLayout title="Pilih Model — Custom ShoeShop" active="Custom"
+        <SketchLayout title="Pilih Model — Custom SHOESHOP.ID" active="Custom"
             breadcrumb={[
                 { label: 'Home', href: '/sketch/home', done: true },
-                { label: 'Pilih Model Custom', active: true },
-                { label: 'Pilih Material & Detail' },
-                { label: 'Preview Konfigurasi' },
+                { label: 'Pilih Model', active: true },
+                { label: 'Pilih Detail' },
+                { label: 'Review' },
                 { label: 'Ukuran' },
-                { label: 'Keranjang' },
                 { label: 'Checkout' },
             ]}>
-            <div className="container-fluid py-4">
-                <div className="row mb-4">
-                    <div className="col-lg-10">
-                        <span className="badge badge-warning text-dark font-weight-bold px-3 py-1 mb-2">
-                            CUSTOMIZER · LANGKAH 1 dari 6
-                        </span>
-                        <h2 style={{ fontWeight: 900 }}>Pilih Silhouette Model</h2>
-                        <p className="text-industrial-600 mb-0">
-                            Pilih base model yang kamu suka — nanti di langkah berikutnya kamu bisa ubah SEMUA detail (kulit, benang,
-                            eyelet, tali, outsole, welt, panel Chelsea — total 8 elemen).
-                        </p>
-                    </div>
-                </div>
+            <Hero
+                image={heroImg}
+                imageSpeed={0.2}
+                height="62vh"
+                minHeight={440}
+                eyebrow="Customizer · Langkah 1 dari 6"
+                kickerIcon="fas fa-shoe-forms"
+                title={<>Pilih <span className="accent">Silhouette</span> Modelmu</>}
+                subtitle="Lima base model daily casual — dari oxford formal sampai boots workwear. Nanti semua detailnya bisa kamu ubah di langkah berikutnya."
+            />
 
-                <div className="row">
-                    {models.map((m, idx) => (
-                        <div key={m.slug} className="col-lg-4 col-md-6 mb-4">
-                            <Link href={`/sketch/custom/${m.slug}`} className="text-decoration-none text-dark">
-                                <div className="card h-100 border-0 shadow-sm position-relative" style={{ transition: 'all .2s', border: '2px solid transparent' }}
-                                    onMouseEnter={e => e.currentTarget.style.borderColor = '#a7671f'}
-                                    onMouseLeave={e => e.currentTarget.style.borderColor = 'transparent'}>
-                                    <span className="position-absolute top-2 left-2 badge badge-dark font-weight-bold">MODEL {String(idx + 1).padStart(2, '0')}</span>
-                                    <div className="d-flex align-items-center justify-content-center" style={{
-                                        height: 260, background: `linear-gradient(135deg, ${m.color}30, #f4f1ec)`
-                                    }}>
-                                        <i className={`fas ${m.icon}`} style={{ fontSize: 120, color: m.color, opacity: .6 }}></i>
-                                    </div>
-                                    <div className="card-body">
-                                        <h5 className="font-weight-bold mb-1">{m.name}</h5>
-                                        <p className="text-industrial-600 mb-3" style={{ fontSize: 13, minHeight: 40 }}>{m.desc}</p>
-                                        <div className="d-flex justify-content-between align-items-center">
-                                            <div>
-                                                <div className="text-industrial-500" style={{ fontSize: 11 }}>BASE PRICE (belum opsi)</div>
-                                                <div style={{ color: '#a7671f', fontWeight: 900, fontSize: 22 }}>{fmt(m.price)}</div>
+            <section style={{ background: '#f7f3ec', padding: 'clamp(56px,7vw,92px) 0' }}>
+                <div className="hm-container">
+                    <SectionHeading
+                        eyebrow="Koleksi Base Model"
+                        title="Lima Dunia, Satu Karakter"
+                        lead="Setiap model punya gaya hidupnya sendiri: formal untuk kantor, kasual untuk jalan, dan semuanya tetap terasa premium."
+                    />
+
+                    <div className="row">
+                        {models.map((m, idx) => (
+                            <div key={m.slug} className="col-lg-4 col-md-6 mb-4">
+                                <Reveal delay={(idx % 3) + 1}>
+                                    <Link href={`/sketch/custom/${m.slug}`} className="text-decoration-none text-dark">
+                                        <div className="hm-card h-100 position-relative">
+                                            <div className="hm-parallax" style={{ height: 250 }}>
+                                                <ParallaxImage src={m.image} speed={0.1} overlay="linear-gradient(180deg, rgba(12,13,17,.08), rgba(12,13,17,.5))" />
+                                                <span className="hm-tag hm-tag-dark position-absolute" style={{ top: 12, left: 12, zIndex: 6 }}>
+                                                    Model {String(idx + 1).padStart(2, '0')}
+                                                </span>
+                                                <span className="hm-tag hm-tag-dark position-absolute" style={{ top: 12, right: 12, zIndex: 6 }}>
+                                                    {m.type === 'casual' ? 'Casual' : 'Formal'}
+                                                </span>
                                             </div>
-                                            <div className="btn" style={{ background: '#181714', color: '#ffb74d' }}>
-                                                Pilih ini <i className="fas fa-arrow-right ml-2"></i>
+                                            <div className="p-4">
+                                                <h4 className="hm-display mb-1" style={{ fontWeight: 800, fontSize: 20 }}>{m.name}</h4>
+                                                <p style={{ fontSize: 13.5, color: '#6b665d', minHeight: 42 }}>{m.desc}</p>
+                                                <div className="d-flex justify-content-between align-items-end mt-3">
+                                                    <div>
+                                                        <div className="hm-mono" style={{ fontSize: 10, letterSpacing: '.14em', color: '#8a857b' }}>BASE PRICE</div>
+                                                        <div style={{ color: '#a9822f', fontWeight: 900, fontSize: 21 }}>{fmt(m.price)}</div>
+                                                    </div>
+                                                    <span className="hm-btn hm-btn-navy" style={{ padding: '10px 16px', fontSize: 12 }}>
+                                                        Pilih <i className="fas fa-arrow-right" />
+                                                    </span>
+                                                </div>
                                             </div>
                                         </div>
-                                    </div>
-                                </div>
-                            </Link>
-                        </div>
-                    ))}
+                                    </Link>
+                                </Reveal>
+                            </div>
+                        ))}
+                    </div>
                 </div>
-            </div>
+            </section>
         </SketchLayout>
     );
 }

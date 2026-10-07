@@ -1,71 +1,88 @@
 import { Link } from '@inertiajs/react';
 import SketchLayout, { fmt } from '../../Components/Sketch/SketchLayout';
+import { Hero, Reveal, ParallaxImage, SectionHeading } from '../../Components/Parallax/index.jsx';
 
 export default function Shop({ presets }) {
+    const heroImg = presets?.[2]?.image || presets?.[0]?.image || '/assets/images/products/pantofel/PANTOFEL.jpeg';
+
     return (
-        <SketchLayout title="Shop Preset — ShoeShop Sketch" active="Shop Preset"
+        <SketchLayout title="Shop Preset — SHOESHOP.ID" active="Shop"
             breadcrumb={[
                 { label: 'Home', href: '/sketch/home', done: true },
                 { label: 'Shop Preset', active: true },
             ]}>
-            <div className="container-fluid py-4">
-                <div className="row mb-4">
-                    <div className="col-md-8">
-                        <h2 style={{ fontWeight: 900 }}>Shop Preset</h2>
-                        <p className="text-industrial-600 mb-0">
-                            Desain desain jadi yang tidak perlu di-custom lagi. Bisa langsung pilih size & checkout.
-                            Atau klik <b>"Custom dari Preset Ini"</b> untuk ubah detail lagi.
-                        </p>
-                    </div>
-                    <div className="col-md-4 text-right">
-                        <Link href="/sketch/custom" className="btn btn-sm font-weight-bold" style={{ background: '#a7671f', color: '#fff' }}>
-                            <i className="fas fa-sliders mr-2"></i> Ingin Custom dari Nol?
-                        </Link>
-                    </div>
-                </div>
+            <Hero
+                image={heroImg}
+                imageSpeed={0.18}
+                height="58vh"
+                minHeight={420}
+                eyebrow="Desain Jadi · Tanpa Custom"
+                kickerIcon="fas fa-store"
+                title={<>Koleksi <span className="accent">Preset</span> Siap Pesan</>}
+                subtitle="Desain yang sudah kami kurasi — tinggal pilih ukuran dan checkout. Ingin ubah detailnya? Setiap preset bisa dibuka kembali di customizer."
+                actions={<Link href="/sketch/custom" className="hm-btn hm-btn-gold"><i className="fas fa-sliders" /> Custom dari Nol</Link>}
+            />
 
-                <div className="row">
-                    {presets.map(p => (
-                        <div key={p.slug} className="col-xl-4 col-lg-6 mb-4">
-                            <div className="card h-100 border-0 shadow-sm">
-                                <div className="position-relative d-flex align-items-center justify-content-center" style={{
-                                    height: 240, background: `linear-gradient(135deg, ${p.color}25, #f4f1ec)`
-                                }}>
-                                    <span className="position-absolute top-2 left-2 badge badge-success font-weight-bold">
-                                        <i className="fas fa-check-circle mr-1"></i> PRESET
-                                    </span>
-                                    <i className={`fas ${p.icon}`} style={{ fontSize: 90, color: p.color, opacity: .55 }}></i>
-                                </div>
-                                <div className="card-body">
-                                    <h5 className="font-weight-bold mb-1">{p.name}</h5>
-                                    <p className="text-industrial-600 mb-3" style={{ fontSize: 13 }}>{p.desc}</p>
-                                    <div className="mb-3">
-                                        <div className="text-industrial-700 font-weight-bold mb-2" style={{ fontSize: 12 }}>Varian Preset:</div>
-                                        {p.preset_variants.map((v, i) => (
-                                            <div key={i} className="d-flex align-items-center justify-content-between py-2 px-3 mb-2 rounded"
-                                                style={{ background: i === 0 ? '#fff4e4' : '#faf8f4', border: i === 0 ? '1px solid #ffd080' : '1px solid transparent', cursor: 'pointer' }}>
-                                                <span style={{ fontSize: 13, fontWeight: i === 0 ? 700 : 500 }}>
-                                                    {i === 0 && <i className="fas fa-check text-success mr-2"></i>}
-                                                    {v.n}
-                                                </span>
-                                                <span style={{ color: '#a7671f', fontWeight: 800, fontSize: 14 }}>{fmt(v.p)}</span>
+            <section style={{ background: '#f7f3ec', padding: 'clamp(56px,7vw,92px) 0' }}>
+                <div className="hm-container">
+                    <SectionHeading
+                        eyebrow="Preset Edition"
+                        title="Siap Pakai, Tetap Personal"
+                        lead="Tersedia dalam beberapa varian — Classic, Heritage, hingga paket lengkap dengan care kit."
+                    />
+
+                    <div className="row">
+                        {presets.map((p, i) => (
+                            <div key={p.slug} className="col-xl-4 col-lg-6 mb-4">
+                                <Reveal delay={(i % 3) + 1}>
+                                    <div className="hm-card h-100 d-flex flex-column">
+                                        <div className="hm-parallax position-relative" style={{ height: 260 }}>
+                                            <ParallaxImage src={p.image} speed={0.1} overlay="linear-gradient(180deg, rgba(12,13,17,.05), rgba(12,13,17,.46))" />
+                                            <span className="hm-tag position-absolute" style={{ top: 12, left: 12, zIndex: 6 }}>
+                                                <i className="fas fa-check-circle" /> Preset
+                                            </span>
+                                        </div>
+                                        <div className="p-4 d-flex flex-column flex-grow-1">
+                                            <div className="d-flex justify-content-between align-items-start mb-2">
+                                                <h4 className="hm-display mb-0" style={{ fontWeight: 800, fontSize: 19 }}>{p.name}</h4>
+                                                <span style={{ color: '#a9822f', fontWeight: 900, fontSize: 16 }}>dari {fmt(p.price)}</span>
                                             </div>
-                                        ))}
+                                            <p style={{ fontSize: 13, color: '#6b665d' }}>{p.desc}</p>
+
+                                            <div className="mt-2 mb-3">
+                                                <div className="hm-mono mb-2" style={{ fontSize: 10, letterSpacing: '.14em', color: '#8a857b' }}>VARIAN PRESET</div>
+                                                {p.preset_variants.map((v, vi) => (
+                                                    <div key={vi} className="d-flex align-items-center justify-content-between py-2 px-3 mb-2"
+                                                        style={{
+                                                            background: vi === 0 ? 'rgba(201,169,98,.1)' : '#faf8f4',
+                                                            border: vi === 0 ? '1px solid rgba(201,169,98,.5)' : '1px solid rgba(20,22,28,.06)',
+                                                            borderRadius: 5, fontSize: 13,
+                                                        }}>
+                                                        <span className="font-weight-bold">
+                                                            {vi === 0 && <i className="fas fa-check mr-2" style={{ color: '#4a7c59', fontSize: 10 }} />}
+                                                            {v.n}
+                                                        </span>
+                                                        <span style={{ color: '#a9822f', fontWeight: 800 }}>{fmt(v.p)}</span>
+                                                    </div>
+                                                ))}
+                                            </div>
+
+                                            <div className="d-flex gap-2 mt-auto">
+                                                <Link href={`/sketch/shop/${p.slug}`} className="hm-btn hm-btn-navy flex-grow-1" style={{ padding: '10px 12px', fontSize: 12 }}>
+                                                    <i className="fas fa-circle-info" /> Detail
+                                                </Link>
+                                                <Link href={`/sketch/custom/${p.slug}`} className="hm-btn hm-btn-outline-dark flex-grow-1" style={{ padding: '10px 12px', fontSize: 12 }}>
+                                                    <i className="fas fa-sliders" /> Custom
+                                                </Link>
+                                            </div>
+                                        </div>
                                     </div>
-                                    <div className="d-flex gap-2">
-                                        <Link href={`/sketch/shop/${p.slug}`} className="btn btn-sm flex-grow-1" style={{ background: '#181714', color: '#fff' }}>
-                                            <i className="fas fa-circle-info mr-1"></i> Detail
-                                        </Link>
-                                        <Link href={`/sketch/custom/${p.slug}`} className="btn btn-sm flex-grow-1" style={{ background: '#fff', color: '#a7671f', border: '1px solid #a7671f' }}>
-                                            <i className="fas fa-sliders mr-1"></i> Custom lagi
-                                        </Link>
-                                    </div>
-                                </div>
+                                </Reveal>
                             </div>
-                        </div>
-                    ))}
+                        ))}
+                    </div>
                 </div>
-            </div>
+            </section>
         </SketchLayout>
     );
 }

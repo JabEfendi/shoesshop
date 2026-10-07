@@ -6,11 +6,11 @@
     <meta name="csrf-token" content="{{ csrf_token() }}">
     <title inertia>{{ config('app.name', 'ShoeShop') }}</title>
     <link rel="preconnect" href="https://fonts.bunny.net">
-    <link href="https://fonts.bunny.net/css?family=roboto:400,500,700|oswald:500,600,700" rel="stylesheet" />
+    <link href="https://fonts.bunny.net/css?family=inter:400,500,600,700,800|oswald:400,500,600,700|playfair-display:400,500,600,700,800,900|jetbrains-mono:400,500,600|caveat:500,600,700" rel="stylesheet" />
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/admin-lte@3.2.0/dist/css/adminlte.min.css">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.4.0/css/all.min.css">
     <style>
-        body { font-family: 'Roboto', sans-serif; background: #f4f6f9; }
+        body { font-family: 'Inter', 'Roboto', sans-serif; background: #f7f3ec; }
         .content-wrapper { margin-left: 0 !important; }
         .main-sidebar { display: none; }
         .brand-link.industrial {
@@ -71,43 +71,10 @@
         }
     </style>
     @viteReactRefresh
-    @vite(['resources/js/app.jsx', "resources/js/Pages/{$page['component']}.jsx"])
+    @vite(['resources/js/app.jsx'])
     @inertiaHead
 </head>
-<body class="sidebar-mini layout-fixed">
-    <div class="wrapper">
-        <nav class="main-header navbar navbar-expand navbar-dark" style="background:#181714;border-bottom:3px solid #a7671f;">
-            <ul class="navbar-nav">
-                <li class="nav-item">
-                    <a class="nav-link brand-link industrial d-inline-block px-3 py-2 text-white text-uppercase font-weight-bold"
-                       href="{{ route('products.index') }}"
-                       style="letter-spacing:1.5px;">
-                        <i class="fas fa-boot mr-2"></i> SHOESHOP<span style="color:#ffb74d;">3D</span>
-                    </a>
-                </li>
-            </ul>
-            <ul class="navbar-nav ml-auto">
-                <li class="nav-item d-none d-md-inline-block">
-                    <span class="nav-link text-industrial-200 text-sm">
-                        <i class="fas fa-cogs mr-1 text-warning"></i>
-                        Custom Configurator v1.0
-                    </span>
-                </li>
-            </ul>
-        </nav>
-
-        <div class="content-wrapper px-3 py-4">
-            <section class="content">
-                @inertia
-            </section>
-        </div>
-
-        <footer class="main-footer text-sm" style="background:#181714;color:#a8a298;border-top:2px solid #454039;margin-left:0;">
-            <strong>© {{ date('Y') }} ShoeShop 3D Configurator.</strong> Built with Laravel + React Three Fiber
-            <div class="float-right d-none d-sm-inline">
-                Tema Industrial · AdminLTE 3.x compatible
-            </div>
-        </footer>
-    </div>
+<body class="hm-body">
+    @inertia
 </body>
 </html>

@@ -1,0 +1,58 @@
+User butuh jawaban SINGKAT, JELAS, TANPA TEST / VERIFIKASI, cocok untuk PRESENTASI. Jawab dalam Bahasa Indonesia, step-step cara menjalankan.
+
+Penting: User pesan "jawab saja ini tanpa test dll nya" → JANGAN panggil tool RunCommand / curl / browser, hanya TEXT SAJA dengan code block command.
+
+Struktur:
+1. Path masuk folder + PATH export
+2. 2 perintah: (a) Start Laravel (php -S, bukan artisan --server karena optionnya tidak ada, server.php custom router Range) (b) Start Vite (npm run dev)
+3. URLs presentasi
+4. Tips presentasi (tab 2 terminal)
+
+Ingat code reference pakai file:// absolute path untuk server.php, ProductSeeder, tapi user tidak minta test, jadi hanya referensi singkat.
+
+## 🚀 CARA MENJALANKAN SHOESHOP 3D CONFIGURATOR (UNTUK PRESENTASI)
+
+Buka **2 Tab Terminal** (satu untuk Laravel, satu untuk Vite):
+
+### 📌 PERTAMA, SETUP PATH (jalankan di KEDUA terminal):
+```bash
+cd ~/Kerja/shoesshop
+export PATH="$PWD/scripts/tools/nodejs/bin:$PATH"
+```
+
+---
+
+### 🔵 TERMINAL 1 — START LARAVEL (Main Website + 3D Router):
+```bash
+php -S 127.0.0.1:8001 server.php
+```
+> Pakai `server.php` custom router di root proyek [server.php](file:///home/crashingtoy/Kerja/shoesshop/server.php) untuk support HTTP 206 Partial Content download GLB 65MB (supaya 3D tidak cacat / hanya sepotong tali).
+
+---
+
+### 🟢 TERMINAL 2 — START VITE (React HMR + CSS/JS Hot Reload):
+```bash
+npm run dev
+```
+> Menjalankan Vite build dev server, port auto **5173** (jika 5173 dipakai → 5174). Laravel Vite Plugin auto sinkron.
+
+---
+
+### 🌐 BUKA DI BROWSER (PRESENTASI):
+| Halaman | Link |
+|---|---|
+| 📦 **Katalog Produk** (Card 2 sepatu dengan foto asli) | `http://127.0.0.1:8001/products` |
+| 🎨 **Configurator 3D Leather Boot** | `http://127.0.0.1:8001/products/leather-boot` |
+| 🎨 **Configurator 3D Chelsea Boot** | `http://127.0.0.1:8001/products/chelsea-boot` |
+
+---
+
+### ⏹️ HENTIKAN SERVER (setelah presentasi):
+Tekan `Ctrl + C` di masing-masing tab terminal (Terminal 1 Laravel + Terminal 2 Vite).
+
+---
+
+### 💡 TIPS PRESENTASI:
+1. **Buka 2 tab browser** → Tab 1: `/products` (Katalog), Tab 2: `/products/leather-boot` (3D configurator)
+2. Untuk demo kustomisasi: Pilih kategori **Sole** → klik swatch **Sole Karet Hitam** → bagian bawah akan berubah warna hitam TANPA bocor ke upper kulit.
+3. Drag object 3D dengan mouse untuk rotate, scroll mouse untuk zoom in/out.

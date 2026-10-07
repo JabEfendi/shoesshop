@@ -4,11 +4,11 @@ use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
 
 $MODELS = [
-    ['slug' => 'boots',        'name' => 'Boots 6\"',        'desc' => 'Classic high-top daily boots',  'price' => 1250000, 'icon' => 'fa-boot',     'color' => '#4a2c1a'],
-    ['slug' => 'chelsea',      'name' => 'Chelsea Boots',    'desc' => 'Easy-on elastic panel boots',  'price' => 980000,  'icon' => 'fa-shoe-prints', 'color' => '#1a1a1a'],
-    ['slug' => 'pantofel',     'name' => 'Pantofel',         'desc' => 'Formal leather oxfords',       'price' => 875000,  'icon' => 'fa-briefcase', 'color' => '#0f0f0f'],
-    ['slug' => 'docmart',      'name' => 'Docmart 8-Eye',   'desc' => 'Iconic chunky sole boots',     'price' => 1325000, 'icon' => 'fa-shoe-forms','color' => '#2a2a2a'],
-    ['slug' => 'loafers',      'name' => 'Loafers',         'desc' => 'Slip-on penny loafers',        'price' => 795000,  'icon' => 'fa-mug-hot',  'color' => '#5c3a1e'],
+    ['slug' => 'boots',        'name' => 'Boots 6"',        'desc' => 'Classic high-top daily boots',  'price' => 1250000, 'icon' => 'fa-boot',     'color' => '#4a2c1a', 'image' => '/assets/images/products/boots/boots.jpeg',            'gallery' => ['/assets/images/products/boots/front-side.jpeg', '/assets/images/products/boots/out-side.jpeg', '/assets/images/products/boots/back-side.jpeg'], 'type' => 'casual', 'glb' => '/3d-assets/leather-boot-optimized.glb'],
+    ['slug' => 'chelsea',      'name' => 'Chelsea Boots',    'desc' => 'Easy-on elastic panel boots',  'price' => 980000,  'icon' => 'fa-shoe-prints', 'color' => '#1a1a1a', 'image' => '/assets/images/products/chelsea-boots/chelsea-pair-glossy-black.jpeg', 'gallery' => ['/assets/images/products/chelsea-boots/front-side.jpeg', '/assets/images/products/chelsea-boots/out-side.jpeg', '/assets/images/products/chelsea-boots/back-side.jpeg'], 'type' => 'formal', 'glb' => '/3d-assets/chelsea-boot-optimized.glb'],
+    ['slug' => 'pantofel',     'name' => 'Pantofel',         'desc' => 'Formal leather oxfords',       'price' => 875000,  'icon' => 'fa-briefcase', 'color' => '#0f0f0f', 'image' => '/assets/images/products/pantofel/PANTOFEL.jpeg',       'gallery' => ['/assets/images/products/pantofel/front-side.jpeg', '/assets/images/products/pantofel/out-side.jpeg', '/assets/images/products/pantofel/back-side.jpeg'], 'type' => 'formal', 'glb' => null],
+    ['slug' => 'docmart',      'name' => 'Docmart 8-Eye',   'desc' => 'Iconic chunky sole boots',     'price' => 1325000, 'icon' => 'fa-shoe-forms','color' => '#2a2a2a', 'image' => '/assets/images/products/docmart/docmart.jpeg',        'gallery' => ['/assets/images/products/docmart/front-side.jpeg', '/assets/images/products/docmart/out-side.jpeg', '/assets/images/products/docmart/back-side.jpeg'], 'type' => 'casual', 'glb' => null],
+    ['slug' => 'loafers',      'name' => 'Loafers',         'desc' => 'Slip-on penny loafers',        'price' => 795000,  'icon' => 'fa-mug-hot',  'color' => '#5c3a1e', 'image' => '/assets/images/products/loafers/loafers.jpeg',         'gallery' => ['/assets/images/products/loafers/front-side.jpeg', '/assets/images/products/loafers/out-side.jpeg', '/assets/images/products/loafers/back-side.jpeg'], 'type' => 'formal', 'glb' => null],
 ];
 
 $CUSTOM_ELEMENTS = [

@@ -1,85 +1,108 @@
 import { Link } from '@inertiajs/react';
 import SketchLayout, { fmt } from '../../Components/Sketch/SketchLayout';
+import { Reveal, ParallaxImage } from '../../Components/Parallax/index.jsx';
 
 export default function ProductDetail({ product }) {
+    const gallery = product.gallery || [product.image].filter(Boolean);
+
     return (
-        <SketchLayout title={`${product.name} — Preset Detail`} active="Shop Preset"
+        <SketchLayout title={`${product.name} — Preset Detail`} active="Shop"
             breadcrumb={[
                 { label: 'Home', href: '/sketch/home', done: true },
                 { label: 'Shop Preset', href: '/sketch/shop', done: true },
                 { label: product.name, active: true },
             ]}>
-            <div className="container-fluid py-4">
-                <div className="row">
-                    <div className="col-lg-7 mb-5">
-                        <div className="d-flex align-items-center justify-content-center position-relative" style={{
-                            height: 480, border: '2px dashed #d9d2c4', borderRadius: 12,
-                            background: `linear-gradient(135deg, ${product.color}22, #fff9ef)`
-                        }}>
-                            <span className="position-absolute top-2 right-2 badge badge-dark">
-                                <i className="fas fa-image mr-1"></i> GAMBAR PRODUK / 3D PRESET (nanti)
-                            </span>
-                            <i className={`fas ${product.icon}`} style={{ fontSize: 160, color: product.color, opacity: .55 }}></i>
-                        </div>
-                    </div>
-                    <div className="col-lg-5">
-                        <div className="badge badge-success mb-2"><i className="fas fa-check mr-1"></i> Preset Edition (tanpa custom)</div>
-                        <h2 className="font-weight-bold mb-1" style={{ fontSize: 32 }}>{product.name} (Classic)</h2>
-                        <div style={{ color: '#a7671f', fontWeight: 900, fontSize: 28 }} className="mb-3">
-                            {fmt(product.price)}
-                        </div>
-                        <p className="text-industrial-600" style={{ lineHeight: 1.7 }}>
-                            Versi preset desain jadi — langsung pilih size & checkout. Kalau mau ubah warna kulit/tali/sole,
-                            klik <b>"Custom dari Preset Ini"</b>.
-                        </p>
-
-                        <div className="card mb-3 mt-4" style={{ border: '1px solid #e3ddd2' }}>
-                            <div className="card-header" style={{ background: '#f9f6f1', fontWeight: 800 }}>
-                                <i className="fas fa-list-check mr-2 text-success"></i> Yang Didapat:
-                            </div>
-                            <ul className="list-group list-group-flush" style={{ fontSize: 14 }}>
-                                {product.highlights.map(h => (
-                                    <li key={h} className="list-group-item"><i className="fas fa-check text-success mr-2"></i>{h}</li>
-                                ))}
-                                <li className="list-group-item"><i className="fas fa-clock text-warning mr-2"></i> Estimasi pengerjaan: <b>{product.lead_time}</b></li>
-                                <li className="list-group-item"><i className="fas fa-shield-halved text-warning mr-2"></i> <b>Garansi 3 hari</b> (wajib video unboxing, ongkir retur = buyer)</li>
-                                <li className="list-group-item"><i className="fas fa-gift text-warning mr-2"></i> Include shoe bag + care kit (cleaner + brush)</li>
-                            </ul>
-                        </div>
-
-                        <div className="mb-3">
-                            <div className="font-weight-bold mb-2" style={{ fontSize: 13 }}><i className="fas fa-ruler mr-1"></i> Pilih Ukuran:</div>
-                            <div className="d-flex flex-wrap gap-2">
-                                {product.sizes.map(sz => (
-                                    <button key={sz} className="btn btn-sm px-3 py-2 font-weight-bold"
-                                        style={{
-                                            background: sz === 42 ? '#181714' : '#fff',
-                                            color: sz === 42 ? '#ffb74d' : '#181714',
-                                            border: sz === 42 ? '2px solid #ffb74d' : '1px solid #cac6bf'
-                                        }}>
-                                        {sz} EU
-                                    </button>
+            <section style={{ background: '#f7f3ec', padding: 'clamp(40px,6vw,72px) 0' }}>
+                <div className="hm-container">
+                    <div className="row">
+                        {/* GALLERY */}
+                        <div className="col-lg-7 mb-4">
+                            <Reveal>
+                                <div className="hm-parallax position-relative" style={{ height: 500, borderRadius: 10, overflow: 'hidden', boxShadow: 'var(--hm-shadow)' }}>
+                                    <ParallaxImage src={product.image} speed={0.14} overlay="linear-gradient(180deg, rgba(12,13,17,.06), rgba(12,13,17,.4))" />
+                                    <span className="hm-tag hm-tag-dark position-absolute" style={{ top: 16, left: 16, zIndex: 6 }}>
+                                        <i className="fas fa-camera" /> Preset View
+                                    </span>
+                                </div>
+                            </Reveal>
+                            <div className="row mt-2">
+                                {gallery.slice(0, 3).map((g, i) => (
+                                    <div key={i} className="col-4">
+                                        <Reveal delay={i + 1}>
+                                            <div style={{ height: 110, borderRadius: 8, overflow: 'hidden', border: '1px solid rgba(20,22,28,.08)' }}>
+                                                <img src={g} alt={`${product.name} ${i}`} className="hm-img-cover" />
+                                            </div>
+                                        </Reveal>
+                                    </div>
                                 ))}
                             </div>
-                            <Link href="/sketch/sizing" className="d-inline-block mt-2" style={{ fontSize: 12, color: '#a7671f' }}>
-                                <i className="fas fa-ruler-combined mr-1"></i> Bingung size? Lihat size chart & upload kaki
-                            </Link>
                         </div>
 
-                        <div className="d-flex flex-wrap gap-2 mt-4">
-                            <Link href="/sketch/cart" className="btn btn-lg flex-grow-1 text-white font-weight-bold" style={{ background: '#a7671f', borderColor: '#a7671f' }}>
-                                <i className="fas fa-cart-shopping mr-2"></i> Tambah ke Keranjang
-                            </Link>
-                            <Link href={`/sketch/custom/${product.slug}`} className="btn btn-lg flex-grow-1" style={{ background: '#fff', color: '#181714', border: '2px solid #181714' }}>
-                                <i className="fas fa-sliders mr-2"></i> Custom dari Preset Ini
-                            </Link>
-                        </div>
-                        <div className="mt-2 p-2 text-center" style={{ fontSize: 12, color: '#454039', background: '#fff4e4', borderRadius: 6 }}>
-                            <i className="fas fa-circle-info mr-1"></i> <b>Pembayaran:</b> DP 50% di awal, pelunasan setelah sepatu jadi via Dashboard Order.
+                        {/* INFO */}
+                        <div className="col-lg-5">
+                            <Reveal delay={1}>
+                                <span className="hm-tag"><i className="fas fa-check" /> Preset Edition · tanpa custom</span>
+                                <h1 className="hm-display mt-3 mb-2" style={{ fontWeight: 800, fontSize: 'clamp(1.7rem,3.6vw,2.5rem)' }}>
+                                    {product.name} <span className="accent">(Classic)</span>
+                                </h1>
+                                <div className="hm-display mb-3" style={{ color: '#a9822f', fontWeight: 900, fontSize: 30 }}>
+                                    {fmt(product.price)}
+                                </div>
+                                <p style={{ color: '#55524c', lineHeight: 1.75 }}>{product.desc}. Versi preset desain jadi — langsung pilih ukuran & checkout. Ingin ubah warna kulit, tali, atau sole? Buka di customizer.</p>
+                            </Reveal>
+
+                            <Reveal delay={2}>
+                                <div className="hm-panel p-4 mt-4">
+                                    <div className="hm-mono mb-3" style={{ fontSize: 10.5, letterSpacing: '.16em', textTransform: 'uppercase', color: '#8a857b' }}>
+                                        <i className="fas fa-list-check mr-2" /> Yang kamu dapat
+                                    </div>
+                                    <ul className="list-unstyled mb-0" style={{ fontSize: 13.5, lineHeight: 2.1 }}>
+                                        {product.highlights.map(h => (
+                                            <li key={h}><i className="fas fa-check mr-2" style={{ color: '#4a7c59', fontSize: 11 }} />{h}</li>
+                                        ))}
+                                        <li><i className="fas fa-clock mr-2" style={{ color: '#a9822f', fontSize: 11 }} />Estimasi pengerjaan: <b>{product.lead_time}</b></li>
+                                        <li><i className="fas fa-shield-halved mr-2" style={{ color: '#a9822f', fontSize: 11 }} />Garansi 3 hari (wajib video unboxing)</li>
+                                        <li><i className="fas fa-gift mr-2" style={{ color: '#a9822f', fontSize: 11 }} />Include shoe bag + care kit</li>
+                                    </ul>
+                                </div>
+                            </Reveal>
+
+                            <Reveal delay={3}>
+                                <div className="mt-4">
+                                    <div className="hm-mono mb-2" style={{ fontSize: 10.5, letterSpacing: '.14em', color: '#8a857b' }}>
+                                        <i className="fas fa-ruler mr-1" /> PILIH UKURAN · EU
+                                    </div>
+                                    <div className="d-flex flex-wrap gap-2">
+                                        {product.sizes.map(sz => (
+                                            <button key={sz} className="hm-btn" style={{
+                                                padding: '9px 16px', fontSize: 13, minWidth: 52,
+                                                background: sz === 42 ? '#14161c' : '#fff',
+                                                color: sz === 42 ? 'var(--hm-brass-2)' : '#14161c',
+                                                border: sz === 42 ? '1px solid var(--hm-brass)' : '1px solid rgba(20,22,28,.18)',
+                                            }}>{sz}</button>
+                                        ))}
+                                    </div>
+                                    <Link href="/sketch/sizing" className="d-inline-block mt-2" style={{ fontSize: 12.5, color: '#a9822f' }}>
+                                        <i className="fas fa-ruler-combined mr-1" /> Bingung ukuran? Lihat size chart & upload kaki
+                                    </Link>
+                                </div>
+
+                                <div className="d-flex flex-wrap gap-2 mt-4">
+                                    <Link href="/sketch/cart" className="hm-btn hm-btn-gold flex-grow-1">
+                                        <i className="fas fa-cart-shopping" /> Tambah ke Keranjang
+                                    </Link>
+                                    <Link href={`/sketch/custom/${product.slug}`} className="hm-btn hm-btn-outline-dark flex-grow-1">
+                                        <i className="fas fa-sliders" /> Custom dari Preset Ini
+                                    </Link>
+                                </div>
+                                <div className="mt-3 p-3 hm-mono" style={{ fontSize: 11.5, color: '#55524c', background: 'rgba(201,169,98,.1)', borderRadius: 6 }}>
+                                    <i className="fas fa-circle-info mr-1" style={{ color: '#a9822f' }} /> DP 50% di awal, pelunasan setelah sepatu jadi.
+                                </div>
+                            </Reveal>
                         </div>
                     </div>
                 </div>
-            </div>
+            </section>
         </SketchLayout>
     );
 }

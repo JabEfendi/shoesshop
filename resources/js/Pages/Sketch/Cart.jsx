@@ -1,159 +1,110 @@
 import { Link } from '@inertiajs/react';
 import SketchLayout, { fmt } from '../../Components/Sketch/SketchLayout';
+import { Reveal } from '../../Components/Parallax/index.jsx';
 
 export default function Cart({ items, subtotal }) {
     return (
-        <SketchLayout title="Keranjang — ShoeShop Sketch" active="Home"
+        <SketchLayout title="Keranjang — SHOESHOP.ID" active="Home"
             breadcrumb={[
                 { label: 'Home', href: '/sketch/home', done: true },
                 { label: 'Pilih Model', href: '/sketch/custom', done: true },
                 { label: 'Custom Detail', href: '/sketch/custom/boots', done: true },
-                { label: 'Preview Konfigurasi', href: '/sketch/custom/boots/preview', done: true },
+                { label: 'Review', href: '/sketch/custom/boots/preview', done: true },
                 { label: 'Pilih Ukuran', href: '/sketch/sizing', done: true },
                 { label: 'Keranjang', active: true },
                 { label: 'Checkout' },
             ]}>
-            <div className="container-fluid py-4">
-                <div className="row mb-3">
-                    <div className="col">
-                        <span className="badge badge-warning text-dark font-weight-bold px-3 py-1 mb-2">
-                            LANGKAH 5 dari 6
-                        </span>
-                        <h2 style={{ fontWeight: 900 }}>Review Keranjang</h2>
+            <section style={{ background: '#f7f3ec', padding: 'clamp(40px,6vw,72px) 0' }}>
+                <div className="hm-container">
+                    <div className="d-flex flex-wrap justify-content-between align-items-end mb-4">
+                        <Reveal>
+                            <span className="hm-kicker"><i className="fas fa-cart-shopping mr-2" /> Langkah 5 dari 6</span>
+                            <h1 className="hm-display mt-2 mb-0" style={{ fontWeight: 800, fontSize: 'clamp(1.6rem,3.4vw,2.4rem)' }}>Review Keranjang</h1>
+                        </Reveal>
+                        <Reveal delay={1}>
+                            <Link href="/sketch/shop" className="hm-btn hm-btn-outline-dark mb-2"><i className="fas fa-plus" /> Tambah Produk</Link>
+                        </Reveal>
                     </div>
-                    <div className="col text-right align-self-end">
-                        <Link href="/sketch/shop" className="btn btn-sm" style={{ background: '#fff', color: '#181714', border: '2px solid #181714' }}>
-                            <i className="fas fa-plus mr-1"></i> Tambah Produk Lain
-                        </Link>
-                    </div>
-                </div>
 
-                <div className="row">
-                    <div className="col-lg-8 mb-4">
-                        <div className="card border-0 shadow-sm">
-                            <div className="card-header d-flex justify-content-between align-items-center" style={{ background: '#f9f6f1', fontWeight: 800 }}>
-                                <span>Item di Keranjang ({items.length})</span>
-                                <span style={{ fontSize: 12, color: '#6e685f' }}>Qty × Size × Variant dapat diubah</span>
-                            </div>
-                            <div className="list-group list-group-flush">
-                                {items.map(it => (
-                                    <div key={it.id} className="list-group-item p-4">
-                                        <div className="row">
+                    <div className="row">
+                        <div className="col-lg-8 mb-4">
+                            {items.map((it, idx) => (
+                                <Reveal key={it.id} delay={(idx % 3) + 1}>
+                                    <div className="hm-panel p-4 mb-3">
+                                        <div className="row align-items-center">
                                             <div className="col-3 col-lg-2">
-                                                <div className="d-flex align-items-center justify-content-center h-100 rounded"
-                                                    style={{ minHeight: 80, background: '#f4f1ec' }}>
-                                                    <i className={`fas ${it.type === 'custom' ? 'fa-sliders' : 'fa-store'} text-industrial-400`} style={{ fontSize: 36 }}></i>
+                                                <div className="d-flex align-items-center justify-content-center rounded" style={{ minHeight: 76, background: '#14161c' }}>
+                                                    <i className={`fas ${it.type === 'custom' ? 'fa-sliders' : 'fa-store'}`} style={{ fontSize: 30, color: 'var(--hm-brass)' }} />
                                                 </div>
                                             </div>
                                             <div className="col-9 col-lg-6">
-                                                <div className="d-flex align-items-start justify-content-between mb-2">
-                                                    <div>
-                                                        {it.type === 'custom' && (
-                                                            <span className="badge badge-warning text-dark mr-2 font-weight-bold">
-                                                                <i className="fas fa-sliders mr-1"></i> CUSTOM
-                                                            </span>
-                                                        )}
-                                                        {it.type === 'preset' && (
-                                                            <span className="badge badge-success mr-2 font-weight-bold">
-                                                                <i className="fas fa-check mr-1"></i> PRESET
-                                                            </span>
-                                                        )}
-                                                        <b style={{ fontSize: 15 }}>{it.name}</b>
-                                                    </div>
-                                                    <button className="btn btn-sm text-danger" style={{ fontSize: 12 }}>
-                                                        <i className="fas fa-trash mr-1"></i> Hapus
-                                                    </button>
+                                                <div className="d-flex align-items-center gap-2 mb-1">
+                                                    {it.type === 'custom'
+                                                        ? <span className="hm-tag"><i className="fas fa-sliders" /> Custom</span>
+                                                        : <span className="hm-tag"><i className="fas fa-check" /> Preset</span>}
+                                                    <b style={{ fontSize: 15 }}>{it.name}</b>
                                                 </div>
-                                                <div className="text-industrial-600 mb-2" style={{ fontSize: 12.5 }}>
-                                                    {it.variant_summary}
-                                                </div>
-                                                <div className="d-flex align-items-center gap-3 mb-2" style={{ fontSize: 13 }}>
-                                                    <span className="px-2 py-1 rounded font-weight-bold"
-                                                        style={{ background: '#181714', color: '#ffb74d' }}>
-                                                        Size EU {it.size}
-                                                    </span>
-                                                    <span className="text-industrial-600">Qty:</span>
-                                                    <div className="d-flex align-items-center" style={{ border: '1px solid #e3ddd2', borderRadius: 6 }}>
-                                                        <button className="btn btn-sm py-0 px-2" style={{ color: '#181714' }}>−</button>
+                                                <div style={{ fontSize: 12.5, color: '#6b665d' }} className="mb-2">{it.variant_summary}</div>
+                                                <div className="d-flex align-items-center gap-3" style={{ fontSize: 13 }}>
+                                                    <span className="hm-tag">Size EU {it.size}</span>
+                                                    <span style={{ color: '#6b665d' }}>Qty:</span>
+                                                    <div className="d-flex align-items-center" style={{ border: '1px solid rgba(20,22,28,.16)', borderRadius: 5 }}>
+                                                        <button className="btn btn-sm py-0 px-2">−</button>
                                                         <span className="px-3 py-1 font-weight-bold">{it.qty}</span>
-                                                        <button className="btn btn-sm py-0 px-2" style={{ color: '#181714' }}>+</button>
+                                                        <button className="btn btn-sm py-0 px-2">+</button>
                                                     </div>
                                                 </div>
-                                                {it.type === 'custom' && (
-                                                    <Link href={`/sketch/custom/boots`} style={{ fontSize: 12, color: '#a7671f' }}>
-                                                        <i className="fas fa-pen mr-1"></i> Ubah konfigurasi custom ini
-                                                    </Link>
-                                                )}
                                             </div>
                                             <div className="col-lg-4 mt-2 mt-lg-0 text-right">
-                                                <div style={{ fontSize: 12, color: '#6e685f' }}>
-                                                    Base {fmt(it.base_price)}
-                                                    {it.add_ons > 0 && <span> + add-ons {fmt(it.add_ons)}</span>}
+                                                <div style={{ fontSize: 12, color: '#8a857b' }}>
+                                                    Base {fmt(it.base_price)}{it.add_ons > 0 && <span> + add-ons {fmt(it.add_ons)}</span>}
                                                 </div>
-                                                <div style={{ color: '#a7671f', fontWeight: 900, fontSize: 20 }}>
-                                                    {fmt(it.unit_total)}
-                                                </div>
+                                                <div className="hm-display" style={{ color: '#a9822f', fontWeight: 800, fontSize: 21 }}>{fmt(it.unit_total)}</div>
+                                                <button className="btn btn-sm text-danger mt-1" style={{ fontSize: 12 }}><i className="fas fa-trash mr-1" /> Hapus</button>
                                             </div>
                                         </div>
                                     </div>
-                                ))}
+                                </Reveal>
+                            ))}
+                            <div className="p-3 hm-mono" style={{ fontSize: 11.5, background: 'rgba(201,169,98,.1)', borderRadius: 8, color: '#55524c' }}>
+                                <i className="fas fa-shield-halved mr-1" style={{ color: '#a9822f' }} />
+                                Saat checkout kamu bayar DP 50% saja. Sisa 50% dibayar setelah sepatu selesai produksi.
                             </div>
                         </div>
 
-                        <div className="mt-3 p-3" style={{ background: '#fff4e4', borderRadius: 8, fontSize: 13 }}>
-                            <i className="fas fa-shield-halved mr-1 text-warning"></i>
-                            <b>Info pembayaran:</b> Saat checkout kamu bayar <b>DP 50%</b> saja. Pelunasan 50% sisanya dibayar <b>setelah sepatu selesai produksi</b>
-                            (dikasih tahu lewat WhatsApp + dashboard order).
-                        </div>
-                    </div>
+                        <div className="col-lg-4">
+                            <Reveal delay={1}>
+                                <div className="hm-panel p-4" style={{ position: 'sticky', top: 90 }}>
+                                    <h6 className="hm-display mb-3" style={{ fontWeight: 800 }}><i className="fas fa-sack-dollar mr-2" style={{ color: '#a9822f' }} />Ringkasan Harga</h6>
+                                    <div className="d-flex justify-content-between mb-1" style={{ fontSize: 14 }}>
+                                        <span>Subtotal ({items.length} item)</span><b>{fmt(subtotal)}</b>
+                                    </div>
+                                    <div className="d-flex justify-content-between mb-1" style={{ fontSize: 13, color: '#6b665d' }}>
+                                        <span><i className="fas fa-truck mr-1" /> Ongkir</span><span>Pilih di Checkout</span>
+                                    </div>
+                                    <div className="d-flex justify-content-between align-items-end border-top mt-3 pt-3" style={{ borderColor: 'rgba(20,22,28,.1)' }}>
+                                        <span className="font-weight-bold">Estimasi Total</span>
+                                        <span className="hm-display" style={{ color: '#a9822f', fontWeight: 800, fontSize: 24 }}>{fmt(subtotal)}</span>
+                                    </div>
 
-                    <div className="col-lg-4">
-                        <div className="card border-0 shadow sticky-top" style={{ top: 10 }}>
-                            <div className="card-body">
-                                <h6 className="font-weight-bold mb-3"><i className="fas fa-sack-dollar mr-2 text-warning"></i> Ringkasan Harga</h6>
-                                <div className="d-flex justify-content-between mb-1" style={{ fontSize: 14 }}>
-                                    <span>Subtotal ({items.length} item)</span>
-                                    <span><b>{fmt(subtotal)}</b></span>
-                                </div>
-                                <div className="d-flex justify-content-between mb-1" style={{ fontSize: 13, color: '#6e685f' }}>
-                                    <span><i className="fas fa-truck mr-1"></i> Ongkir (estimasi)</span>
-                                    <span>Pilih di Checkout</span>
-                                </div>
-                                <div className="d-flex justify-content-between mb-1" style={{ fontSize: 13, color: '#2e7d32' }}>
-                                    <span><i className="fas fa-percent mr-1"></i> Diskon</span>
-                                    <span>Belum ada</span>
-                                </div>
-                                <div className="border-top mt-3 pt-3 d-flex justify-content-between align-items-end">
-                                    <span style={{ fontSize: 14, fontWeight: 700 }}>Estimasi TOTAL</span>
-                                    <div style={{ color: '#a7671f', fontWeight: 900, fontSize: 24 }}>
-                                        {fmt(subtotal)}
+                                    <div className="mt-4 p-3" style={{ background: '#101218', borderRadius: 8 }}>
+                                        <div className="hm-mono mb-2" style={{ fontSize: 10.5, letterSpacing: '.12em', color: 'rgba(255,255,255,.6)' }}>DIBAYAR SEKARANG (DP 50%)</div>
+                                        <div className="hm-display" style={{ color: 'var(--hm-brass-2)', fontWeight: 800, fontSize: 24 }}>{fmt(Math.round(subtotal * 0.5))}</div>
+                                        <div style={{ fontSize: 11, color: 'rgba(255,255,255,.5)' }} className="mt-1">
+                                            Sisa {fmt(Math.round(subtotal * 0.5))} setelah sepatu jadi.
+                                        </div>
+                                    </div>
+
+                                    <div className="d-flex gap-2 mt-4">
+                                        <Link href="/sketch/sizing" className="hm-btn hm-btn-outline-dark" style={{ padding: '11px 16px' }}><i className="fas fa-arrow-left" /></Link>
+                                        <Link href="/sketch/checkout" className="hm-btn hm-btn-gold flex-grow-1">Checkout <i className="fas fa-arrow-right" /></Link>
                                     </div>
                                 </div>
-
-                                <div className="mt-4 p-3 rounded" style={{ background: '#181714', color: '#fff' }}>
-                                    <div className="mb-2"><b>Estimasi yang dibayar sekarang (DP 50%):</b></div>
-                                    <div style={{ color: '#ffb74d', fontWeight: 900, fontSize: 22 }} className="mb-2">
-                                        {fmt(Math.round(subtotal * 0.5))}
-                                    </div>
-                                    <div style={{ fontSize: 11, color: '#a8a298' }}>
-                                        Sisa pelunasan {fmt(Math.round(subtotal * 0.5))} dibayar setelah sepatu selesai dibuat.
-                                    </div>
-                                </div>
-
-                                <div className="d-flex gap-2 mt-4">
-                                    <Link href="/sketch/sizing" className="btn btn-sm flex-grow-1"
-                                        style={{ background: '#fff', color: '#181714', border: '2px solid #181714' }}>
-                                        <i className="fas fa-arrow-left mr-1"></i> Kembali
-                                    </Link>
-                                    <Link href="/sketch/checkout" className="btn btn-sm flex-grow-1 text-white font-weight-bold" style={{ background: '#a7671f' }}>
-                                        Lanjut Checkout <i className="fas fa-arrow-right ml-1"></i>
-                                    </Link>
-                                </div>
-                            </div>
+                            </Reveal>
                         </div>
                     </div>
                 </div>
-            </div>
+            </section>
         </SketchLayout>
     );
 }
