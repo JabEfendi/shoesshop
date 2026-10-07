@@ -14,7 +14,7 @@ class ProductSeeder extends Seeder
             'name'           => 'Premium Leather Boot 6"',
             'description'    => 'Sepatu boot kulit premium dengan konstruksi Goodyear welt, tahan air ringan, dan nyaman untuk penggunaan sehari-hari maupun outdoor ringan.',
             'base_price'     => 1250000,
-            'thumbnail'      => '/images/boots/boots.jpeg',
+            'thumbnail'      => '/assets/images/products/boots/v2/boots.jpeg',
             'glb_model_path' => '/3d-assets/leather-boot-optimized.glb',
             'published'      => true,
         ]);
@@ -23,7 +23,7 @@ class ProductSeeder extends Seeder
             'name'           => 'Chelsea Boot Kulit Pull-Up',
             'description'    => 'Model Chelsea boot klasik dengan panel elastis di samping, easy on/off, cocok untuk gaya smart casual dan formal.',
             'base_price'     => 980000,
-            'thumbnail'      => '/images/boots/front-side.jpeg',
+            'thumbnail'      => '/assets/images/products/chelsea-boots/chelsea-pair-glossy-black.jpeg',
             'glb_model_path' => '/3d-assets/chelsea-boot-optimized.glb',
             'published'      => true,
         ]);

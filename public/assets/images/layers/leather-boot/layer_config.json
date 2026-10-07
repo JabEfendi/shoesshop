@@ -1,0 +1,108 @@
+{
+  "_meta": {
+    "model_slug": "leather-boot",
+    "view_angle": "front-3q",
+    "canvas_size": { "width": 800, "height": 600 },
+    "base_photo": "/assets/images/products/boots/front-side.jpeg",
+    "use_photo_as_bg": true,
+    "layer_mode": "overlay_2d"
+  },
+  "layers": [
+    {
+      "z_index": 10,
+      "category": "sole",
+      "layer_key": "010_sole",
+      "folder": "angles/front-3q/010_sole",
+      "fallback_shape": "sole",
+      "defaults_to": "sole-karet-hitam",
+      "opacity": 1.0,
+      "blend_mode": "normal",
+      "options": {
+        "sole-karet-hitam":    { "file": "sole-karet-hitam.png",    "hex": "#1a1a1a", "label": "Sol Karet Hitam" },
+        "sole-kulit-coklat":   { "file": "sole-kulit-coklat.png",   "hex": "#6b3a0d", "label": "Sol Kulit Coklat" },
+        "sole-crepe-beige":    { "file": "sole-crepe-beige.png",    "hex": "#d8c49a", "label": "Sol Crepe Beige" },
+        "sole-commando":       { "file": "sole-commando.png",       "hex": "#2a2a2a", "label": "Sol Commando Lug" }
+      }
+    },
+    {
+      "z_index": 20,
+      "category": "insole",
+      "layer_key": "020_insole",
+      "folder": "angles/front-3q/020_insole",
+      "fallback_shape": "insole",
+      "defaults_to": "insole-eva-standar",
+      "opacity": 0.95,
+      "blend_mode": "normal",
+      "options": {
+        "insole-eva-standar":  { "file": "insole-eva-standar.png",  "hex": "#2b2b2b", "label": "Insole EVA Standar" },
+        "insole-kulit":        { "file": "insole-kulit.png",        "hex": "#8b5a2b", "label": "Insole Kulit Premium" },
+        "insole-memory":       { "file": "insole-memory.png",       "hex": "#3e4b5c", "label": "Insole Memory Foam" }
+      }
+    },
+    {
+      "z_index": 30,
+      "category": "material_upper",
+      "layer_key": "030_upper",
+      "folder": "angles/front-3q/030_upper",
+      "fallback_shape": "upper_leather_boot",
+      "defaults_to": "kulit-coklat-tua",
+      "opacity": 1.0,
+      "blend_mode": "multiply_if_photo_base",
+      "options": {
+        "kulit-coklat-tua":    { "file": "kulit-coklat-tua.png",    "hex": "#4a2c1a", "label": "Kulit Coklat Tua",   "roughness": 0.85, "metalness": 0.05 },
+        "kulit-coklat-muda":   { "file": "kulit-coklat-muda.png",   "hex": "#8b5a2b", "label": "Kulit Coklat Muda",  "roughness": 0.80, "metalness": 0.05 },
+        "kulit-hitam-full":    { "file": "kulit-hitam-full.png",    "hex": "#1a1a1a", "label": "Kulit Hitam Full",   "roughness": 0.75, "metalness": 0.10 },
+        "kulit-oak-burgundy":  { "file": "kulit-oak-burgundy.png",  "hex": "#5e1f1f", "label": "Kulit Burgundy Oak", "roughness": 0.80, "metalness": 0.05 },
+        "kulit-suede-taupe":   { "file": "kulit-suede-taupe.png",   "hex": "#8e8376", "label": "Suede Taupe Matte",  "roughness": 1.00, "metalness": 0.00 }
+      }
+    },
+    {
+      "z_index": 40,
+      "category": "laces",
+      "layer_key": "040_laces",
+      "folder": "angles/front-3q/040_laces",
+      "fallback_shape": "laces",
+      "defaults_to": "laces-waxed-coklat",
+      "opacity": 1.0,
+      "blend_mode": "normal",
+      "options": {
+        "laces-waxed-coklat":  { "file": "laces-waxed-coklat.png",  "hex": "#4a2c1a", "label": "Tali Waxed Coklat" },
+        "laces-flat-hitam":    { "file": "laces-flat-hitam.png",    "hex": "#1a1a1a", "label": "Tali Flat Hitam" },
+        "laces-bulat-tan":     { "file": "laces-bulat-tan.png",     "hex": "#b38247", "label": "Tali Bulat Tan" },
+        "laces-paracord-od":   { "file": "laces-paracord-od.png",   "hex": "#556b2f", "label": "Tali Paracord OD" }
+      }
+    },
+    {
+      "z_index": 50,
+      "category": "hardware",
+      "layer_key": "050_hardware",
+      "folder": "angles/front-3q/050_hardware",
+      "fallback_shape": "eyelets",
+      "defaults_to": "hw-nikel-silver",
+      "opacity": 1.0,
+      "blend_mode": "normal",
+      "options": {
+        "hw-nikel-silver":     { "file": "hw-nikel-silver.png",     "hex": "#c0c0c0", "label": "Eyelet Nikel Silver", "roughness": 0.30, "metalness": 0.85 },
+        "hw-gold-brass":       { "file": "hw-gold-brass.png",       "hex": "#b8860b", "label": "Eyelet Kuning Brass", "roughness": 0.35, "metalness": 0.75 },
+        "hw-black-pvd":        { "file": "hw-black-pvd.png",        "hex": "#2a2a2a", "label": "Eyelet Black PVD",   "roughness": 0.55, "metalness": 0.60 },
+        "hw-antik-perak":      { "file": "hw-antik-perak.png",      "hex": "#7a7a7a", "label": "Eyelet Perak Antik", "roughness": 0.60, "metalness": 0.65 }
+      }
+    },
+    {
+      "z_index": 60,
+      "category": "stitching",
+      "layer_key": "060_stitching",
+      "folder": "angles/front-3q/060_stitching",
+      "fallback_shape": "stitch_lines",
+      "defaults_to": "stitch-match",
+      "opacity": 0.88,
+      "blend_mode": "normal",
+      "options": {
+        "stitch-match":        { "file": "stitch-match.png",        "hex": null,      "label": "Benang Match (Sama Kulit)" },
+        "stitch-contrast-tan": { "file": "stitch-contrast-tan.png", "hex": "#b38247", "label": "Benang Kontras Tan" },
+        "stitch-putih":        { "file": "stitch-putih.png",        "hex": "#ffffff", "label": "Benang Jahit Putih" },
+        "stitch-hitam":        { "file": "stitch-hitam.png",        "hex": "#1a1a1a", "label": "Benang Jahit Hitam" }
+      }
+    }
+  ]
+}

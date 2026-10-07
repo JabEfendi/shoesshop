@@ -6,11 +6,11 @@
     "keywords": ["laravel", "framework", "shoeshop", "3d-configurator"],
     "license": "MIT",
     "require": {
-        "php": "^8.2",
+        "php": "^8.2 || ^8.3 || ^8.4 || ^8.5",
         "laravel/framework": "^11.0",
         "laravel/tinker": "^2.9",
-        "inertiajs/inertia-laravel": "^1.3",
-        "tightenco/ziggy": "^2.0"
+        "inertiajs/inertia-laravel": "^2.0",
+        "tightenco/ziggy": "^2.6"
     },
     "require-dev": {
         "fakerphp/faker": "^1.23",
@@ -59,6 +59,10 @@
         "optimize-autoloader": true,
         "preferred-install": "dist",
         "sort-packages": true,
+        "audit": {
+            "abandoned": "ignore",
+            "block-insecure": false
+        },
         "allow-plugins": {
             "pestphp/pest-plugin": true,
             "php-http/discovery": true
