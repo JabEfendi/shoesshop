@@ -1,10 +1,16 @@
 import { useState } from 'react';
-import { Link } from '@inertiajs/react';
+import { Link, useForm } from '@inertiajs/react';
 import SketchLayout, { fmt } from '../../Components/Sketch/SketchLayout';
 import { Reveal } from '../../Components/Parallax/index.jsx';
 
 export default function Checkout({ expedisi, payment_rules, subtotal, alamat_default }) {
     const [ongkirIdx, setOngkirIdx] = useState(0);
+    const [paymentMethod, setPaymentMethod] = useState('qris');
+    const { data, setData, post, processing, errors } = useForm({
+        recipient_name: alamat_default.penerima || '', phone: alamat_default.hp || '', address: alamat_default.alamat || '',
+        city: alamat_default.kota || '', postal_code: alamat_default.kode_pos || '', notes: alamat_default.catatan || '',
+        shipping_method: expedisi[0].id, payment_method: 'qris',
+    });
     const ongkir = expedisi[ongkirIdx].price;
     const total = subtotal + ongkir;
     const dp = Math.round(total * (payment_rules.dp_pct / 100));
@@ -19,6 +25,7 @@ export default function Checkout({ expedisi, payment_rules, subtotal, alamat_def
                 { label: 'Keranjang', href: '/sketch/cart', done: true },
                 { label: 'Checkout', active: true },
             ]}>
+            <form onSubmit={(event) => { event.preventDefault(); post('/checkout'); }}>
             <section style={{ background: '#f7f3ec', padding: 'clamp(40px,6vw,72px) 0' }}>
                 <div className="hm-container">
                     <Reveal>
@@ -34,23 +41,33 @@ export default function Checkout({ expedisi, payment_rules, subtotal, alamat_def
                                     <div className="row">
                                         <div className="col-md-6 mb-3">
                                             <label className="hm-mono mb-1" style={{ fontSize: 10.5, letterSpacing: '.1em', color: '#6b665d' }}>NAMA PENERIMA</label>
-                                            <input type="text" defaultValue={alamat_default.penerima} className="form-control" />
+                                            <input type="text" value={data.recipient_name} onChange={e => setData('recipient_name', e.target.value)} className="form-control" />
+                                            {errors.recipient_name && <small className="text-danger">{errors.recipient_name}</small>}
+                                        </div>
+                                        <div className="col-12 mb-0">
+                                            <label className="hm-mono mb-1" style={{ fontSize: 10.5, letterSpacing: '.1em', color: '#6b665d' }}>CATATAN PENGIRIMAN</label>
+                                            <textarea rows={2} value={data.notes} onChange={e => setData('notes', e.target.value)} className="form-control" />
+                                            {errors.notes && <small className="text-danger">{errors.notes}</small>}
                                         </div>
                                         <div className="col-md-6 mb-3">
                                             <label className="hm-mono mb-1" style={{ fontSize: 10.5, letterSpacing: '.1em', color: '#6b665d' }}>NO. HP / WA</label>
-                                            <input type="text" defaultValue={alamat_default.hp} className="form-control" />
+                                            <input type="text" value={data.phone} onChange={e => setData('phone', e.target.value)} className="form-control" />
+                                            {errors.phone && <small className="text-danger">{errors.phone}</small>}
                                         </div>
                                         <div className="col-12 mb-3">
                                             <label className="hm-mono mb-1" style={{ fontSize: 10.5, letterSpacing: '.1em', color: '#6b665d' }}>ALAMAT LENGKAP</label>
-                                            <textarea rows={3} defaultValue={alamat_default.alamat} className="form-control" />
+                                            <textarea rows={3} value={data.address} onChange={e => setData('address', e.target.value)} className="form-control" />
+                                            {errors.address && <small className="text-danger">{errors.address}</small>}
                                         </div>
                                         <div className="col-md-6 mb-3">
                                             <label className="hm-mono mb-1" style={{ fontSize: 10.5, letterSpacing: '.1em', color: '#6b665d' }}>KOTA / KABUPATEN</label>
-                                            <select className="form-control"><option>Kota Depok</option><option>Kota Jakarta Selatan</option><option>Kota Tangerang Selatan</option></select>
+                                            <input type="text" value={data.city} onChange={e => setData('city', e.target.value)} className="form-control" />
+                                            {errors.city && <small className="text-danger">{errors.city}</small>}
                                         </div>
                                         <div className="col-md-6 mb-3">
                                             <label className="hm-mono mb-1" style={{ fontSize: 10.5, letterSpacing: '.1em', color: '#6b665d' }}>KODE POS</label>
-                                            <input type="text" defaultValue="164xx" className="form-control" />
+                                            <input type="text" value={data.postal_code} onChange={e => setData('postal_code', e.target.value)} className="form-control" />
+                                            {errors.postal_code && <small className="text-danger">{errors.postal_code}</small>}
                                         </div>
                                     </div>
                                 </div>
@@ -60,19 +77,19 @@ export default function Checkout({ expedisi, payment_rules, subtotal, alamat_def
                                 <div className="hm-panel p-4 mb-3">
                                     <h6 className="hm-display mb-3" style={{ fontWeight: 800 }}><i className="fas fa-truck mr-2" style={{ color: '#a9822f' }} />Pilih Ekspedisi</h6>
                                     {expedisi.map((e, i) => (
-                                        <div key={e.name} onClick={() => setOngkirIdx(i)} role="button"
+                                        <button type="button" key={e.name} onClick={() => { setOngkirIdx(i); setData('shipping_method', e.id); }}
                                             className="d-flex justify-content-between align-items-center p-3 mb-2"
                                             style={{
                                                 cursor: 'pointer', borderRadius: 6,
                                                 background: ongkirIdx === i ? 'rgba(201,169,98,.12)' : '#faf8f4',
                                                 border: ongkirIdx === i ? '1px solid #c9a962' : '1px solid rgba(20,22,28,.06)',
                                             }}>
-                                            <div>
+                                            <div className="text-left">
                                                 <b>{ongkirIdx === i && <i className="fas fa-check-circle mr-2" style={{ color: '#a9822f' }} />}{e.name}</b>
                                                 <div style={{ fontSize: 12.5, color: '#6b665d' }}>Estimasi {e.etd}</div>
                                             </div>
                                             <span style={{ color: '#a9822f', fontWeight: 900, fontSize: 16 }}>{fmt(e.price)}</span>
-                                        </div>
+                                        </button>
                                     ))}
                                 </div>
                             </Reveal>
@@ -88,10 +105,10 @@ export default function Checkout({ expedisi, payment_rules, subtotal, alamat_def
                                     </div>
                                     <div className="hm-mono mb-2" style={{ fontSize: 10.5, letterSpacing: '.1em', color: '#6b665d' }}>METODE DP</div>
                                     <div className="d-flex flex-wrap gap-2 mb-3">
-                                        {payment_rules.methods.map(m => {
-                                            const active = m === 'QRIS';
+                                        {Object.entries(payment_rules.methods).map(([id, m]) => {
+                                            const active = paymentMethod === id;
                                             return (
-                                                <button key={m} className="hm-btn" style={{
+                                                <button type="button" key={id} onClick={() => { setPaymentMethod(id); setData('payment_method', id); }} className="hm-btn" style={{
                                                     padding: '11px 18px', fontSize: 12.5,
                                                     background: active ? 'linear-gradient(135deg,#d9b45e,#a9822f)' : '#fff',
                                                     color: active ? '#17140c' : '#14161c',
@@ -151,7 +168,7 @@ export default function Checkout({ expedisi, payment_rules, subtotal, alamat_def
 
                                     <div className="d-flex gap-2">
                                         <Link href="/sketch/cart" className="hm-btn hm-btn-outline-dark" style={{ padding: '11px 16px' }}><i className="fas fa-arrow-left" /></Link>
-                                        <Link href="/sketch/account/orders" className="hm-btn hm-btn-gold flex-grow-1"><i className="fas fa-bolt" /> Bayar DP</Link>
+                                        <button type="submit" disabled={processing} className="hm-btn hm-btn-gold flex-grow-1"><i className="fas fa-bolt" /> {processing ? 'Memproses...' : 'Buat Pesanan & Bayar DP'}</button>
                                     </div>
                                     <div className="text-center mt-2 hm-mono" style={{ fontSize: 10.5, color: '#8a857b' }}>
                                         Diarahkan ke halaman pembayaran QRIS/VA.
@@ -162,6 +179,7 @@ export default function Checkout({ expedisi, payment_rules, subtotal, alamat_def
                     </div>
                 </div>
             </section>
+            </form>
         </SketchLayout>
     );
 }

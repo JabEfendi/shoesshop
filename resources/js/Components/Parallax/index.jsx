@@ -43,35 +43,62 @@ const prefersReduced = () =>
  * parent through the viewport. Parent is the stable measuring reference so the
  * transform never feeds back into its own measurement.
  *
- * @param {number} speed  positive = moves up faster as you scroll down
- * @param {object} opts   { max, axis, scale }
+ * @param {number} speed  positive = drifts down relative to the parent on scroll
+ * @param {object} opts   { max, axis, scale, cover }
  */
 export function useParallax(speed = 0.2, opts = {}) {
-    const { max = 220, axis = 'y', scale = 0 } = opts;
+    const { max = 220, axis = 'y', scale = 0, cover = false } = opts;
     const ref = useRef(null);
 
     useEffect(() => {
         const el = ref.current;
-        if (!el || prefersReduced()) return;
+        if (!el) return;
         const host = el.parentElement || el;
+        const motion = window.matchMedia('(prefers-reduced-motion: reduce)');
+        const mobile = window.matchMedia('(max-width: 767px)');
 
         const update = (vh) => {
+            if (motion.matches) {
+                el.style.transform = '';
+                return;
+            }
             const rect = host.getBoundingClientRect();
             if (rect.bottom < -vh || rect.top > vh * 2) return;
             const center = rect.top + rect.height / 2;
-            const progress = (center - vh / 2) / vh; // ≈ -1 .. 1
-            const value = Math.max(-max, Math.min(max, -progress * speed * 100));
+            const progress = (center - vh / 2) / Math.max(vh, 1);
+            // Backgrounds must never drift beyond their overscan and expose an edge.
+            const limit = cover ? Math.min(max, Math.max(0, (el.offsetHeight - rect.height) / 2 - 1)) : max;
+            const distance = -progress * speed * vh * (mobile.matches ? 0.35 : 1);
+            const value = Math.max(-limit, Math.min(limit, distance));
             const s = scale ? 1 + Math.min(scale, Math.abs(progress) * scale) : 1;
             const ty = axis === 'y' || axis === 'both' ? value : 0;
             const tx = axis === 'x' || axis === 'both' ? value : 0;
             el.style.transform = `translate3d(${tx}px, ${ty}px, 0)${scale ? ` scale(${s})` : ''}`;
         };
 
-        update(window.innerHeight);
-        return subscribe(update);
-    }, [speed, max, axis, scale]);
+        const refresh = () => update(window.innerHeight);
+        refresh();
+        const unsubscribe = subscribe(update);
+        motion.addEventListener('change', refresh);
+        mobile.addEventListener('change', refresh);
+        const resize = typeof ResizeObserver !== 'undefined' ? new ResizeObserver(refresh) : null;
+        resize?.observe(host);
+        return () => {
+            unsubscribe();
+            motion.removeEventListener('change', refresh);
+            mobile.removeEventListener('change', refresh);
+            resize?.disconnect();
+            el.style.transform = '';
+        };
+    }, [speed, max, axis, scale, cover]);
 
     return ref;
+}
+
+/** A normal-flow layer, with a stable parent for measuring scroll movement. */
+export function ParallaxElement({ children, speed = 0.12, max = 90, className = '', ...rest }) {
+    const ref = useParallax(speed, { max });
+    return <div ref={ref} className={`hm-parallax-element ${className}`} {...rest}>{children}</div>;
 }
 
 /**
@@ -106,7 +133,7 @@ export function ParallaxImage({
     style,
     overlay = 'linear-gradient(180deg, rgba(10,11,14,.35) 0%, rgba(10,11,14,.15) 45%, rgba(10,11,14,.78) 100%)',
 }) {
-    const ref = useParallax(speed, { max });
+    const ref = useParallax(speed, { max, cover: true });
     return (
         <div
             ref={ref}

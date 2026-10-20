@@ -1,5 +1,5 @@
-import { Link } from '@inertiajs/react';
-import ShoeConfigurator from '../../Components/ShoeConfigurator/index.jsx';
+import { lazy, Suspense } from 'react';
+const ShoeConfigurator = lazy(() => import('../../Components/ShoeConfigurator/index.jsx'));
 import SketchLayout from '../../Components/Sketch/SketchLayout';
 import { Hero, Reveal } from '../../Components/Parallax/index.jsx';
 
@@ -25,11 +25,11 @@ export default function ProductShow({ product, category_labels, customization_op
             <section style={{ background: '#f7f3ec', padding: 'clamp(36px,5vw,64px) 0' }}>
                 <div className="hm-container">
                     <Reveal>
-                        <ShoeConfigurator
+                        <Suspense fallback={<div className="hm-panel p-5 text-center">Memuat konfigurator 3D...</div>}><ShoeConfigurator
                             product={product}
                             categoryLabels={category_labels}
                             customizationOptions={customization_options}
-                        />
+                        /></Suspense>
                     </Reveal>
 
                     <div className="row mt-5">

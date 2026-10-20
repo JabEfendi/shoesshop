@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Head, Link } from '@inertiajs/react';
+import { Head, Link, router, usePage } from '@inertiajs/react';
 
 const NAV = [
     { href: '/sketch/home',          label: 'Home',       icon: 'fa-house-chimney' },
@@ -45,6 +45,8 @@ function BrandMark({ light = true }) {
 function Header({ active, transparent = false }) {
     const [scrolled, setScrolled] = useState(false);
     const [open, setOpen] = useState(false);
+    const { auth } = usePage().props;
+    const user = auth?.user;
 
     useEffect(() => {
         const on = () => setScrolled(window.scrollY > 24);
@@ -77,9 +79,8 @@ function Header({ active, transparent = false }) {
                         <i className="fas fa-cart-shopping" />
                         <span className="hm-mono" style={{ fontSize: 11 }}>2</span>
                     </Link>
-                    <Link href="/sketch/account/orders" className="hm-btn hm-btn-gold d-none d-md-inline-flex" style={{ padding: '10px 18px', fontSize: 12 }}>
-                        <i className="fas fa-user" /> Account
-                    </Link>
+                    {user ? <button type="button" onClick={() => router.post('/logout')} className="hm-btn hm-btn-gold d-none d-md-inline-flex" style={{ padding: '10px 18px', fontSize: 12 }}><i className="fas fa-right-from-bracket" /> Keluar</button>
+                        : <Link href="/login" className="hm-btn hm-btn-gold d-none d-md-inline-flex" style={{ padding: '10px 18px', fontSize: 12 }}><i className="fas fa-user" /> Masuk</Link>}
                     <button className="hm-btn hm-btn-ghost d-lg-none" style={{ padding: '8px 12px' }} onClick={() => setOpen(o => !o)} aria-label="Menu">
                         <i className={`fas ${open ? 'fa-xmark' : 'fa-bars'}`} />
                     </button>
@@ -207,7 +208,7 @@ function Footer() {
 
 export default function SketchLayout({ title, active, breadcrumb, children, transparentHeader = false }) {
     return (
-        <div className="d-flex flex-column hm-body" style={{ minHeight: '100vh' }}>
+        <div className={`d-flex flex-column hm-body ${transparentHeader ? 'hm-layout-overlay' : ''}`} style={{ minHeight: '100vh' }}>
             <Head title={title || 'ShoeShop — Daily Casual Leather'} />
             <Header active={active} transparent={transparentHeader} />
             {breadcrumb && breadcrumb.length > 0 && (

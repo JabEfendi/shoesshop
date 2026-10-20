@@ -55,7 +55,9 @@ Route::middleware('inertia')->prefix('sketch')->name('sketch.')->group(function 
     })->name('shop');
 
     Route::get('/shop/{slug}', function ($slug) use ($MODELS) {
-        $p = collect($MODELS)->firstWhere('slug', $slug) ?: $MODELS[0];
+        $p = collect($MODELS)->firstWhere('slug', $slug);
+        abort_unless($p, 404);
+
         return Inertia::render('Sketch/ProductDetail', [
             'product' => [
                 ...$p,
@@ -73,7 +75,9 @@ Route::middleware('inertia')->prefix('sketch')->name('sketch.')->group(function 
     })->name('choose-model');
 
     Route::get('/custom/{slug}', function ($slug) use ($MODELS, $CUSTOM_ELEMENTS) {
-        $m = collect($MODELS)->firstWhere('slug', $slug) ?: $MODELS[0];
+        $m = collect($MODELS)->firstWhere('slug', $slug);
+        abort_unless($m, 404);
+
         return Inertia::render('Sketch/Customizer', [
             'model' => $m,
             'elements' => $CUSTOM_ELEMENTS,
@@ -81,7 +85,9 @@ Route::middleware('inertia')->prefix('sketch')->name('sketch.')->group(function 
     })->name('customizer');
 
     Route::get('/custom/{slug}/preview', function ($slug) use ($MODELS, $CUSTOM_ELEMENTS) {
-        $m = collect($MODELS)->firstWhere('slug', $slug) ?: $MODELS[0];
+        $m = collect($MODELS)->firstWhere('slug', $slug);
+        abort_unless($m, 404);
+
         return Inertia::render('Sketch/CustomizerPreview', [
             'model' => $m,
             'elements' => $CUSTOM_ELEMENTS,
@@ -104,112 +110,6 @@ Route::middleware('inertia')->prefix('sketch')->name('sketch.')->group(function 
             'next_url' => route('sketch.cart'),
         ]);
     })->name('sizing');
-
-    Route::get('/cart', function () use ($MODELS, $EXPEDISI) {
-        $m = $MODELS[0];
-        return Inertia::render('Sketch/Cart', [
-            'items' => [
-                [
-                    'id' => 1,
-                    'type' => 'custom',
-                    'name' => 'Custom ' . $m['name'],
-                    'variant_summary' => 'Kulit Hitam + Lug Sole + Brass Eyelet + Welt Premium',
-                    'size' => 42,
-                    'qty' => 1,
-                    'base_price' => $m['price'],
-                    'add_ons' => 235000,
-                    'unit_total' => $m['price'] + 235000,
-                ],
-                [
-                    'id' => 2,
-                    'type' => 'preset',
-                    'name' => $MODELS[2]['name'] . ' (Preset)',
-                    'variant_summary' => 'Classic Edition (Hitam)',
-                    'size' => 41,
-                    'qty' => 1,
-                    'base_price' => $MODELS[2]['price'],
-                    'add_ons' => 0,
-                    'unit_total' => $MODELS[2]['price'],
-                ],
-            ],
-            'subtotal' => ($m['price'] + 235000) + $MODELS[2]['price'],
-        ]);
-    })->name('cart');
-
-    Route::get('/checkout', function () use ($MODELS, $EXPEDISI) {
-        $subtotal = ($MODELS[0]['price'] + 235000) + $MODELS[2]['price'];
-        return Inertia::render('Sketch/Checkout', [
-            'expedisi' => $EXPEDISI,
-            'payment_rules' => [
-                'dp_pct' => 50,
-                'pelunasan_trigger' => 'Setelah sepatu jadi (via dashboard order, dikabarin WA)',
-                'methods' => ['QRIS', 'Virtual Account (BCA, BRI, BNI, Mandiri)'],
-            ],
-            'subtotal' => $subtotal,
-            'ongkir_default' => 18000,
-            'alamat_default' => [
-                'penerima' => 'Rafie (Contoh)',
-                'hp' => '0812-xxxx-xxxx',
-                'alamat' => 'Jl. Contoh No. 123, Kel. Contoh, Kec. Contoh, Kota Depok, Jawa Barat 164xx',
-                'catatan' => 'Rumah 2 lantai, pagar coklat, seberang warung tegal',
-            ],
-        ]);
-    })->name('checkout');
-
-    Route::get('/account/orders', function () use ($MODELS) {
-        return Inertia::render('Sketch/OrderDashboard', [
-            'orders' => [
-                [
-                    'id' => 'INV/20261005/0001',
-                    'tgl' => '2026-10-05',
-                    'items' => [
-                        ['n' => 'Custom ' . $MODELS[0]['name'], 'size' => 42, 'qty' => 1, 'price' => $MODELS[0]['price'] + 235000],
-                    ],
-                    'produksi' => [
-                        ['label' => 'Konfirmasi DP',        'status' => 'done'],
-                        ['label' => 'Pemotongan Pola',     'status' => 'active'],
-                        ['label' => 'Jahit Upper',          'status' => 'pending'],
-                        ['label' => 'Goodyear Welt',        'status' => 'pending'],
-                        ['label' => 'Finishing + QC',       'status' => 'pending'],
-                        ['label' => 'Selesai Produksi ➜ Pelunasan', 'status' => 'pending'],
-                        ['label' => 'Packing & Kirim',      'status' => 'pending'],
-                    ],
-                    'estimasi' => '± 7 hari (sampai 12 Okt 2026)',
-                    'tagihan' => [
-                        'total' => $MODELS[0]['price'] + 235000 + 18000,
-                        'dp' => round(($MODELS[0]['price'] + 235000 + 18000) * 0.5),
-                        'lunas' => false,
-                        'pelunasan_sisa' => round(($MODELS[0]['price'] + 235000 + 18000) * 0.5),
-                    ],
-                    'garansi' => ['claimable' => true, 'sampai' => '2027-10-05', 'syarat' => 'Wajib video unboxing, ongkir retur = buyer'],
-                ],
-                [
-                    'id' => 'INV/20260920/0088',
-                    'tgl' => '2026-09-20',
-                    'items' => [
-                        ['n' => $MODELS[2]['name'] . ' Preset', 'size' => 41, 'qty' => 1, 'price' => $MODELS[2]['price']],
-                    ],
-                    'produksi' => [
-                        ['label' => 'Konfirmasi DP',        'status' => 'done'],
-                        ['label' => 'Pemotongan Pola',     'status' => 'done'],
-                        ['label' => 'Jahit Upper',          'status' => 'done'],
-                        ['label' => 'Goodyear Welt',        'status' => 'done'],
-                        ['label' => 'Finishing + QC',       'status' => 'done'],
-                        ['label' => 'Selesai Produksi ➜ Pelunasan', 'status' => 'done'],
-                        ['label' => 'Packing & Kirim',      'status' => 'done'],
-                    ],
-                    'estimasi' => 'Selesai 27 Sep 2026 — Sudah diterima',
-                    'tagihan' => [
-                        'total' => $MODELS[2]['price'] + 13000,
-                        'dp' => round(($MODELS[2]['price'] + 13000) * 0.5),
-                        'lunas' => true,
-                        'pelunasan_sisa' => 0,
-                    ],
-                    'garansi' => ['claimable' => true, 'sampai' => '2027-09-27', 'syarat' => 'Wajib video unboxing, ongkir retur = buyer'],
-                ],
-            ],
-        ]);
-    })->name('orders');
 
     Route::get('/our-story', function () {
         return Inertia::render('Sketch/OurStory');

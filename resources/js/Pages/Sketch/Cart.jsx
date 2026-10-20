@@ -1,8 +1,10 @@
-import { Link } from '@inertiajs/react';
+import { Link, router } from '@inertiajs/react';
 import SketchLayout, { fmt } from '../../Components/Sketch/SketchLayout';
 import { Reveal } from '../../Components/Parallax/index.jsx';
 
 export default function Cart({ items, subtotal }) {
+    const updateQuantity = (item, qty) => router.patch(`/cart/${item.id}`, { qty }, { preserveScroll: true });
+    const removeItem = (item) => router.delete(`/cart/${item.id}`, { preserveScroll: true });
     return (
         <SketchLayout title="Keranjang — SHOESHOP.ID" active="Home"
             breadcrumb={[
@@ -49,9 +51,9 @@ export default function Cart({ items, subtotal }) {
                                                     <span className="hm-tag">Size EU {it.size}</span>
                                                     <span style={{ color: '#6b665d' }}>Qty:</span>
                                                     <div className="d-flex align-items-center" style={{ border: '1px solid rgba(20,22,28,.16)', borderRadius: 5 }}>
-                                                        <button className="btn btn-sm py-0 px-2">−</button>
+                                                        <button type="button" disabled={it.qty <= 1} onClick={() => updateQuantity(it, it.qty - 1)} className="btn btn-sm py-0 px-2">−</button>
                                                         <span className="px-3 py-1 font-weight-bold">{it.qty}</span>
-                                                        <button className="btn btn-sm py-0 px-2">+</button>
+                                                        <button type="button" onClick={() => updateQuantity(it, it.qty + 1)} className="btn btn-sm py-0 px-2">+</button>
                                                     </div>
                                                 </div>
                                             </div>
@@ -60,16 +62,17 @@ export default function Cart({ items, subtotal }) {
                                                     Base {fmt(it.base_price)}{it.add_ons > 0 && <span> + add-ons {fmt(it.add_ons)}</span>}
                                                 </div>
                                                 <div className="hm-display" style={{ color: '#a9822f', fontWeight: 800, fontSize: 21 }}>{fmt(it.unit_total)}</div>
-                                                <button className="btn btn-sm text-danger mt-1" style={{ fontSize: 12 }}><i className="fas fa-trash mr-1" /> Hapus</button>
+                                                <button type="button" onClick={() => removeItem(it)} className="btn btn-sm text-danger mt-1" style={{ fontSize: 12 }}><i className="fas fa-trash mr-1" /> Hapus</button>
                                             </div>
                                         </div>
                                     </div>
                                 </Reveal>
                             ))}
-                            <div className="p-3 hm-mono" style={{ fontSize: 11.5, background: 'rgba(201,169,98,.1)', borderRadius: 8, color: '#55524c' }}>
+                            {items.length === 0 && <div className="hm-panel p-4 text-center"><p>Keranjang masih kosong.</p><Link href="/sketch/shop" className="hm-btn hm-btn-gold">Lihat Koleksi</Link></div>}
+                            {items.length > 0 && <div className="p-3 hm-mono" style={{ fontSize: 11.5, background: 'rgba(201,169,98,.1)', borderRadius: 8, color: '#55524c' }}>
                                 <i className="fas fa-shield-halved mr-1" style={{ color: '#a9822f' }} />
                                 Saat checkout kamu bayar DP 50% saja. Sisa 50% dibayar setelah sepatu selesai produksi.
-                            </div>
+                            </div>}
                         </div>
 
                         <div className="col-lg-4">
@@ -97,7 +100,7 @@ export default function Cart({ items, subtotal }) {
 
                                     <div className="d-flex gap-2 mt-4">
                                         <Link href="/sketch/sizing" className="hm-btn hm-btn-outline-dark" style={{ padding: '11px 16px' }}><i className="fas fa-arrow-left" /></Link>
-                                        <Link href="/sketch/checkout" className="hm-btn hm-btn-gold flex-grow-1">Checkout <i className="fas fa-arrow-right" /></Link>
+                                    {items.length > 0 && <Link href="/sketch/checkout" className="hm-btn hm-btn-gold flex-grow-1">Checkout <i className="fas fa-arrow-right" /></Link>}
                                     </div>
                                 </div>
                             </Reveal>

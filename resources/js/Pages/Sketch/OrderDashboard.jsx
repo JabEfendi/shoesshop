@@ -8,11 +8,12 @@ function StatusBadge({ s }) {
 }
 
 export default function OrderDashboard({ orders }) {
+    const activeOrders = orders.filter(o => o.status !== 'completed');
     const stats = [
         ['Total Order', orders.length, '#14161c'],
-        ['Dalam Produksi', 1, '#a9822f'],
-        ['Sisa Pelunasan', fmt(orders[0].tagihan.pelunasan_sisa), '#b7410e'],
-        ['Garansi Aktif', orders.filter(o => o.garansi.claimable).length, '#4a7c59'],
+        ['Menunggu DP', orders.filter(o => o.payment_status === 'pending').length, '#a9822f'],
+        ['Sisa Pelunasan', fmt(orders.reduce((sum, o) => sum + o.tagihan.pelunasan_sisa, 0)), '#b7410e'],
+        ['Order Aktif', activeOrders.length, '#4a7c59'],
     ];
 
     return (
@@ -50,6 +51,7 @@ export default function OrderDashboard({ orders }) {
                         ))}
                     </div>
 
+                    {orders.length === 0 && <div className="hm-panel p-5 text-center"><h3 className="hm-display">Belum ada pesanan</h3><p>Pesanan yang dibuat setelah checkout akan muncul di sini.</p></div>}
                     {orders.map((o, idx) => (
                         <Reveal key={o.id} delay={1}>
                             <div className="hm-panel mb-4" style={{ borderColor: idx === 0 ? 'rgba(201,169,98,.5)' : undefined }}>
@@ -62,8 +64,7 @@ export default function OrderDashboard({ orders }) {
                                             <i className="fas fa-calendar mr-1" /> {o.tgl} · Size EU {o.items[0].size}
                                         </span>
                                     </div>
-                                    {idx === 0 && <span className="hm-tag" style={{ background: 'rgba(201,169,98,.2)', color: 'var(--hm-brass-2)', borderColor: 'rgba(201,169,98,.5)' }}><i className="fas fa-gears fa-spin" /> Produksi Berjalan</span>}
-                                    {idx === 1 && <span className="hm-tag" style={{ background: 'rgba(74,124,89,.2)', color: '#a7d6b3', borderColor: 'rgba(74,124,89,.5)' }}><i className="fas fa-check" /> Sudah Diterima</span>}
+                                    <span className="hm-tag" style={{ background: 'rgba(201,169,98,.2)', color: 'var(--hm-brass-2)', borderColor: 'rgba(201,169,98,.5)' }}><i className="fas fa-clock" /> {o.payment_status === 'pending' ? 'Menunggu DP' : o.status}</span>
                                 </div>
                                 <div className="p-4">
                                     <div className="row">
@@ -72,9 +73,14 @@ export default function OrderDashboard({ orders }) {
                                                 <span className="hm-mono" style={{ fontSize: 10.5, letterSpacing: '.12em', color: '#8a857b', textTransform: 'uppercase' }}>
                                                     <i className="fas fa-diagram-project mr-1" /> Timeline Produksi
                                                 </span>
-                                                <span className="hm-tag">{o.estimasi}</span>
+                                                <span className="hm-tag">Dibuat {o.tgl}</span>
                                             </div>
-                                            {o.produksi.map((s, si) => (
+                                             {[
+                                                 { label: 'Pesanan dibuat', status: 'done' },
+                                                 { label: 'Pembayaran DP', status: o.payment_status === 'paid' ? 'done' : 'active' },
+                                                 { label: 'Produksi', status: o.payment_status === 'paid' ? 'active' : 'pending' },
+                                                 { label: 'Pengiriman', status: 'pending' },
+                                             ].map((s, si) => (
                                                 <div key={s.label} className="d-flex align-items-center justify-content-between p-2 mb-1"
                                                     style={{
                                                         borderRadius: 6,
@@ -95,12 +101,10 @@ export default function OrderDashboard({ orders }) {
                                                     <StatusBadge s={s.status} />
                                                 </div>
                                             ))}
-                                            {idx === 0 && (
-                                                <div className="mt-4 p-3" style={{ background: '#eef5fb', borderRadius: 8, fontSize: 13 }}>
-                                                    <i className="fas fa-clock mr-1" style={{ color: '#3a7ca5' }} />
-                                                    <b>Update terakhir:</b> Pemotongan pola ~50% selesai. Besok masuk tahap jahit upper.
-                                                </div>
-                                            )}
+                                             <div className="mt-4 p-3" style={{ background: '#eef5fb', borderRadius: 8, fontSize: 13 }}>
+                                                 <i className="fas fa-clock mr-1" style={{ color: '#3a7ca5' }} />
+                                                 {o.payment_status === 'pending' ? 'Pesanan dibuat. Selesaikan pembayaran DP untuk memulai produksi.' : 'Pembayaran diterima, pesanan sedang diproses.'}
+                                             </div>
                                         </div>
 
                                         <div className="col-lg-5">
@@ -120,25 +124,11 @@ export default function OrderDashboard({ orders }) {
                                                         <span className="font-weight-bold">Sisa Pelunasan</span>
                                                         <b style={{ color: o.tagihan.lunas ? '#4a7c59' : '#b7410e', fontSize: 17 }}>{fmt(o.tagihan.pelunasan_sisa)}</b>
                                                     </div>
-                                                    {!o.tagihan.lunas && (
-                                                        <button className="hm-btn hm-btn-gold w-100 mt-2" style={{ fontSize: 12 }}>
-                                                            <i className="fas fa-credit-card" /> Bayar Pelunasan
-                                                        </button>
-                                                    )}
+                                                     {!o.tagihan.lunas && <div className="mt-2 hm-mono" style={{ fontSize: 11, color: '#8a857b' }}>Instruksi pembayaran dikirim setelah order dibuat.</div>}
                                                 </div>
                                             </div>
 
-                                            <div className="hm-panel p-3">
-                                                <div className="d-flex justify-content-between align-items-center mb-2">
-                                                    <b><i className="fas fa-shield-halved mr-2" style={{ color: '#a9822f' }} />Garansi</b>
-                                                    {o.garansi.claimable && <span className="hm-tag">Aktif s/d {o.garansi.sampai}</span>}
-                                                </div>
-                                                <div style={{ fontSize: 12.5, color: '#6b665d' }} className="mb-3">{o.garansi.syarat}</div>
-                                                <div className="d-flex gap-2">
-                                                    <button className="hm-btn hm-btn-navy flex-grow-1" style={{ padding: '10px', fontSize: 11.5 }}><i className="fas fa-file-invoice" /> Klaim</button>
-                                                    <button className="hm-btn hm-btn-outline-dark flex-grow-1" style={{ padding: '10px', fontSize: 11.5 }}><i className="fas fa-rotate" /> Re-Soling</button>
-                                                </div>
-                                            </div>
+                                            <div className="hm-panel p-3"><b><i className="fas fa-shield-halved mr-2" style={{ color: '#a9822f' }} />Garansi</b><div style={{ fontSize: 12.5, color: '#6b665d' }} className="mt-2">Garansi dapat diajukan setelah pesanan selesai dan diterima.</div></div>
                                         </div>
                                     </div>
                                 </div>

@@ -1,8 +1,17 @@
-import { Link } from '@inertiajs/react';
+import { Link, router, usePage } from '@inertiajs/react';
+import { useMemo, useState } from 'react';
 import SketchLayout from '../../Components/Sketch/SketchLayout';
 import { Reveal } from '../../Components/Parallax/index.jsx';
 
 export default function Sizing({ chart, next_url }) {
+    const { url } = usePage();
+    const params = useMemo(() => new URLSearchParams(url.split('?')[1] || ''), [url]);
+    const [size, setSize] = useState(42);
+    const modelSlug = params.get('model') || 'boots';
+    const selection = useMemo(() => {
+        try { return JSON.parse(params.get('selection') || '{}'); } catch { return {}; }
+    }, [params]);
+    const addToCart = () => router.post('/cart', { type: 'custom', model_slug: modelSlug, size, selection });
     return (
         <SketchLayout title="Sizing — SHOESHOP.ID" active="Custom"
             breadcrumb={[
@@ -73,13 +82,13 @@ export default function Sizing({ chart, next_url }) {
                                                         <td>{r.insole_cm} cm</td>
                                                         <td style={{ fontSize: 12.5, color: '#6b665d' }}>{r.recommended_for}</td>
                                                         <td>
-                                                            <button className="btn btn-sm px-3" style={{
+                                                            <button type="button" onClick={() => setSize(r.size)} className="btn btn-sm px-3" style={{
                                                                 borderRadius: 4,
-                                                                background: i === 3 ? '#14161c' : '#fff',
-                                                                color: i === 3 ? 'var(--hm-brass-2)' : '#14161c',
-                                                                border: i === 3 ? '1px solid #c9a962' : '1px solid rgba(20,22,28,.18)',
+                                                                background: size === r.size ? '#14161c' : '#fff',
+                                                                color: size === r.size ? 'var(--hm-brass-2)' : '#14161c',
+                                                                border: size === r.size ? '1px solid #c9a962' : '1px solid rgba(20,22,28,.18)',
                                                             }}>
-                                                                {i === 3 ? <><i className="fas fa-check mr-1" />Pilih</> : 'Pilih'}
+                                                                {size === r.size ? <><i className="fas fa-check mr-1" />Pilih</> : 'Pilih'}
                                                             </button>
                                                         </td>
                                                     </tr>
@@ -100,15 +109,15 @@ export default function Sizing({ chart, next_url }) {
                         <div className="hm-panel p-4 d-flex flex-wrap align-items-center justify-content-between">
                             <h5 className="mb-0 font-weight-bold">
                                 <i className="fas fa-circle-check mr-2" style={{ color: '#4a7c59' }} />
-                                Terpilih: <span className="hm-tag ml-2">Size 42 EU · Insole 26.8 cm</span>
+                                 Terpilih: <span className="hm-tag ml-2">Size {size} EU · Insole {chart.find(r => r.size === size)?.insole_cm} cm</span>
                             </h5>
                             <div className="d-flex gap-2 mt-3 mt-md-0">
                                 <Link href="/sketch/custom/boots/preview" className="hm-btn hm-btn-outline-dark" style={{ padding: '11px 18px' }}>
                                     <i className="fas fa-arrow-left" /> Kembali
                                 </Link>
-                                <Link href="/sketch/cart" className="hm-btn hm-btn-gold">
+                                <button type="button" onClick={addToCart} className="hm-btn hm-btn-gold">
                                     Masuk Keranjang <i className="fas fa-cart-shopping" />
-                                </Link>
+                                </button>
                             </div>
                         </div>
                     </Reveal>

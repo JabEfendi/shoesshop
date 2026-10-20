@@ -1,8 +1,10 @@
-import { useMemo, useState } from 'react';
+import { lazy, Suspense, useMemo, useState } from 'react';
 import { Link } from '@inertiajs/react';
 import SketchLayout, { fmt } from '../../Components/Sketch/SketchLayout';
 import { Reveal } from '../../Components/Parallax/index.jsx';
-import Shoe3DStage, { useSyncShoeStore } from '../../Components/Sketch/Shoe3DStage';
+import { useSyncShoeStore } from '../../Components/Sketch/useSyncShoeStore';
+
+const Shoe3DStage = lazy(() => import('../../Components/Sketch/Shoe3DStage'));
 
 const ELEMENT_ICONS = {
     'kulit': 'fa-cowhide',
@@ -82,7 +84,7 @@ export default function Customizer({ model, elements }) {
                         <div className="col-lg-7 mb-4">
                             <Reveal>
                                 <div className="hm-panel p-2" style={{ background: '#0e1015', border: '1px solid rgba(201,169,98,.25)' }}>
-                                    <Shoe3DStage glb={model.glb} slug={model.slug} model={model.slug} height={560} />
+                                    <Suspense fallback={<div style={{ height: 560 }} className="d-flex align-items-center justify-content-center text-white">Memuat preview 3D...</div>}><Shoe3DStage glb={model.glb} slug={model.slug} model={model.slug} height={560} /></Suspense>
                                     <div className="d-flex flex-wrap justify-content-between align-items-center px-3 py-3" style={{ borderTop: '1px solid rgba(255,255,255,.08)' }}>
                                         <div className="hm-mono" style={{ fontSize: 10.5, letterSpacing: '.1em', color: 'rgba(255,255,255,.55)', textTransform: 'uppercase' }}>
                                             {model.name} · {elements.filter(e => e.defaults[sel[e.slug]]?.p > 0).length} upgrade
@@ -168,7 +170,7 @@ export default function Customizer({ model, elements }) {
                                         <button onClick={() => setSel(defaults)} className="hm-btn hm-btn-outline-dark" style={{ padding: '11px 16px' }}>
                                             <i className="fas fa-rotate-left" /> Reset
                                         </button>
-                                        <Link href={`/sketch/custom/${model.slug}/preview`} className="hm-btn hm-btn-gold flex-grow-1">
+                                        <Link href={`/sketch/custom/${model.slug}/preview?selection=${encodeURIComponent(JSON.stringify(sel))}`} className="hm-btn hm-btn-gold flex-grow-1">
                                             Review Konfigurasi <i className="fas fa-arrow-right" />
                                         </Link>
                                     </div>

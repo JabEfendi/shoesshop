@@ -3,18 +3,9 @@ import { ShoeConfiguratorCanvas } from '../ShoeConfigurator/ShoeModel';
 import { useShoeStore } from '../ShoeConfigurator/useShoeStore';
 import PhotorealRecoloringPreview from '../ShoeConfigurator/PhotorealRecoloringPreview';
 import { resolveHeadRequestViteDevUrl } from '../ShoeConfigurator/resolveAssetUrl';
+export { useSyncShoeStore } from './useSyncShoeStore';
 
 /* Peta elemen kustomisasi Sketch → kategori mesh 3D / photo-recolor. */
-export const ELEMENT_TO_CATEGORY = {
-    'kulit':            'material_upper',
-    'benang-kulit':     'stitching',
-    'benang-outsole':   'sole',
-    'eyelet':           'hardware',
-    'panel-chelsea':    'material_upper',
-    'tali':             'laces',
-    'storm-welt':       'stitching',
-    'outsole':          'sole',
-};
 
 function Loading({ label = 'Menyiapkan preview...' }) {
     return (
@@ -32,36 +23,6 @@ function Loading({ label = 'Menyiapkan preview...' }) {
 /**
  * Sinkronkan pilihan elemen Sketch (selectedMap: slug → index) ke store 3D.
  */
-export function useSyncShoeStore(elements, selectedMap, model) {
-    const initFromProps = useShoeStore(s => s.initFromProps);
-    const setOption = useShoeStore(s => s.setOption);
-
-    useEffect(() => {
-        initFromProps({ base_price: model?.price || 0, slug: model?.slug, glb_model_path: model?.glb }, {});
-        // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [model?.slug]);
-
-    useEffect(() => {
-        if (!elements) return;
-        elements.forEach(el => {
-            const category = ELEMENT_TO_CATEGORY[el.slug];
-            if (!category) return;
-            const idx = selectedMap?.[el.slug] ?? 0;
-            const v = el.defaults[idx];
-            if (!v) return;
-            setOption(category, {
-                id: `${el.slug}-${idx}`,
-                name: v.n,
-                display_name: v.n,
-                hex_color: v.c || null,
-                price_addition: v.p || 0,
-                roughness: el.slug === 'kulit' ? 0.82 : undefined,
-                metalness: el.slug === 'eyelet' ? 0.8 : undefined,
-            });
-        });
-    }, [elements, selectedMap, setOption]);
-}
-
 /**
  * Shoe3DStage — menampilkan model 3D interaktif (R3F) bila GLB tersedia,
  * atau preview photo-recolor sebagai fallback. Latar studio gelap Hybrid Mood.

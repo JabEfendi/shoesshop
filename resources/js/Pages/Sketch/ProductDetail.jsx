@@ -1,9 +1,13 @@
-import { Link } from '@inertiajs/react';
+import { Link, router } from '@inertiajs/react';
+import { useState } from 'react';
 import SketchLayout, { fmt } from '../../Components/Sketch/SketchLayout';
 import { Reveal, ParallaxImage } from '../../Components/Parallax/index.jsx';
 
 export default function ProductDetail({ product }) {
     const gallery = product.gallery || [product.image].filter(Boolean);
+    const [size, setSize] = useState(42);
+
+    const addPreset = () => router.post('/cart', { type: 'preset', model_slug: product.slug, size });
 
     return (
         <SketchLayout title={`${product.name} — Preset Detail`} active="Shop"
@@ -74,11 +78,11 @@ export default function ProductDetail({ product }) {
                                     </div>
                                     <div className="d-flex flex-wrap gap-2">
                                         {product.sizes.map(sz => (
-                                            <button key={sz} className="hm-btn" style={{
+                                            <button key={sz} type="button" onClick={() => setSize(sz)} className="hm-btn" style={{
                                                 padding: '9px 16px', fontSize: 13, minWidth: 52,
-                                                background: sz === 42 ? '#14161c' : '#fff',
-                                                color: sz === 42 ? 'var(--hm-brass-2)' : '#14161c',
-                                                border: sz === 42 ? '1px solid var(--hm-brass)' : '1px solid rgba(20,22,28,.18)',
+                                                background: sz === size ? '#14161c' : '#fff',
+                                                color: sz === size ? 'var(--hm-brass-2)' : '#14161c',
+                                                border: sz === size ? '1px solid var(--hm-brass)' : '1px solid rgba(20,22,28,.18)',
                                             }}>{sz}</button>
                                         ))}
                                     </div>
@@ -88,9 +92,9 @@ export default function ProductDetail({ product }) {
                                 </div>
 
                                 <div className="d-flex flex-wrap gap-2 mt-4">
-                                    <Link href="/sketch/cart" className="hm-btn hm-btn-gold flex-grow-1">
+                                    <button type="button" onClick={addPreset} className="hm-btn hm-btn-gold flex-grow-1">
                                         <i className="fas fa-cart-shopping" /> Tambah ke Keranjang
-                                    </Link>
+                                    </button>
                                     <Link href={`/sketch/custom/${product.slug}`} className="hm-btn hm-btn-outline-dark flex-grow-1">
                                         <i className="fas fa-sliders" /> Custom dari Preset Ini
                                     </Link>

@@ -1,13 +1,18 @@
-import { Link } from '@inertiajs/react';
+import { lazy, Suspense } from 'react';
+import { Link, usePage } from '@inertiajs/react';
 import SketchLayout, { fmt } from '../../Components/Sketch/SketchLayout';
 import { Reveal, SectionHeading } from '../../Components/Parallax/index.jsx';
-import Shoe3DStage from '../../Components/Sketch/Shoe3DStage';
+const Shoe3DStage = lazy(() => import('../../Components/Sketch/Shoe3DStage'));
 
 export default function CustomizerPreview({ model, elements, lead_time, garansi }) {
+    const { url } = usePage();
+    const params = new URLSearchParams(url.split('?')[1] || '');
+    let selected = {};
+    try { selected = JSON.parse(params.get('selection') || '{}'); } catch { selected = {}; }
     const picks = elements.map((e, i) => ({
         el: e,
-        v: e.defaults[i === 2 ? 1 : i === elements.length - 1 ? 2 : 0],
-        add: i === 2 ? e.defaults[1].p : i === elements.length - 1 ? e.defaults[2].p : 0,
+        v: e.defaults[selected[e.slug] ?? 0],
+        add: e.defaults[selected[e.slug] ?? 0]?.p || 0,
     }));
     const addOns = picks.reduce((t, p) => t + p.add, 0);
     const total = model.price + addOns;
@@ -35,7 +40,7 @@ export default function CustomizerPreview({ model, elements, lead_time, garansi 
                         <div className="col-lg-7 mb-4">
                             <Reveal>
                                 <div className="hm-panel p-2" style={{ background: '#0e1015', border: '1px solid rgba(201,169,98,.25)' }}>
-                                    <Shoe3DStage glb={model.glb} slug={model.slug} model={model.slug} height={520} badge="360° Preview Final" />
+                                    <Suspense fallback={<div style={{ height: 520 }} className="d-flex align-items-center justify-content-center text-white">Memuat preview 3D...</div>}><Shoe3DStage glb={model.glb} slug={model.slug} model={model.slug} height={520} badge="360° Preview Final" /></Suspense>
                                 </div>
                                 <div className="d-flex flex-wrap gap-2 mt-3">
                                     <span className="hm-tag"><i className="fas fa-clock" /> {lead_time}</span>
@@ -88,7 +93,7 @@ export default function CustomizerPreview({ model, elements, lead_time, garansi 
                                         <Link href={`/sketch/custom/${model.slug}`} className="hm-btn hm-btn-ghost" style={{ padding: '11px 16px' }}>
                                             <i className="fas fa-pen" /> Ubah
                                         </Link>
-                                        <Link href="/sketch/sizing" className="hm-btn hm-btn-gold flex-grow-1">
+                                        <Link href={`/sketch/sizing?model=${model.slug}&selection=${encodeURIComponent(JSON.stringify(selected))}`} className="hm-btn hm-btn-gold flex-grow-1">
                                             Pilih Ukuran <i className="fas fa-ruler" />
                                         </Link>
                                     </div>
