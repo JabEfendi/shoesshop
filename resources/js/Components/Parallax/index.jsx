@@ -171,7 +171,7 @@ export function Reveal({ children, delay = 0, className = '', as: Tag = 'div', o
                     }
                 });
             },
-            { threshold: 0.14, rootMargin: '0px 0px -7% 0px' }
+            { threshold: 0, rootMargin: '0px 0px -24px 0px' }
         );
         io.observe(el);
         return () => io.disconnect();

@@ -1,12 +1,16 @@
+import { useState } from 'react';
 import { Link } from '@inertiajs/react';
 import SketchLayout, { fmt } from '../../Components/Sketch/SketchLayout';
 import { Hero, Reveal, ParallaxImage, SectionHeading } from '../../Components/Parallax/index.jsx';
 
 export default function Shop({ presets }) {
+    const [category, setCategory] = useState('all');
+    const [sort, setSort] = useState('collection');
+    const visible = presets.filter(p => category === 'all' || p.type === category).sort((a, b) => sort === 'low' ? a.price - b.price : sort === 'high' ? b.price - a.price : 0);
     const heroImg = presets?.[2]?.image || presets?.[0]?.image || '/assets/images/products/pantofel/PANTOFEL.jpeg';
 
     return (
-        <SketchLayout title="Shop Preset — SHOESHOP.ID" active="Shop"
+        <SketchLayout title="Shop Preset — SHOESHOP.ID" active="Collection"
             breadcrumb={[
                 { label: 'Home', href: '/sketch/home', done: true },
                 { label: 'Shop Preset', active: true },
@@ -31,8 +35,13 @@ export default function Shop({ presets }) {
                         lead="Tersedia dalam beberapa varian — Classic, Heritage, hingga paket lengkap dengan care kit."
                     />
 
-                    <div className="row">
-                        {presets.map((p, i) => (
+                    <div className="atelier-toolbar">
+                        <div className="atelier-filters" aria-label="Kategori koleksi">{[['all', 'Semua'], ['casual', 'Casual'], ['formal', 'Formal']].map(([value, label]) => <button type="button" key={value} aria-pressed={category === value} onClick={() => setCategory(value)}>{label}</button>)}</div>
+                        <span className="hm-mono" aria-live="polite">{visible.length} model</span>
+                        <label>Urutkan <select value={sort} onChange={e => setSort(e.target.value)}><option value="collection">Koleksi</option><option value="low">Harga terendah</option><option value="high">Harga tertinggi</option></select></label>
+                    </div>
+                    <div className="row atelier-collection" key={`${category}-${sort}`}>
+                        {visible.map((p, i) => (
                             <div key={p.slug} className="col-xl-4 col-lg-6 mb-4">
                                 <Reveal delay={(i % 3) + 1}>
                                     <div className="hm-card h-100 d-flex flex-column">

@@ -1,12 +1,12 @@
-import React, { useEffect, useState } from 'react';
-import { Head, Link, router, usePage } from '@inertiajs/react';
+import React, { useEffect, useRef, useState } from 'react';
+import { Head, Link, usePage } from '@inertiajs/react';
 
 const NAV = [
-    { href: '/sketch/home',          label: 'Home',       icon: 'fa-house-chimney' },
-    { href: '/sketch/shop',          label: 'Shop',       icon: 'fa-store' },
-    { href: '/sketch/custom',        label: 'Custom',     icon: 'fa-sliders' },
-    { href: '/sketch/our-story',     label: 'Our Story',  icon: 'fa-book-open' },
-    { href: '/sketch/account/orders',label: 'Orders',     icon: 'fa-clipboard-list' },
+    { href: '/sketch/home',      label: 'Home',       icon: 'fa-house-chimney' },
+    { href: '/sketch/shop',      label: 'Collection', icon: 'fa-store' },
+    { href: '/sketch/custom',    label: '3D Custom',  icon: 'fa-sliders' },
+    { href: '/sketch/our-story', label: 'Craft',       icon: 'fa-book-open' },
+    { href: '/sketch/sizing',    label: 'Size Guide',  icon: 'fa-ruler-combined' },
 ];
 
 const fmt = (n) => new Intl.NumberFormat('id-ID', { style: 'currency', currency: 'IDR', maximumFractionDigits: 0 }).format(Number(n) || 0);
@@ -26,15 +26,11 @@ function SketchBadge() {
 function BrandMark({ light = true }) {
     return (
         <span className="d-inline-flex align-items-center">
-            <span className="d-inline-flex align-items-center justify-content-center mr-2"
-                style={{ width: 34, height: 34, borderRadius: 6, background: 'linear-gradient(135deg,#d9b45e,#a9822f)' }}>
-                <i className="fas fa-boot" style={{ color: '#17140c', fontSize: 16 }} />
-            </span>
             <span className="d-flex flex-column" style={{ lineHeight: 1 }}>
-                <span className="hm-display" style={{ fontSize: 19, fontWeight: 800, letterSpacing: '.06em', color: light ? '#fff' : '#14161c' }}>
-                    SHOESHOP<span className="hm-gold-text">.ID</span>
+                <span className="hm-display" style={{ fontSize: 19, fontWeight: 800, letterSpacing: '-.06em', color: light ? '#303018' : '#303018' }}>
+                    SHOE<span className="hm-gold-text">SHOP</span>.ID
                 </span>
-                <span className="hm-mono" style={{ fontSize: 8.5, letterSpacing: '.28em', color: light ? 'rgba(255,255,255,.45)' : 'rgba(20,22,28,.5)', marginTop: 3 }}>
+                <span className="hm-mono" style={{ fontSize: 8.5, letterSpacing: '.16em', color: '#909078', marginTop: 3 }}>
                     DAILY CASUAL LEATHER
                 </span>
             </span>
@@ -42,11 +38,10 @@ function BrandMark({ light = true }) {
     );
 }
 
-function Header({ active, transparent = false }) {
+function Header({ active }) {
     const [scrolled, setScrolled] = useState(false);
     const [open, setOpen] = useState(false);
-    const { auth } = usePage().props;
-    const user = auth?.user;
+    const menuButton = useRef(null);
 
     useEffect(() => {
         const on = () => setScrolled(window.scrollY > 24);
@@ -55,61 +50,30 @@ function Header({ active, transparent = false }) {
         return () => window.removeEventListener('scroll', on);
     }, []);
 
-    return (
-        <header className={`hm-header ${scrolled ? 'is-scrolled' : ''}`} style={transparent && !scrolled ? { background: 'transparent', borderBottomColor: 'transparent' } : undefined}>
-            <div className="hm-container d-flex align-items-center justify-content-between" style={{ minHeight: 70 }}>
-                <Link href="/sketch/home" className="text-decoration-none">
-                    <BrandMark />
-                </Link>
+    useEffect(() => {
+        if (!open) return undefined;
+        const previousOverflow = document.body.style.overflow;
+        document.body.style.overflow = 'hidden';
+        return () => {
+            document.body.style.overflow = previousOverflow;
+            menuButton.current?.focus();
+        };
+    }, [open]);
 
-                <nav className="d-none d-lg-flex align-items-center">
-                    {NAV.map(n => {
-                        const isActive = active === n.label;
-                        return (
-                            <Link key={n.label} href={n.href} className={`hm-navlink ${isActive ? 'is-active' : ''}`}>
-                                <i className={`fas ${n.icon} mr-2`} style={{ fontSize: 11, opacity: .8 }} />
-                                {n.label}
-                            </Link>
-                        );
-                    })}
-                </nav>
-
-                <div className="d-flex align-items-center gap-2">
-                    <Link href="/sketch/cart" className="hm-btn hm-btn-ghost d-none d-sm-inline-flex" style={{ padding: '9px 14px' }} title="Keranjang">
-                        <i className="fas fa-cart-shopping" />
-                        <span className="hm-mono" style={{ fontSize: 11 }}>2</span>
-                    </Link>
-                    {user ? <button type="button" onClick={() => router.post('/logout')} className="hm-btn hm-btn-gold d-none d-md-inline-flex" style={{ padding: '10px 18px', fontSize: 12 }}><i className="fas fa-right-from-bracket" /> Keluar</button>
-                        : <Link href="/login" className="hm-btn hm-btn-gold d-none d-md-inline-flex" style={{ padding: '10px 18px', fontSize: 12 }}><i className="fas fa-user" /> Masuk</Link>}
-                    <button className="hm-btn hm-btn-ghost d-lg-none" style={{ padding: '8px 12px' }} onClick={() => setOpen(o => !o)} aria-label="Menu">
-                        <i className={`fas ${open ? 'fa-xmark' : 'fa-bars'}`} />
-                    </button>
-                </div>
-            </div>
-
-            {open && (
-                <div className="d-lg-none" style={{ borderTop: '1px solid rgba(201,169,98,.2)', background: 'rgba(12,13,17,.98)' }}>
-                    <div className="hm-container py-3 d-flex flex-column">
-                        {NAV.map(n => (
-                            <Link key={n.label} href={n.href} onClick={() => setOpen(false)}
-                                className={`hm-navlink ${active === n.label ? 'is-active' : ''}`} style={{ padding: '12px 0' }}>
-                                <i className={`fas ${n.icon} mr-2`} style={{ fontSize: 12, opacity: .8 }} />
-                                {n.label}
-                            </Link>
-                        ))}
-                        <Link href="/sketch/cart" onClick={() => setOpen(false)} className="hm-btn hm-btn-gold mt-2">
-                            <i className="fas fa-cart-shopping" /> Keranjang
-                        </Link>
-                    </div>
-                </div>
-            )}
-        </header>
-    );
+    return <header className={`shoe-shell-header ${scrolled ? 'is-scrolled' : ''}`}>
+        <Link href="/sketch/home" className="shoe-shell-wordmark" aria-label="SHOESHOP.ID home">SHOE<span>SHOP</span>.ID</Link>
+        <nav className="shoe-shell-nav" aria-label="Primary navigation">
+            {NAV.map((item) => <Link key={item.href} href={item.href} className={active === item.label ? 'is-active' : ''}>{item.label}</Link>)}
+            <Link href="/sketch/cart" className={active === 'Cart' ? 'is-active' : ''}>Cart</Link>
+        </nav>
+        <div className="shoe-shell-actions"><Link href="/sketch/custom" className="shoe-shell-button">Build yours <span aria-hidden="true">&rarr;</span></Link><button ref={menuButton} type="button" onClick={() => setOpen(true)} className="shoe-shell-menu" aria-label="Open menu" aria-expanded={open} aria-controls="storefront-mobile-menu"><i /><i /></button></div>
+        {open && <div id="storefront-mobile-menu" className="shoe-shell-overlay" role="dialog" aria-modal="true" aria-label="Navigation menu"><div className="shoe-shell-overlay__top"><Link href="/sketch/home" className="shoe-shell-wordmark" onClick={() => setOpen(false)}>SHOE<span>SHOP</span>.ID</Link><button type="button" onClick={() => setOpen(false)} className="shoe-shell-close">Close</button></div><nav>{[...NAV, { href: '/sketch/cart', label: 'Cart' }].map((item, index) => <Link key={item.href} href={item.href} onClick={() => setOpen(false)}><small>0{index + 1}</small>{item.label}</Link>)}</nav><Link href="/sketch/custom" className="shoe-shell-button" onClick={() => setOpen(false)}>Build your pair <span aria-hidden="true">&rarr;</span></Link></div>}
+    </header>;
 }
 
 function FlowBreadcrumb({ steps }) {
     return (
-        <div style={{ background: '#faf7f1', borderBottom: '1px solid rgba(20,22,28,.07)' }}>
+        <div className="hm-flow" role="navigation" aria-label="Alur pesanan" style={{ background: '#faf7f1', borderBottom: '1px solid rgba(20,22,28,.07)' }}>
             <div className="hm-container py-2 d-flex flex-wrap align-items-center gap-1" style={{ fontSize: 11.5 }}>
                 <span className="hm-mono mr-2" style={{ letterSpacing: '.14em', textTransform: 'uppercase', color: '#a49c8d' }}>
                     <i className="fas fa-diagram-project mr-1" /> Alur
@@ -161,11 +125,7 @@ function Footer() {
                             Daily casual leather — handmade di Indonesia. Custom & preset, konstruksi
                             <span className="hm-gold-text"> Goodyear Welt</span> yang bisa di-re-soling.
                         </p>
-                        <div className="d-flex gap-2">
-                            <a href="#" className="d-inline-flex align-items-center justify-content-center" style={{ width: 36, height: 36, borderRadius: 6, background: 'rgba(255,255,255,.06)' }}><i className="fab fa-instagram" /></a>
-                            <a href="#" className="d-inline-flex align-items-center justify-content-center" style={{ width: 36, height: 36, borderRadius: 6, background: 'rgba(255,255,255,.06)' }}><i className="fab fa-tiktok" /></a>
-                            <a href="#" className="d-inline-flex align-items-center justify-content-center" style={{ width: 36, height: 36, borderRadius: 6, background: 'rgba(255,255,255,.06)' }}><i className="fab fa-whatsapp" /></a>
-                        </div>
+                        <Link href="/sketch/custom" className="hm-footer-studio">Buat pasangan versimu <span aria-hidden="true">↗</span></Link>
                     </div>
                     <div className="col-6 col-lg-2 mb-4">
                         <h6 className="hm-display text-white mb-3" style={{ fontSize: 13, letterSpacing: '.1em' }}>Jelajah</h6>
@@ -207,14 +167,15 @@ function Footer() {
 }
 
 export default function SketchLayout({ title, active, breadcrumb, children, transparentHeader = false }) {
+    const { component } = usePage();
+    const page = component.split('/').pop().replace(/([a-z])([A-Z])/g, '$1-$2').toLowerCase();
+
     return (
-        <div className={`d-flex flex-column hm-body ${transparentHeader ? 'hm-layout-overlay' : ''}`} style={{ minHeight: '100vh' }}>
+        <div className={`d-flex flex-column hm-body hm-storefront hm-page-${page} ${transparentHeader ? 'hm-layout-overlay' : ''}`} style={{ minHeight: '100vh' }}>
+            <a href="#storefront-main" className="hm-skip-link">Lewati ke konten</a>
             <Head title={title || 'ShoeShop — Daily Casual Leather'} />
-            <Header active={active} transparent={transparentHeader} />
-            {breadcrumb && breadcrumb.length > 0 && (
-                <FlowBreadcrumb steps={breadcrumb} />
-            )}
-            <main className="flex-grow-1">{children}</main>
+            <Header active={active} />
+            <main id="storefront-main" tabIndex={-1} className="flex-grow-1">{children}</main>
             <Footer />
         </div>
     );

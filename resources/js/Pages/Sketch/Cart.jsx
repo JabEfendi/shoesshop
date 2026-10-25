@@ -1,12 +1,16 @@
+import { useState } from 'react';
 import { Link, router } from '@inertiajs/react';
 import SketchLayout, { fmt } from '../../Components/Sketch/SketchLayout';
 import { Reveal } from '../../Components/Parallax/index.jsx';
 
 export default function Cart({ items, subtotal }) {
-    const updateQuantity = (item, qty) => router.patch(`/cart/${item.id}`, { qty }, { preserveScroll: true });
-    const removeItem = (item) => router.delete(`/cart/${item.id}`, { preserveScroll: true });
+    const [pending, setPending] = useState(null);
+    const [feedback, setFeedback] = useState('');
+    const options = { preserveScroll: true, onFinish: () => setPending(null), onSuccess: () => setFeedback('Keranjang diperbarui.'), onError: () => setFeedback('Perubahan belum tersimpan. Silakan coba lagi.') };
+    const updateQuantity = (item, qty) => { if (pending) return; setPending(item.id); router.patch(`/cart/${item.id}`, { qty }, options); };
+    const removeItem = (item) => { if (pending) return; setPending(item.id); router.delete(`/cart/${item.id}`, options); };
     return (
-        <SketchLayout title="Keranjang — SHOESHOP.ID" active="Home"
+        <SketchLayout title="Keranjang — SHOESHOP.ID" active="Cart"
             breadcrumb={[
                 { label: 'Home', href: '/sketch/home', done: true },
                 { label: 'Pilih Model', href: '/sketch/custom', done: true },
@@ -28,11 +32,12 @@ export default function Cart({ items, subtotal }) {
                         </Reveal>
                     </div>
 
+                    <p role="status" className="hm-mono atelier-feedback">{pending ? 'Memperbarui keranjang...' : feedback || `${items.length} item · Periksa ukuran dan jumlah sebelum melanjutkan.`}</p>
                     <div className="row">
                         <div className="col-lg-8 mb-4">
                             {items.map((it, idx) => (
                                 <Reveal key={it.id} delay={(idx % 3) + 1}>
-                                    <div className="hm-panel p-4 mb-3">
+                                    <div aria-busy={pending === it.id} className={`hm-panel atelier-cart-item p-4 mb-3 ${pending === it.id ? 'is-pending' : ''}`}>
                                         <div className="row align-items-center">
                                             <div className="col-3 col-lg-2">
                                                 <div className="d-flex align-items-center justify-content-center rounded" style={{ minHeight: 76, background: '#14161c' }}>
@@ -51,9 +56,9 @@ export default function Cart({ items, subtotal }) {
                                                     <span className="hm-tag">Size EU {it.size}</span>
                                                     <span style={{ color: '#6b665d' }}>Qty:</span>
                                                     <div className="d-flex align-items-center" style={{ border: '1px solid rgba(20,22,28,.16)', borderRadius: 5 }}>
-                                                        <button type="button" disabled={it.qty <= 1} onClick={() => updateQuantity(it, it.qty - 1)} className="btn btn-sm py-0 px-2">−</button>
+                                                        <button type="button" aria-label={`Kurangi jumlah ${it.name}`} disabled={!!pending || it.qty <= 1} onClick={() => updateQuantity(it, it.qty - 1)} className="btn btn-sm py-0 px-2">−</button>
                                                         <span className="px-3 py-1 font-weight-bold">{it.qty}</span>
-                                                        <button type="button" onClick={() => updateQuantity(it, it.qty + 1)} className="btn btn-sm py-0 px-2">+</button>
+                                                        <button type="button" aria-label={`Tambah jumlah ${it.name}`} disabled={!!pending} onClick={() => updateQuantity(it, it.qty + 1)} className="btn btn-sm py-0 px-2">+</button>
                                                     </div>
                                                 </div>
                                             </div>

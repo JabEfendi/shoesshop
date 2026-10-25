@@ -6,11 +6,16 @@ import { Reveal, ParallaxImage } from '../../Components/Parallax/index.jsx';
 export default function ProductDetail({ product }) {
     const gallery = product.gallery || [product.image].filter(Boolean);
     const [size, setSize] = useState(42);
-
-    const addPreset = () => router.post('/cart', { type: 'preset', model_slug: product.slug, size });
+    const [image, setImage] = useState(product.image);
+    const [processing, setProcessing] = useState(false);
+    const addPreset = () => {
+        if (processing) return;
+        setProcessing(true);
+        router.post('/cart', { type: 'preset', model_slug: product.slug, size }, { onFinish: () => setProcessing(false) });
+    };
 
     return (
-        <SketchLayout title={`${product.name} — Preset Detail`} active="Shop"
+        <SketchLayout title={`${product.name} — Preset Detail`} active="Collection"
             breadcrumb={[
                 { label: 'Home', href: '/sketch/home', done: true },
                 { label: 'Shop Preset', href: '/sketch/shop', done: true },
@@ -23,7 +28,7 @@ export default function ProductDetail({ product }) {
                         <div className="col-lg-7 mb-4">
                             <Reveal>
                                 <div className="hm-parallax position-relative" style={{ height: 500, borderRadius: 10, overflow: 'hidden', boxShadow: 'var(--hm-shadow)' }}>
-                                    <ParallaxImage src={product.image} speed={0.14} overlay="linear-gradient(180deg, rgba(12,13,17,.06), rgba(12,13,17,.4))" />
+                                    <img key={image} src={image} alt={product.name} className="atelier-gallery-main" />
                                     <span className="hm-tag hm-tag-dark position-absolute" style={{ top: 16, left: 16, zIndex: 6 }}>
                                         <i className="fas fa-camera" /> Preset View
                                     </span>
@@ -33,9 +38,9 @@ export default function ProductDetail({ product }) {
                                 {gallery.slice(0, 3).map((g, i) => (
                                     <div key={i} className="col-4">
                                         <Reveal delay={i + 1}>
-                                            <div style={{ height: 110, borderRadius: 8, overflow: 'hidden', border: '1px solid rgba(20,22,28,.08)' }}>
-                                                <img src={g} alt={`${product.name} ${i}`} className="hm-img-cover" />
-                                            </div>
+                                            <button type="button" className="atelier-thumbnail" aria-label={`Lihat ${product.name}, foto ${i + 1}`} aria-pressed={image === g} onClick={() => setImage(g)}>
+                                                <img src={g} alt="" className="hm-img-cover" />
+                                            </button>
                                         </Reveal>
                                     </div>
                                 ))}
@@ -78,7 +83,7 @@ export default function ProductDetail({ product }) {
                                     </div>
                                     <div className="d-flex flex-wrap gap-2">
                                         {product.sizes.map(sz => (
-                                            <button key={sz} type="button" onClick={() => setSize(sz)} className="hm-btn" style={{
+                                            <button key={sz} type="button" aria-pressed={sz === size} onClick={() => setSize(sz)} className="hm-btn" style={{
                                                 padding: '9px 16px', fontSize: 13, minWidth: 52,
                                                 background: sz === size ? '#14161c' : '#fff',
                                                 color: sz === size ? 'var(--hm-brass-2)' : '#14161c',
@@ -92,8 +97,8 @@ export default function ProductDetail({ product }) {
                                 </div>
 
                                 <div className="d-flex flex-wrap gap-2 mt-4">
-                                    <button type="button" onClick={addPreset} className="hm-btn hm-btn-gold flex-grow-1">
-                                        <i className="fas fa-cart-shopping" /> Tambah ke Keranjang
+<button type="button" disabled={processing} aria-busy={processing} onClick={addPreset} className="hm-btn hm-btn-gold flex-grow-1">
+                                        <i className="fas fa-cart-shopping" /> {processing ? 'Menambahkan...' : 'Tambah ke Keranjang'}
                                     </button>
                                     <Link href={`/sketch/custom/${product.slug}`} className="hm-btn hm-btn-outline-dark flex-grow-1">
                                         <i className="fas fa-sliders" /> Custom dari Preset Ini

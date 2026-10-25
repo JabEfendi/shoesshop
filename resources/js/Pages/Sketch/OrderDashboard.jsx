@@ -1,13 +1,17 @@
+import { useState } from 'react';
+import { Link } from '@inertiajs/react';
 import SketchLayout, { fmt } from '../../Components/Sketch/SketchLayout';
 import { Hero, Reveal } from '../../Components/Parallax/index.jsx';
 
 function StatusBadge({ s }) {
     if (s === 'done') return <span className="hm-tag" style={{ background: 'rgba(74,124,89,.14)', borderColor: 'rgba(74,124,89,.4)', color: '#3d6b4b' }}><i className="fas fa-check" /> Selesai</span>;
-    if (s === 'active') return <span className="hm-tag" style={{ background: 'rgba(201,169,98,.18)', borderColor: 'rgba(201,169,98,.5)', color: '#8a6a1f' }}><i className="fas fa-gears fa-spin" /> Sedang dikerjakan</span>;
+    if (s === 'active') return <span className="hm-tag" style={{ background: 'rgba(201,169,98,.18)', borderColor: 'rgba(201,169,98,.5)', color: '#8a6a1f' }}><i className="fas fa-circle-dot" /> Tahap saat ini</span>;
     return <span className="hm-tag" style={{ color: '#8a857b' }}>Menunggu</span>;
 }
 
 export default function OrderDashboard({ orders }) {
+    const [filter, setFilter] = useState('all');
+    const visibleOrders = orders.filter(o => filter === 'all' || (filter === 'pending' ? o.payment_status === 'pending' : o.status === 'completed'));
     const activeOrders = orders.filter(o => o.status !== 'completed');
     const stats = [
         ['Total Order', orders.length, '#14161c'],
@@ -17,7 +21,7 @@ export default function OrderDashboard({ orders }) {
     ];
 
     return (
-        <SketchLayout title="Order Dashboard — SHOESHOP.ID" active="Orders"
+        <SketchLayout title="Order Dashboard — SHOESHOP.ID" active=""
             breadcrumb={[
                 { label: 'Home', href: '/sketch/home', done: true },
                 { label: 'Account', active: true },
@@ -52,7 +56,10 @@ export default function OrderDashboard({ orders }) {
                     </div>
 
                     {orders.length === 0 && <div className="hm-panel p-5 text-center"><h3 className="hm-display">Belum ada pesanan</h3><p>Pesanan yang dibuat setelah checkout akan muncul di sini.</p></div>}
-                    {orders.map((o, idx) => (
+                    <div className="atelier-toolbar"><div className="atelier-filters" aria-label="Filter pesanan">{[['all', 'Semua'], ['pending', 'Menunggu DP'], ['completed', 'Selesai']].map(([value, label]) => <button key={value} type="button" aria-pressed={filter === value} onClick={() => setFilter(value)}>{label}</button>)}</div><span className="hm-mono" aria-live="polite">{visibleOrders.length} pesanan</span></div>
+                    {orders.length > 0 && visibleOrders.length === 0 && <p className="hm-panel p-4">Tidak ada pesanan pada kategori ini.</p>}
+                    {orders.length === 0 && <Link href="/sketch/shop" className="hm-btn hm-btn-gold mb-4">Jelajahi koleksi</Link>}
+                    {visibleOrders.map((o, idx) => (
                         <Reveal key={o.id} delay={1}>
                             <div className="hm-panel mb-4" style={{ borderColor: idx === 0 ? 'rgba(201,169,98,.5)' : undefined }}>
                                 <div className="d-flex flex-wrap justify-content-between align-items-center p-3"
@@ -67,6 +74,7 @@ export default function OrderDashboard({ orders }) {
                                     <span className="hm-tag" style={{ background: 'rgba(201,169,98,.2)', color: 'var(--hm-brass-2)', borderColor: 'rgba(201,169,98,.5)' }}><i className="fas fa-clock" /> {o.payment_status === 'pending' ? 'Menunggu DP' : o.status}</span>
                                 </div>
                                 <div className="p-4">
+                                    <details className="atelier-order-details"><summary>Detail pesanan · {o.items.length} item</summary><div>{o.items.map((item, index) => <div className="atelier-spec-row" key={index}><strong>{item.n}</strong><span>EU {item.size} · {item.qty} pasang · {fmt(item.price)}</span></div>)}</div></details>
                                     <div className="row">
                                         <div className="col-lg-7 mb-4">
                                             <div className="d-flex flex-wrap align-items-center gap-2 mb-3">
@@ -78,8 +86,8 @@ export default function OrderDashboard({ orders }) {
                                              {[
                                                  { label: 'Pesanan dibuat', status: 'done' },
                                                  { label: 'Pembayaran DP', status: o.payment_status === 'paid' ? 'done' : 'active' },
-                                                 { label: 'Produksi', status: o.payment_status === 'paid' ? 'active' : 'pending' },
-                                                 { label: 'Pengiriman', status: 'pending' },
+{ label: 'Produksi', status: ['shipped', 'completed'].includes(o.status) ? 'done' : o.status === 'production' ? 'active' : 'pending' },
+                                                 { label: 'Pengiriman', status: o.status === 'completed' ? 'done' : o.status === 'shipped' ? 'active' : 'pending' },
                                              ].map((s, si) => (
                                                 <div key={s.label} className="d-flex align-items-center justify-content-between p-2 mb-1"
                                                     style={{
@@ -117,7 +125,7 @@ export default function OrderDashboard({ orders }) {
                                                         <span>Total Tagihan</span><b>{fmt(o.tagihan.total)}</b>
                                                     </div>
                                                     <div className="d-flex justify-content-between py-2" style={{ borderBottom: '1px solid rgba(20,22,28,.06)' }}>
-                                                        <span>DP {Math.round(o.tagihan.dp / o.tagihan.total * 100)}% <i className="fas fa-check ml-1" style={{ color: '#4a7c59', fontSize: 10 }} /></span>
+                                                        <span>DP {o.tagihan.total ? Math.round(o.tagihan.dp / o.tagihan.total * 100) : 0}% {o.payment_status === 'paid' && <i className="fas fa-check ml-1" style={{ color: '#4a7c59', fontSize: 10 }} />}</span>
                                                         <b style={{ color: '#4a7c59' }}>{fmt(o.tagihan.dp)}</b>
                                                     </div>
                                                     <div className="d-flex justify-content-between py-2">

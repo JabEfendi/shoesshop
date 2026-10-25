@@ -11,7 +11,7 @@ const CONSTRUCTION = [
 
 export default function OurStory() {
     return (
-        <SketchLayout title="Our Story — Craftsmanship | SHOESHOP.ID" active="Our Story"
+        <SketchLayout title="Our Story — Craftsmanship | SHOESHOP.ID" active="Craft"
             breadcrumb={[
                 { label: 'Home', href: '/sketch/home', done: true },
                 { label: 'Our Story / Craftsmanship', active: true },
@@ -52,9 +52,9 @@ export default function OurStory() {
                             </Reveal>
                             <Reveal delay={2}>
                                 <p className="hm-lead" style={{ maxWidth: 520 }}>
-                                    Kami percaya pada craftsmanship yang tidak bisa diburu-buru. Setiap sepatu
-                                    melewati tangan tujuh lebih pengrajin dengan rata-rata pengalaman dua belas tahun.
-                                    Tidak ada produksi massal — hanya kesabaran.
+                                    Kami percaya pada detail yang tidak perlu berteriak. Pilihan kulit, bentuk,
+                                    jahitan, dan outsole memberi karakter pada sepatu yang kamu pakai setiap hari.
+                                    Kenali setiap bagian sebelum menentukan pasanganmu.
                                 </p>
                             </Reveal>
                         </div>
@@ -62,10 +62,10 @@ export default function OurStory() {
                             <Reveal delay={1}>
                                 <div className="row">
                                     {[
-                                        ['12+', 'Tahun pengalaman pengrajin'],
-                                        ['7', 'Tangan di balik tiap pasang'],
-                                        ['5', 'Tahun+ umur sepatu terawat'],
-                                        ['100%', 'Handmade di Indonesia'],
+                                        ['01', 'Kulit / tekstur & karakter'],
+                                        ['02', 'Bentuk / siluet keseharian'],
+                                        ['03', 'Jahitan / detail personal'],
+                                        ['04', 'Outsole / fondasi langkah'],
                                     ].map(([n, l], i) => (
                                         <div key={n} className="col-6 mb-3">
                                             <div className="hm-panel p-4 h-100">
@@ -120,7 +120,7 @@ export default function OurStory() {
                         {CONSTRUCTION.map(([n, t, d, ic], i) => (
                             <div key={n} className="col-lg-3 col-md-6 mb-4">
                                 <Reveal delay={(i % 4) + 1}>
-                                    <div className="hm-card h-100 p-4">
+                                    <div className="hm-card atelier-craft-card h-100 p-4">
                                         <div className="d-flex align-items-baseline mb-3">
                                             <span className="hm-display mr-3" style={{ color: '#a9822f', fontSize: 34, fontWeight: 800, lineHeight: 1 }}>{n}</span>
                                             <h5 className="hm-display mb-0" style={{ fontWeight: 800, fontSize: 16 }}>{t}</h5>

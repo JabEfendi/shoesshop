@@ -1,5 +1,5 @@
 import { lazy, Suspense, useMemo, useState } from 'react';
-import { Link } from '@inertiajs/react';
+import { Link, usePage } from '@inertiajs/react';
 import SketchLayout, { fmt } from '../../Components/Sketch/SketchLayout';
 import { Reveal } from '../../Components/Parallax/index.jsx';
 import { useSyncShoeStore } from '../../Components/Sketch/useSyncShoeStore';
@@ -19,7 +19,7 @@ const ELEMENT_ICONS = {
 
 function OptionRow({ v, active, onClick }) {
     return (
-        <button onClick={onClick} className={`hm-option-chip mb-2 ${active ? 'is-active' : ''}`}>
+        <button type="button" aria-pressed={active} onClick={onClick} className={`hm-option-chip mb-2 ${active ? 'is-active' : ''}`}>
             {v.c && (
                 <span className="flex-shrink-0" style={{
                     width: 30, height: 30, borderRadius: '50%',
@@ -40,7 +40,13 @@ function OptionRow({ v, active, onClick }) {
 
 export default function Customizer({ model, elements }) {
     const defaults = useMemo(() => Object.fromEntries(elements.map(e => [e.slug, 0])), [elements]);
-    const [sel, setSel] = useState(defaults);
+    const { url } = usePage();
+    const [sel, setSel] = useState(() => {
+        try {
+            const selection = JSON.parse(new URLSearchParams(url.split('?')[1] || '').get('selection') || '{}');
+            return Object.fromEntries(elements.map(e => [e.slug, Number.isInteger(selection?.[e.slug]) && e.defaults[selection[e.slug]] ? selection[e.slug] : 0]));
+        } catch { return defaults; }
+    });
     const [activeEl, setActiveEl] = useState(elements[0].slug);
 
     useSyncShoeStore(elements, sel, model);
@@ -51,7 +57,7 @@ export default function Customizer({ model, elements }) {
     const summary = elements.map(e => e.defaults[sel[e.slug]]?.n).filter(Boolean).join(' · ');
 
     return (
-        <SketchLayout title={`Custom ${model.name} — SHOESHOP.ID`} active="Custom"
+        <SketchLayout title={`Custom ${model.name} — SHOESHOP.ID`} active="3D Custom"
             breadcrumb={[
                 { label: 'Home', href: '/sketch/home', done: true },
                 { label: 'Pilih Model', href: '/sketch/custom', done: true },
@@ -113,7 +119,7 @@ export default function Customizer({ model, elements }) {
                                             const isA = activeEl === e.slug;
                                             const hasUp = e.defaults[sel[e.slug]]?.p > 0;
                                             return (
-                                                <button key={e.slug} onClick={() => setActiveEl(e.slug)}
+                                                <button type="button" aria-pressed={isA} key={e.slug} onClick={() => setActiveEl(e.slug)}
                                                     className="btn btn-sm px-3 py-2"
                                                     style={{
                                                         fontWeight: isA ? 700 : 600, fontSize: 12.5, borderRadius: 4,
@@ -142,7 +148,8 @@ export default function Customizer({ model, elements }) {
                                             {elements.map(e => e.slug).indexOf(activeEl) + 1} / {elements.length}
                                         </span>
                                     </div>
-                                    <div style={{ background: '#14161c', padding: 12, borderRadius: 8, maxHeight: 320, overflowY: 'auto' }}>
+                                    <div className="atelier-option-progress" aria-hidden="true"><span style={{ width: `${((elements.findIndex(e => e.slug === activeEl) + 1) / elements.length) * 100}%` }} /></div>
+                                    <div key={activeEl} className="atelier-option-enter" style={{ background: '#14161c', padding: 12, borderRadius: 8, maxHeight: 320, overflowY: 'auto' }}>
                                         {activeElement.defaults.map((v, i) => (
                                             <OptionRow key={i} v={v} active={sel[activeEl] === i}
                                                 onClick={() => setSel(s => ({ ...s, [activeEl]: i }))} />
@@ -162,7 +169,7 @@ export default function Customizer({ model, elements }) {
                                         ))}
                                         <div className="d-flex justify-content-between align-items-end border-top mt-3 pt-3" style={{ borderColor: 'rgba(20,22,28,.1)' }}>
                                             <span className="hm-mono" style={{ fontSize: 10.5, letterSpacing: '.12em', color: '#6b665d' }}>TOTAL SEBELUM ONGKIR</span>
-                                            <span className="hm-display" style={{ fontWeight: 800, fontSize: 26, color: '#14161c' }}>{fmt(total)}</span>
+                                            <span key={total} aria-live="polite" className="hm-display atelier-price-update" style={{ fontWeight: 800, fontSize: 26, color: '#14161c' }}>{fmt(total)}</span>
                                         </div>
                                     </div>
 

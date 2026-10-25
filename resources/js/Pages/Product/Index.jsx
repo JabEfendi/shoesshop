@@ -1,10 +1,13 @@
+import { useState } from 'react';
 import { Link } from '@inertiajs/react';
 import SketchLayout, { fmt } from '../../Components/Sketch/SketchLayout';
 import { Hero, Reveal, SectionHeading } from '../../Components/Parallax/index.jsx';
 
 export default function ProductIndex({ products = [] }) {
+    const [query, setQuery] = useState('');
+    const visible = products.filter(p => p.name.toLowerCase().includes(query.trim().toLowerCase()));
     return (
-        <SketchLayout title="Katalog Sepatu — SHOESHOP.ID" active="Shop"
+        <SketchLayout title="Katalog Sepatu — SHOESHOP.ID" active="Collection"
             breadcrumb={[
                 { label: 'Home', href: '/sketch/home', done: true },
                 { label: 'Katalog', active: true },
@@ -23,7 +26,9 @@ export default function ProductIndex({ products = [] }) {
             <section style={{ background: '#f7f3ec', padding: 'clamp(48px,6vw,80px) 0' }}>
                 <div className="hm-container">
                     <SectionHeading eyebrow={`${products.length} Model`} title="Didukung 3D Configurator" />
-                    <div className="row">
+                    <div className="atelier-toolbar"><label htmlFor="catalog-search">Temukan model <input id="catalog-search" type="search" value={query} onChange={e => setQuery(e.target.value)} placeholder="Nama model..." className="form-control" /></label><span className="hm-mono" aria-live="polite">{visible.length} model ditemukan</span></div>
+                    {products.length > 0 && visible.length === 0 && <p>Tidak ada model yang cocok. Coba nama lain.</p>}
+                    <div className="row atelier-collection">
                         {products.length === 0 && (
                             <div className="col-12">
                                 <div className="hm-panel p-4">
@@ -32,7 +37,7 @@ export default function ProductIndex({ products = [] }) {
                                 </div>
                             </div>
                         )}
-                        {products.map((p, i) => (
+                        {visible.map((p, i) => (
                             <div key={p.id} className="col-lg-4 col-md-6 mb-4">
                                 <Reveal delay={(i % 3) + 1}>
                                     <div className="hm-card h-100">

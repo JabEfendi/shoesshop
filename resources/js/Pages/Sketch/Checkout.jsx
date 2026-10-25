@@ -17,7 +17,7 @@ export default function Checkout({ expedisi, payment_rules, subtotal, alamat_def
     const sisa = total - dp;
 
     return (
-        <SketchLayout title="Checkout — SHOESHOP.ID" active="Home"
+        <SketchLayout title="Checkout — SHOESHOP.ID" active="Collection"
             breadcrumb={[
                 { label: 'Home', href: '/sketch/home', done: true },
                 { label: 'Custom Detail', href: '/sketch/custom/boots', done: true },
@@ -25,7 +25,7 @@ export default function Checkout({ expedisi, payment_rules, subtotal, alamat_def
                 { label: 'Keranjang', href: '/sketch/cart', done: true },
                 { label: 'Checkout', active: true },
             ]}>
-            <form onSubmit={(event) => { event.preventDefault(); post('/checkout'); }}>
+            <form aria-busy={processing} className="atelier-checkout" onSubmit={(event) => { event.preventDefault(); post('/checkout'); }}>
             <section style={{ background: '#f7f3ec', padding: 'clamp(40px,6vw,72px) 0' }}>
                 <div className="hm-container">
                     <Reveal>
@@ -33,6 +33,8 @@ export default function Checkout({ expedisi, payment_rules, subtotal, alamat_def
                         <h1 className="hm-display mt-2 mb-4" style={{ fontWeight: 800, fontSize: 'clamp(1.6rem,3.4vw,2.4rem)' }}>Checkout Order</h1>
                     </Reveal>
 
+                    <div className="atelier-checkout-guide"><span>01 / Alamat</span><span>02 / Pengiriman</span><span>03 / Pembayaran</span></div>
+                    {Object.keys(errors).length > 0 && <div role="alert" className="atelier-form-errors"><strong>Periksa kembali pesananmu.</strong><ul>{Object.entries(errors).map(([field, message]) => <li key={field}>{message}</li>)}</ul></div>}
                     <div className="row">
                         <div className="col-lg-8 mb-4">
                             <Reveal delay={1}>
@@ -41,32 +43,32 @@ export default function Checkout({ expedisi, payment_rules, subtotal, alamat_def
                                     <div className="row">
                                         <div className="col-md-6 mb-3">
                                             <label className="hm-mono mb-1" style={{ fontSize: 10.5, letterSpacing: '.1em', color: '#6b665d' }}>NAMA PENERIMA</label>
-                                            <input type="text" value={data.recipient_name} onChange={e => setData('recipient_name', e.target.value)} className="form-control" />
+                                            <input aria-label="Nama penerima" autoComplete="shipping name" type="text" value={data.recipient_name} onChange={e => setData('recipient_name', e.target.value)} className="form-control" />
                                             {errors.recipient_name && <small className="text-danger">{errors.recipient_name}</small>}
                                         </div>
                                         <div className="col-12 mb-0">
                                             <label className="hm-mono mb-1" style={{ fontSize: 10.5, letterSpacing: '.1em', color: '#6b665d' }}>CATATAN PENGIRIMAN</label>
-                                            <textarea rows={2} value={data.notes} onChange={e => setData('notes', e.target.value)} className="form-control" />
+                                            <textarea aria-label="Catatan pengiriman" rows={2} value={data.notes} onChange={e => setData('notes', e.target.value)} className="form-control" />
                                             {errors.notes && <small className="text-danger">{errors.notes}</small>}
                                         </div>
                                         <div className="col-md-6 mb-3">
                                             <label className="hm-mono mb-1" style={{ fontSize: 10.5, letterSpacing: '.1em', color: '#6b665d' }}>NO. HP / WA</label>
-                                            <input type="text" value={data.phone} onChange={e => setData('phone', e.target.value)} className="form-control" />
+                                            <input aria-label="Nomor HP atau WhatsApp" autoComplete="shipping tel" type="tel" value={data.phone} onChange={e => setData('phone', e.target.value)} className="form-control" />
                                             {errors.phone && <small className="text-danger">{errors.phone}</small>}
                                         </div>
                                         <div className="col-12 mb-3">
                                             <label className="hm-mono mb-1" style={{ fontSize: 10.5, letterSpacing: '.1em', color: '#6b665d' }}>ALAMAT LENGKAP</label>
-                                            <textarea rows={3} value={data.address} onChange={e => setData('address', e.target.value)} className="form-control" />
+                                            <textarea aria-label="Alamat lengkap" autoComplete="shipping street-address" rows={3} value={data.address} onChange={e => setData('address', e.target.value)} className="form-control" />
                                             {errors.address && <small className="text-danger">{errors.address}</small>}
                                         </div>
                                         <div className="col-md-6 mb-3">
                                             <label className="hm-mono mb-1" style={{ fontSize: 10.5, letterSpacing: '.1em', color: '#6b665d' }}>KOTA / KABUPATEN</label>
-                                            <input type="text" value={data.city} onChange={e => setData('city', e.target.value)} className="form-control" />
+                                            <input aria-label="Kota atau kabupaten" autoComplete="shipping address-level2" type="text" value={data.city} onChange={e => setData('city', e.target.value)} className="form-control" />
                                             {errors.city && <small className="text-danger">{errors.city}</small>}
                                         </div>
                                         <div className="col-md-6 mb-3">
                                             <label className="hm-mono mb-1" style={{ fontSize: 10.5, letterSpacing: '.1em', color: '#6b665d' }}>KODE POS</label>
-                                            <input type="text" value={data.postal_code} onChange={e => setData('postal_code', e.target.value)} className="form-control" />
+                                            <input aria-label="Kode pos" autoComplete="shipping postal-code" inputMode="numeric" type="text" value={data.postal_code} onChange={e => setData('postal_code', e.target.value)} className="form-control" />
                                             {errors.postal_code && <small className="text-danger">{errors.postal_code}</small>}
                                         </div>
                                     </div>
@@ -77,8 +79,8 @@ export default function Checkout({ expedisi, payment_rules, subtotal, alamat_def
                                 <div className="hm-panel p-4 mb-3">
                                     <h6 className="hm-display mb-3" style={{ fontWeight: 800 }}><i className="fas fa-truck mr-2" style={{ color: '#a9822f' }} />Pilih Ekspedisi</h6>
                                     {expedisi.map((e, i) => (
-                                        <button type="button" key={e.name} onClick={() => { setOngkirIdx(i); setData('shipping_method', e.id); }}
-                                            className="d-flex justify-content-between align-items-center p-3 mb-2"
+                                        <button type="button" aria-pressed={ongkirIdx === i} key={e.name} onClick={() => { setOngkirIdx(i); setData('shipping_method', e.id); }}
+                                            className="atelier-shipping-option d-flex justify-content-between align-items-center p-3 mb-2"
                                             style={{
                                                 cursor: 'pointer', borderRadius: 6,
                                                 background: ongkirIdx === i ? 'rgba(201,169,98,.12)' : '#faf8f4',
@@ -108,7 +110,7 @@ export default function Checkout({ expedisi, payment_rules, subtotal, alamat_def
                                         {Object.entries(payment_rules.methods).map(([id, m]) => {
                                             const active = paymentMethod === id;
                                             return (
-                                                <button type="button" key={id} onClick={() => { setPaymentMethod(id); setData('payment_method', id); }} className="hm-btn" style={{
+                                                <button type="button" aria-pressed={active} key={id} onClick={() => { setPaymentMethod(id); setData('payment_method', id); }} className="hm-btn" style={{
                                                     padding: '11px 18px', fontSize: 12.5,
                                                     background: active ? 'linear-gradient(135deg,#d9b45e,#a9822f)' : '#fff',
                                                     color: active ? '#17140c' : '#14161c',
@@ -155,7 +157,7 @@ export default function Checkout({ expedisi, payment_rules, subtotal, alamat_def
                                         <div className="hm-mono mb-1" style={{ fontSize: 10.5, letterSpacing: '.1em', color: '#6b665d' }}>
                                             <i className="fas fa-credit-card mr-1" /> DIBAYAR SEKARANG (DP {payment_rules.dp_pct}%)
                                         </div>
-                                        <div className="hm-display" style={{ color: '#a9822f', fontWeight: 800, fontSize: 30 }}>{fmt(dp)}</div>
+                                        <div key={dp} aria-live="polite" className="hm-display atelier-price-update" style={{ color: '#a9822f', fontWeight: 800, fontSize: 30 }}>{fmt(dp)}</div>
                                         <div style={{ fontSize: 12, color: '#6b665d' }}>Pelunasan nanti: <b>{fmt(sisa)}</b></div>
                                     </div>
 

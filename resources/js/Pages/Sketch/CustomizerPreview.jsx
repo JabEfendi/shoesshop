@@ -1,4 +1,5 @@
-import { lazy, Suspense } from 'react';
+import { lazy, Suspense, useMemo } from 'react';
+import { useSyncShoeStore } from '../../Components/Sketch/useSyncShoeStore';
 import { Link, usePage } from '@inertiajs/react';
 import SketchLayout, { fmt } from '../../Components/Sketch/SketchLayout';
 import { Reveal, SectionHeading } from '../../Components/Parallax/index.jsx';
@@ -6,9 +7,13 @@ const Shoe3DStage = lazy(() => import('../../Components/Sketch/Shoe3DStage'));
 
 export default function CustomizerPreview({ model, elements, lead_time, garansi }) {
     const { url } = usePage();
-    const params = new URLSearchParams(url.split('?')[1] || '');
-    let selected = {};
-    try { selected = JSON.parse(params.get('selection') || '{}'); } catch { selected = {}; }
+    const selected = useMemo(() => {
+        let raw;
+        try { raw = JSON.parse(new URLSearchParams(url.split('?')[1] || '').get('selection') || '{}'); } catch { raw = {}; }
+        return Object.fromEntries(elements.map(e => [e.slug, Number.isInteger(raw?.[e.slug]) && e.defaults[raw[e.slug]] ? raw[e.slug] : 0]));
+    }, [url, elements]);
+    useSyncShoeStore(elements, selected, model);
+    const editUrl = `/sketch/custom/${model.slug}?selection=${encodeURIComponent(JSON.stringify(selected))}`;
     const picks = elements.map((e, i) => ({
         el: e,
         v: e.defaults[selected[e.slug] ?? 0],
@@ -18,7 +23,7 @@ export default function CustomizerPreview({ model, elements, lead_time, garansi 
     const total = model.price + addOns;
 
     return (
-        <SketchLayout title={`Review Custom ${model.name}`} active="Custom"
+        <SketchLayout title={`Review Custom ${model.name}`} active="3D Custom"
             breadcrumb={[
                 { label: 'Home', href: '/sketch/home', done: true },
                 { label: 'Pilih Model', href: '/sketch/custom', done: true },
@@ -59,7 +64,7 @@ export default function CustomizerPreview({ model, elements, lead_time, garansi 
                                         <span className="font-weight-bold">Model</span><span>{model.name}</span>
                                     </div>
                                     {picks.map(p => (
-                                        <div key={p.el.slug} className="d-flex justify-content-between align-items-center py-2" style={{ borderBottom: '1px solid rgba(20,22,28,.06)', fontSize: 13.5 }}>
+                                        <div key={p.el.slug} className="atelier-spec-row d-flex justify-content-between align-items-center py-2" style={{ borderBottom: '1px solid rgba(20,22,28,.06)', fontSize: 13.5 }}>
                                             <span style={{ color: '#55524c' }}>{p.el.label}</span>
                                             <span className="text-right">
                                                 <span className="font-weight-bold d-block">{p.v.n}</span>
@@ -90,7 +95,7 @@ export default function CustomizerPreview({ model, elements, lead_time, garansi 
                                         <span className="hm-display" style={{ fontWeight: 800, fontSize: 28, color: 'var(--hm-brass-2)', lineHeight: 1 }}>{fmt(total)}</span>
                                     </div>
                                     <div className="d-flex gap-2 mt-4">
-                                        <Link href={`/sketch/custom/${model.slug}`} className="hm-btn hm-btn-ghost" style={{ padding: '11px 16px' }}>
+                                        <Link href={editUrl} className="hm-btn hm-btn-ghost" style={{ padding: '11px 16px' }}>
                                             <i className="fas fa-pen" /> Ubah
                                         </Link>
                                         <Link href={`/sketch/sizing?model=${model.slug}&selection=${encodeURIComponent(JSON.stringify(selected))}`} className="hm-btn hm-btn-gold flex-grow-1">

@@ -5,14 +5,14 @@ import { Hero, Reveal } from '../../Components/Parallax/index.jsx';
 
 export default function ProductShow({ product, category_labels, customization_options }) {
     return (
-        <SketchLayout title={product?.name || 'Produk'} active="Custom"
+        <SketchLayout title={product?.name || 'Produk'} active="3D Custom"
             breadcrumb={[
                 { label: 'Home', href: '/sketch/home', done: true },
                 { label: 'Katalog', href: '/products', done: true },
                 { label: product?.name, active: true },
             ]}>
             <Hero
-                image="/assets/images/products/boots/front-side.jpeg"
+                image={product?.thumbnail || '/assets/images/products/boots/front-side.jpeg'}
                 imageSpeed={0.16}
                 height="42vh"
                 minHeight={320}
@@ -24,6 +24,7 @@ export default function ProductShow({ product, category_labels, customization_op
 
             <section style={{ background: '#f7f3ec', padding: 'clamp(36px,5vw,64px) 0' }}>
                 <div className="hm-container">
+                    <Reveal className="atelier-studio-intro"><span className="hm-kicker">The material studio</span><h2 className="hm-serif">Satu bentuk. Pilihan personal.</h2><div className="atelier-checkout-guide"><span>01 / Pilih material</span><span>02 / Putar & periksa</span><span>03 / Review harga</span></div></Reveal>
                     <Reveal>
                         <Suspense fallback={<div className="hm-panel p-5 text-center">Memuat konfigurator 3D...</div>}><ShoeConfigurator
                             product={product}

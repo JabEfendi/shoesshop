@@ -1,12 +1,15 @@
+import { useState } from 'react';
 import { Link } from '@inertiajs/react';
 import SketchLayout, { fmt } from '../../Components/Sketch/SketchLayout';
 import { Hero, Reveal, ParallaxImage, SectionHeading } from '../../Components/Parallax/index.jsx';
 
 export default function ChooseModel({ models }) {
+    const [style, setStyle] = useState('all');
+    const visible = models.filter(model => style === 'all' || model.type === style);
     const heroImg = models?.[0]?.image || '/assets/images/products/boots/boots.jpeg';
 
     return (
-        <SketchLayout title="Pilih Model — Custom SHOESHOP.ID" active="Custom"
+        <SketchLayout title="Pilih Model — Custom SHOESHOP.ID" active="3D Custom"
             breadcrumb={[
                 { label: 'Home', href: '/sketch/home', done: true },
                 { label: 'Pilih Model', active: true },
@@ -34,8 +37,9 @@ export default function ChooseModel({ models }) {
                         lead="Setiap model punya gaya hidupnya sendiri: formal untuk kantor, kasual untuk jalan, dan semuanya tetap terasa premium."
                     />
 
-                    <div className="row">
-                        {models.map((m, idx) => (
+                    <div className="atelier-toolbar"><p className="mb-0 hm-serif">Mulai dari bentuk. Jadikan milikmu.</p><div className="atelier-filters" aria-label="Gaya model">{[['all', 'Semua model'], ['casual', 'Daily casual'], ['formal', 'Smart & formal']].map(([value, label]) => <button key={value} type="button" aria-pressed={style === value} onClick={() => setStyle(value)}>{label}</button>)}</div></div>
+                    <div className="row atelier-models" key={style}>
+                        {visible.map((m, idx) => (
                             <div key={m.slug} className="col-lg-4 col-md-6 mb-4">
                                 <Reveal delay={(idx % 3) + 1}>
                                     <Link href={`/sketch/custom/${m.slug}`} className="text-decoration-none text-dark">
