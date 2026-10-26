@@ -226,9 +226,7 @@ export default function PhotorealRecoloringPreview({
     const [maskStatus, setMaskStatus] = useState({}); // category: 'custom' | 'fallback'
     const selected = useShoeStore(s => s.selected);
     const slugFromStore = useShoeStore(s => s.productSlug);
-    const modelSlug = productSlug || slugFromStore || 'leather-boot';
-    // The storefront uses short route slugs, while the image-layer assets use product slugs.
-    const model = modelSlug === 'boots' ? 'leather-boot' : modelSlug === 'chelsea' ? 'chelsea-boot' : modelSlug;
+    const model = productSlug || slugFromStore || 'leather-boot';
 
     useEffect(() => { selectedRef.current = selected; }, [selected]);
 
@@ -238,13 +236,8 @@ export default function PhotorealRecoloringPreview({
         setLoading(true);
         (async () => {
             try {
-                const configUrl = `/assets/images/layers/${model}/layer_config.json`;
-                const r = await fetch(configUrl);
+                const r = await fetch(`/assets/images/layers/${model}/layer_config.json`);
                 if (!r.ok) throw new Error('Config HTTP ' + r.status);
-                const contentType = r.headers.get('content-type') || '';
-                if (!contentType.includes('application/json')) {
-                    throw new Error(`Config bukan JSON: ${configUrl}`);
-                }
                 const cfg = await r.json();
                 if (cancelled) return;
                 configRef.current = cfg;
