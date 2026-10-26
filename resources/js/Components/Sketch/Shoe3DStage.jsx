@@ -92,7 +92,7 @@ export default function Shoe3DStage({
                 </Suspense>
             ) : (
                 <>
-                    <PhotorealRecoloringPreview productSlug={slug} />
+                    <PhotorealRecoloringPreview productSlug={model} />
                     {meshes.length === 0 && (
                         <span className="hm-3d-badge" style={{ bottom: 14, left: 14 }}>
                             <i className="fas fa-circle-info" /> Asset GLB menyusul — preview foto aktif

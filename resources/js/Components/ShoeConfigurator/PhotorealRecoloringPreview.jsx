@@ -206,6 +206,13 @@ function svgMaskDataUriFor(category, width = 1200, height = 900, model = 'leathe
     return 'data:image/svg+xml;charset=utf-8,' + encodeURIComponent(svg);
 }
 
+const LAYER_MODEL_BY_PRODUCT_SLUG = {
+    boots: 'leather-boot',
+    'leather-boot': 'leather-boot',
+    chelsea: 'chelsea-boot',
+    'chelsea-boot': 'chelsea-boot',
+};
+
 /* -------- The Component -------- */
 export default function PhotorealRecoloringPreview({
     productSlug,
@@ -226,7 +233,8 @@ export default function PhotorealRecoloringPreview({
     const [maskStatus, setMaskStatus] = useState({}); // category: 'custom' | 'fallback'
     const selected = useShoeStore(s => s.selected);
     const slugFromStore = useShoeStore(s => s.productSlug);
-    const model = productSlug || slugFromStore || 'leather-boot';
+    const modelSlug = productSlug || slugFromStore || 'leather-boot';
+    const model = LAYER_MODEL_BY_PRODUCT_SLUG[modelSlug];
 
     useEffect(() => { selectedRef.current = selected; }, [selected]);
 
@@ -236,8 +244,16 @@ export default function PhotorealRecoloringPreview({
         setLoading(true);
         (async () => {
             try {
-                const r = await fetch(`/assets/images/layers/${model}/layer_config.json`);
+                if (!model) {
+                    throw new Error(`Preview recolor belum tersedia untuk model: ${modelSlug}`);
+                }
+                const configUrl = `/assets/images/layers/${model}/layer_config.json`;
+                const r = await fetch(configUrl);
                 if (!r.ok) throw new Error('Config HTTP ' + r.status);
+                const contentType = r.headers.get('content-type') || '';
+                if (!contentType.includes('application/json')) {
+                    throw new Error(`Config bukan JSON: ${configUrl}`);
+                }
                 const cfg = await r.json();
                 if (cancelled) return;
                 configRef.current = cfg;
