@@ -206,13 +206,6 @@ function svgMaskDataUriFor(category, width = 1200, height = 900, model = 'leathe
     return 'data:image/svg+xml;charset=utf-8,' + encodeURIComponent(svg);
 }
 
-const LAYER_MODEL_BY_PRODUCT_SLUG = {
-    boots: 'leather-boot',
-    'leather-boot': 'leather-boot',
-    chelsea: 'chelsea-boot',
-    'chelsea-boot': 'chelsea-boot',
-};
-
 /* -------- The Component -------- */
 export default function PhotorealRecoloringPreview({
     productSlug,
@@ -234,7 +227,8 @@ export default function PhotorealRecoloringPreview({
     const selected = useShoeStore(s => s.selected);
     const slugFromStore = useShoeStore(s => s.productSlug);
     const modelSlug = productSlug || slugFromStore || 'leather-boot';
-    const model = LAYER_MODEL_BY_PRODUCT_SLUG[modelSlug];
+    // The storefront uses short route slugs, while the image-layer assets use product slugs.
+    const model = modelSlug === 'boots' ? 'leather-boot' : modelSlug === 'chelsea' ? 'chelsea-boot' : modelSlug;
 
     useEffect(() => { selectedRef.current = selected; }, [selected]);
 
@@ -244,9 +238,6 @@ export default function PhotorealRecoloringPreview({
         setLoading(true);
         (async () => {
             try {
-                if (!model) {
-                    throw new Error(`Preview recolor belum tersedia untuk model: ${modelSlug}`);
-                }
                 const configUrl = `/assets/images/layers/${model}/layer_config.json`;
                 const r = await fetch(configUrl);
                 if (!r.ok) throw new Error('Config HTTP ' + r.status);

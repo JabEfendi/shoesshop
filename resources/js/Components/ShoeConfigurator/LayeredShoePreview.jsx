@@ -17,12 +17,6 @@ import { useShoeStore } from './useShoeStore';
  * ================================================================ */
 
 const LAYER_CONFIG_CACHE = {};
-const LAYER_MODEL_BY_PRODUCT_SLUG = {
-    boots: 'leather-boot',
-    'leather-boot': 'leather-boot',
-    chelsea: 'chelsea-boot',
-    'chelsea-boot': 'chelsea-boot',
-};
 
 async function loadLayerConfig(modelSlug) {
     if (!modelSlug) return null;
@@ -30,9 +24,6 @@ async function loadLayerConfig(modelSlug) {
     try {
         const r = await fetch(`/assets/images/layers/${modelSlug}/layer_config.json`);
         if (!r.ok) throw new Error('HTTP ' + r.status);
-        if (!r.headers.get('content-type')?.includes('application/json')) {
-            throw new Error('Respons bukan JSON');
-        }
         const cfg = await r.json();
         LAYER_CONFIG_CACHE[modelSlug] = cfg;
         return cfg;
@@ -433,17 +424,11 @@ export default function LayeredShoePreview({
     const [loading, setLoading] = useState(true);
     const selected = useShoeStore(s => s.selected);
     const slugFromStore = useShoeStore(s => s.productSlug);
-    const requestedModel = productSlug || slugFromStore || 'leather-boot';
-    const model = LAYER_MODEL_BY_PRODUCT_SLUG[requestedModel];
+    const model = productSlug || slugFromStore || 'leather-boot';
 
     useEffect(() => {
         let cancelled = false;
         setLoading(true);
-        if (!model) {
-            setConfig(null);
-            setLoading(false);
-            return undefined;
-        }
         loadLayerConfig(model).then(cfg => {
             if (!cancelled) {
                 setConfig(cfg);
