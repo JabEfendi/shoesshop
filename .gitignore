@@ -1,5 +1,7 @@
 /node_modules
 /public/build
+/dist
+/deploy
 /public/hot
 /public/3d-assets/*.glb
 /storage/*.key

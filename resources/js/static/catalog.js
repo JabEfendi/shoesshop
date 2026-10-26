@@ -1,0 +1,46 @@
+export const MODELS = [
+    { slug: 'boots', name: 'Boots 6"', desc: 'Classic high-top daily boots', price: 1250000, icon: 'fa-boot', color: '#4a2c1a', image: '/assets/images/products/boots/boots.jpeg', gallery: ['/assets/images/products/boots/front-side.jpeg', '/assets/images/products/boots/out-side.jpeg', '/assets/images/products/boots/in-side.jpeg', '/assets/images/products/boots/back-side.jpeg', '/assets/images/products/boots/down-side.jpeg', '/assets/images/products/boots/v2/atas.jpeg', '/assets/images/products/boots/v2/all.png'], type: 'casual', glb: null },
+    { slug: 'chelsea', name: 'Chelsea Boots', desc: 'Easy-on elastic panel boots', price: 980000, icon: 'fa-shoe-prints', color: '#1a1a1a', image: '/assets/images/products/chelsea-boots/chelsea-pair-glossy-black.jpeg', gallery: ['/assets/images/products/chelsea-boots/front-side.jpeg', '/assets/images/products/chelsea-boots/out-side.jpeg', '/assets/images/products/chelsea-boots/in-side.jpeg', '/assets/images/products/chelsea-boots/back-side.jpeg', '/assets/images/products/chelsea-boots/down-side.jpeg'], type: 'formal', glb: null },
+    { slug: 'pantofel', name: 'Pantofel', desc: 'Formal leather oxfords', price: 875000, icon: 'fa-briefcase', color: '#0f0f0f', image: '/assets/images/products/pantofel/PANTOFEL.jpeg', gallery: ['/assets/images/products/pantofel/front-side.jpeg', '/assets/images/products/pantofel/out-side.jpeg', '/assets/images/products/pantofel/in-side.jpeg', '/assets/images/products/pantofel/back-side.jpeg', '/assets/images/products/pantofel/down-side.jpeg'], type: 'formal', glb: null },
+    { slug: 'docmart', name: 'Docmart 8-Eye', desc: 'Iconic chunky sole boots', price: 1325000, icon: 'fa-shoe-forms', color: '#2a2a2a', image: '/assets/images/products/docmart/docmart.jpeg', gallery: ['/assets/images/products/docmart/front-side.jpeg', '/assets/images/products/docmart/out-side.jpeg', '/assets/images/products/docmart/in-side.jpeg', '/assets/images/products/docmart/back-side.jpeg', '/assets/images/products/docmart/down-side.jpeg'], type: 'casual', glb: null },
+    { slug: 'loafers', name: 'Loafers', desc: 'Slip-on penny loafers', price: 795000, icon: 'fa-mug-hot', color: '#5c3a1e', image: '/assets/images/products/loafers/loafers.jpeg', gallery: ['/assets/images/products/loafers/front-side.jpeg', '/assets/images/products/loafers/out-side.jpeg', '/assets/images/products/loafers/in-side.jpeg', '/assets/images/products/loafers/back-side.jpeg', '/assets/images/products/loafers/down-side.jpeg'], type: 'formal', glb: null },
+];
+
+export const ELEMENTS = [
+    { slug: 'kulit', label: 'Kulit Upper', icon: 'fa-cowhide', defaults: [{ n: 'Full Grain Coklat', p: 0, c: '#4a2c1a' }, { n: 'Full Grain Hitam', p: 25000, c: '#1a1a1a' }, { n: 'Pull-Up Burgundy', p: 75000, c: '#5e1f1f' }] },
+    { slug: 'benang-kulit', label: 'Benang Jahit Upper', icon: 'fa-wand-magic-sparkles', defaults: [{ n: 'Match Kulit', p: 0 }, { n: 'Kontras Putih', p: 10000, c: '#ffffff' }, { n: 'Kontras Tan', p: 10000, c: '#b38247' }] },
+    { slug: 'benang-outsole', label: 'Benang Jahit Outsole', icon: 'fa-diagram-project', defaults: [{ n: 'Standar Coklat', p: 0 }, { n: 'Heavy Copper', p: 15000, c: '#b87333' }, { n: 'Kontras Kuning', p: 10000, c: '#f0c040' }] },
+    { slug: 'eyelet', label: 'Eyelet Logam', icon: 'fa-screwdriver-wrench', defaults: [{ n: 'Silver Nikel', p: 0, c: '#c0c0c0' }, { n: 'Brass Gold', p: 35000, c: '#b8860b' }, { n: 'Black PVD', p: 45000, c: '#2a2a2a' }] },
+    { slug: 'panel-chelsea', label: 'Panel Chelsea', icon: 'fa-angles-left-right', defaults: [{ n: 'Elastis Hitam', p: 0, c: '#1a1a1a' }, { n: 'Elastis Coklat', p: 20000, c: '#4a2c1a' }, { n: 'Leather Gusset', p: 60000 }] },
+    { slug: 'tali', label: 'Tali Sepatu', icon: 'fa-link', defaults: [{ n: 'Waxed Coklat', p: 0, c: '#4a2c1a' }, { n: 'Flat Hitam', p: 0, c: '#1a1a1a' }, { n: 'Paracord OD', p: 25000, c: '#556b2f' }] },
+    { slug: 'storm-welt', label: 'Storm Welt', icon: 'fa-water', defaults: [{ n: 'Tidak Ada', p: 0 }, { n: 'Standar Welt (WR)', p: 85000 }, { n: 'Triple Welt (Premium)', p: 150000 }] },
+    { slug: 'outsole', label: 'Outsole', icon: 'fa-shoe-prints', defaults: [{ n: 'Karet Hitam', p: 0, c: '#1a1a1a' }, { n: 'Kulit Dress Coklat', p: 125000, c: '#6b3a0d' }, { n: 'Commando Lug', p: 150000, c: '#2a2a2a' }] },
+];
+
+export const SIZE_CHART = [
+    { size: 39, insole_cm: '24.5', recommended_for: 'Panjang kaki 23.8 - 24.2 cm' },
+    { size: 40, insole_cm: '25.2', recommended_for: 'Panjang kaki 24.5 - 24.9 cm' },
+    { size: 41, insole_cm: '26.0', recommended_for: 'Panjang kaki 25.3 - 25.7 cm' },
+    { size: 42, insole_cm: '26.8', recommended_for: 'Panjang kaki 26.1 - 26.5 cm' },
+    { size: 43, insole_cm: '27.6', recommended_for: 'Panjang kaki 26.9 - 27.3 cm' },
+    { size: 44, insole_cm: '28.4', recommended_for: 'Panjang kaki 27.7 - 28.1 cm' },
+    { size: 45, insole_cm: '28.5', recommended_for: 'Panjang kaki 28.5 - 28.9 cm' },
+];
+
+export const getModel = (slug) => MODELS.find((model) => model.slug === slug) || MODELS[0];
+
+export const getProduct = (slug) => ({
+    ...getModel(slug),
+    highlights: ['Full Grain Leather', 'Goodyear Welt', 'Water Repellent', 'Anti-slip Outsole', '12 Bulan Garansi Jahitan'],
+    sizes: [39, 40, 41, 42, 43, 44, 45],
+    lead_time: '+/- 7 hari',
+});
+
+export const PRESETS = MODELS.map((model) => ({
+    ...model,
+    preset_variants: [
+        { n: `Classic ${model.name}`, p: model.price },
+        { n: 'Heritage Edition', p: model.price + 180000 },
+        { n: 'Daily Pack + Care Kit', p: model.price + 250000 },
+    ],
+}));

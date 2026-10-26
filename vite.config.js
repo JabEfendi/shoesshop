@@ -1,30 +1,31 @@
+import { cpSync, existsSync } from 'node:fs';
+import { resolve } from 'node:path';
 import { defineConfig } from 'vite';
-import laravel from 'laravel-vite-plugin';
 import react from '@vitejs/plugin-react';
 
+const copyPublicAssets = {
+    name: 'copy-public-assets',
+    closeBundle() {
+        const source = resolve('public/assets');
+        const destination = resolve('dist/assets');
+
+        if (existsSync(source)) {
+            cpSync(source, destination, {
+                recursive: true,
+                filter: (path) => !path.includes('/3d-models/') && !path.includes('\\3d-models\\'),
+            });
+        }
+    },
+};
+
 export default defineConfig({
-    plugins: [
-        laravel({
-            input: 'resources/js/app.jsx',
-            ssr: 'resources/js/ssr.jsx',
-            refresh: true,
-        }),
-        react(),
-    ],
-    server: {
-        host: '127.0.0.1',
-        port: 5173,
-        strictPort: false,
-        hmr: {
-            host: '127.0.0.1',
+    plugins: [react(), copyPublicAssets],
+    resolve: {
+        alias: {
+            '@inertiajs/react': resolve('resources/js/static/inertia.jsx'),
         },
     },
-    ssr: {
-        noExternal: ['@inertiajs/server', 'three', '@react-three/fiber', '@react-three/drei'],
-    },
-    optimizeDeps: {
-        include: ['three', '@react-three/fiber', '@react-three/drei'],
-    },
+    publicDir: false,
     build: {
         rollupOptions: {
             output: {
