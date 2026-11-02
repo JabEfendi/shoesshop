@@ -45,7 +45,7 @@ export default function CustomizerPreview({ model, elements, lead_time, garansi 
                         <div className="col-lg-7 mb-4">
                             <Reveal>
                                 <div className="hm-panel p-2" style={{ background: '#0e1015', border: '1px solid rgba(201,169,98,.25)' }}>
-                                    <Suspense fallback={<div style={{ height: 520 }} className="d-flex align-items-center justify-content-center text-white">Memuat preview 3D...</div>}><Shoe3DStage glb={model.glb} slug={model.slug} model={model.slug} height={520} badge="360° Preview Final" /></Suspense>
+                                    <Suspense fallback={<div style={{ height: 520 }} className="d-flex align-items-center justify-content-center text-white">Memuat preview 3D...</div>}><Shoe3DStage glb={model.glb} slug={model.previewSlug || model.slug} model={model.previewSlug || model.slug} height={520} badge="360° Preview Final" /></Suspense>
                                 </div>
                                 <div className="d-flex flex-wrap gap-2 mt-3">
                                     <span className="hm-tag"><i className="fas fa-clock" /> {lead_time}</span>

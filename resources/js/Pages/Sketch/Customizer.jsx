@@ -90,7 +90,7 @@ export default function Customizer({ model, elements }) {
                         <div className="col-lg-7 mb-4">
                             <Reveal>
                                 <div className="hm-panel p-2" style={{ background: '#0e1015', border: '1px solid rgba(201,169,98,.25)' }}>
-                                    <Suspense fallback={<div style={{ height: 560 }} className="d-flex align-items-center justify-content-center text-white">Memuat preview 3D...</div>}><Shoe3DStage glb={model.glb} slug={model.slug} model={model.slug} height={560} /></Suspense>
+                                    <Suspense fallback={<div style={{ height: 560 }} className="d-flex align-items-center justify-content-center text-white">Memuat preview 3D...</div>}><Shoe3DStage glb={model.glb} slug={model.previewSlug || model.slug} model={model.previewSlug || model.slug} height={560} /></Suspense>
                                     <div className="d-flex flex-wrap justify-content-between align-items-center px-3 py-3" style={{ borderTop: '1px solid rgba(255,255,255,.08)' }}>
                                         <div className="hm-mono" style={{ fontSize: 10.5, letterSpacing: '.1em', color: 'rgba(255,255,255,.55)', textTransform: 'uppercase' }}>
                                             {model.name} · {elements.filter(e => e.defaults[sel[e.slug]]?.p > 0).length} upgrade

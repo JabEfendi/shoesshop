@@ -1,0 +1,825 @@
+<!doctype html>
+<html lang="id">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>SHOESHOP.ID — Visual Moodboard</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=Inter:wght@300;400;500;600&family=Playfair+Display:ital,wght@0,400;0,500;0,600;1,400;1,500&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --paper:#f2ebd0;
+    --paper-2:#f7f2e3;
+    --ink:#303018;
+    --body:#3b2722;
+    --leather:#604848;
+    --cognac:#a47148;
+    --brass:#c9a24a;
+    --moss:#909078;
+    --stone:#d8d8c0;
+    --forest:#3c4a3a;
+    --rust:#a9502e;
+    --line:rgba(48,48,24,.18);
+    --line-soft:rgba(48,48,24,.10);
+    --serif:"Playfair Display",Georgia,serif;
+    --sans:"Inter",Arial,sans-serif;
+    --mono:"DM Mono",Consolas,monospace;
+  }
+  *{box-sizing:border-box}
+  html,body{margin:0;padding:0}
+  body{
+    background:#ddd6c2;
+    color:var(--body);
+    font-family:var(--sans);
+    font-size:10pt;
+    line-height:1.55;
+    -webkit-font-smoothing:antialiased;
+    padding:18px 0 40px;
+  }
+  .page{
+    width:210mm;
+    min-height:297mm;
+    margin:0 auto 14px;
+    padding:15mm 16mm 12mm;
+    background:var(--paper);
+    position:relative;
+    display:flex;
+    flex-direction:column;
+    overflow:hidden;
+    box-shadow:0 10px 30px rgba(24,23,20,.16);
+  }
+  .page::after{
+    content:"";
+    position:absolute;inset:0;
+    pointer-events:none;
+    opacity:.28;
+    background-image:radial-gradient(rgba(48,48,24,.22) .45px, transparent .45px);
+    background-size:5px 5px;
+    mix-blend-mode:multiply;
+  }
+  .page > *{position:relative;z-index:1}
+
+  /* ---------- shared ---------- */
+  .mono{font-family:var(--mono);font-size:7.4pt;letter-spacing:.14em;text-transform:uppercase}
+  .phead{display:flex;align-items:flex-start;justify-content:space-between;gap:12mm;border-top:1px solid var(--ink);padding-top:3mm;margin-bottom:8mm}
+  .phead .num{font-family:var(--mono);font-size:8pt;letter-spacing:.12em;color:var(--moss);padding-top:1.5mm}
+  .phead h2{font-family:var(--serif);font-weight:500;font-size:25pt;line-height:.95;letter-spacing:-.02em;margin:0;color:var(--ink);flex:1}
+  .phead .note{font-family:var(--mono);font-size:6.8pt;letter-spacing:.1em;text-transform:uppercase;color:var(--moss);text-align:right;max-width:44mm;line-height:1.6;padding-top:1mm}
+  .pfoot{display:flex;justify-content:space-between;align-items:center;margin-top:auto;padding-top:4mm;border-top:1px solid var(--line);font-family:var(--mono);font-size:6.2pt;letter-spacing:.12em;text-transform:uppercase;color:var(--moss)}
+  .kicker{font-family:var(--mono);font-size:7pt;letter-spacing:.18em;text-transform:uppercase;color:var(--moss);margin:0 0 4mm}
+  .lead{font-family:var(--serif);font-size:14pt;line-height:1.35;letter-spacing:-.01em;color:var(--ink);margin:0}
+  .body-copy{font-size:9pt;line-height:1.7;color:var(--body);margin:0}
+  .body-copy + .body-copy{margin-top:3mm}
+  .accent{color:var(--leather)}
+  .rule{height:1px;background:var(--line);margin:6mm 0}
+
+  /* ---------- cover ---------- */
+  .cover{background:var(--ink);color:var(--paper);padding:17mm 16mm 12mm}
+  .cover::after{opacity:.18;background-image:radial-gradient(rgba(242,235,208,.4) .4px, transparent .4px)}
+  .cover-head{display:flex;justify-content:space-between;align-items:baseline;border-bottom:1px solid rgba(242,235,208,.28);padding-bottom:3mm;color:var(--paper)}
+  .cover-head span{color:var(--brass)}
+  .cover-body{display:grid;grid-template-columns:1.08fr .92fr;gap:10mm;align-items:center;flex:1;padding:10mm 0 7mm}
+  .cover-copy .kicker{color:var(--brass);opacity:.9}
+  .cover h1{font-family:var(--serif);font-weight:400;font-size:57pt;line-height:.84;letter-spacing:-.02em;margin:0 0 7mm;color:var(--paper)}
+  .cover h1 em{font-style:italic;color:var(--brass)}
+  .cover .lead{color:var(--paper);font-size:13pt;max-width:80mm}
+  .cover .sub{font-size:8.2pt;line-height:1.7;color:rgba(242,235,208,.66);max-width:78mm;margin-top:5mm}
+  .cover-art{position:relative;height:150mm}
+  .cover-art img{width:100%;height:100%;object-fit:cover;border-radius:80mm 80mm 4mm 4mm;filter:saturate(.82) contrast(1.04) sepia(.12);display:block}
+  .cover-art::before{content:"";position:absolute;inset:-4mm -4mm 4mm 4mm;border:1px solid var(--brass);border-radius:84mm 84mm 4mm 4mm;opacity:.55}
+  .cover-art figcaption{position:absolute;left:-10mm;bottom:12mm;background:var(--paper);color:var(--ink);padding:3mm 4mm;font-family:var(--mono);font-size:6pt;letter-spacing:.12em;text-transform:uppercase;line-height:1.7}
+  .cover-foot{display:grid;grid-template-columns:1.4fr 1fr 1fr 1fr;gap:5mm;border-top:1px solid rgba(242,235,208,.28);padding-top:4mm;margin-top:6mm}
+  .cover-foot div span{display:block;font-family:var(--mono);font-size:5.8pt;letter-spacing:.14em;text-transform:uppercase;color:rgba(242,235,208,.5);margin-bottom:1.5mm}
+  .cover-foot div strong{font-weight:400;font-size:8.2pt;color:var(--paper)}
+  .cover-palette{display:flex;height:7mm;margin:6mm -16mm -12mm;overflow:hidden}
+  .cover-palette i{flex:1}
+
+  /* ---------- direction ---------- */
+  .statement{font-family:var(--serif);font-size:18pt;line-height:1.28;letter-spacing:-.015em;color:var(--ink);margin:0 0 7mm;max-width:160mm}
+  .statement em{color:var(--leather)}
+  .pillars{display:grid;grid-template-columns:repeat(3,1fr);gap:4mm;margin-bottom:7mm}
+  .pillar{border-top:2px solid var(--ink);padding-top:3mm}
+  .pillar .n{font-family:var(--mono);font-size:6.4pt;letter-spacing:.14em;color:var(--brass);margin-bottom:2mm}
+  .pillar h3{font-family:var(--serif);font-weight:500;font-size:14pt;letter-spacing:-.01em;margin:0 0 2mm;color:var(--ink)}
+  .pillar p{margin:0;font-size:8pt;line-height:1.65;color:var(--body)}
+  .formula{display:grid;grid-template-columns:repeat(3,1fr);gap:3mm;margin-top:0;border:1px solid var(--line);padding:4mm;background:var(--paper-2)}
+  .formula div{font-size:7.4pt;line-height:1.5}
+  .formula b{display:block;font-family:var(--mono);font-size:13pt;font-weight:500;color:var(--leather);letter-spacing:-.02em;margin-bottom:1mm}
+  .formula span{font-family:var(--mono);font-size:5.8pt;letter-spacing:.12em;text-transform:uppercase;color:var(--moss);display:block;margin-bottom:1.2mm}
+  .note-box{border-left:3px solid var(--brass);padding:2mm 0 2mm 4mm;font-size:8pt;line-height:1.65;color:var(--body);margin-top:5mm}
+  .pull-quote{font-family:var(--serif);font-style:italic;font-size:19pt;line-height:1.2;letter-spacing:-.01em;color:var(--leather);text-align:center;padding:7mm 0;margin:0}
+  .pull-quote span{display:block;font-family:var(--mono);font-style:normal;font-size:6pt;letter-spacing:.14em;text-transform:uppercase;color:var(--moss);margin-top:3mm}
+  .keyword-row{display:flex;flex-wrap:wrap;gap:2mm;margin-top:5mm}
+  .keyword-row .chip{background:rgba(247,242,227,.6)}
+
+  /* ---------- references ---------- */
+  .ref-grid{display:grid;grid-template-columns:1fr 1fr;gap:3.2mm}
+  .ref{border:1px solid var(--line);padding:3.4mm;display:flex;flex-direction:column;background:rgba(247,242,227,.35)}
+  .ref-top{display:flex;align-items:baseline;gap:2mm;border-bottom:1px solid var(--line-soft);padding-bottom:1.6mm;margin-bottom:2mm}
+  .ref-top i{font-family:var(--mono);font-style:normal;font-size:6pt;color:var(--brass);letter-spacing:.1em}
+  .ref-top h3{font-family:var(--serif);font-weight:500;font-size:11pt;margin:0;letter-spacing:-.01em;color:var(--ink);line-height:1.1}
+  .ref-type{font-family:var(--mono);font-size:5.4pt;text-transform:uppercase;letter-spacing:.12em;color:var(--moss);margin-bottom:2mm}
+  .ref dl{margin:0;display:grid;grid-template-columns:auto 1fr;gap:.8mm 2mm;font-size:7pt;line-height:1.45}
+  .ref dt{font-family:var(--mono);font-size:5.4pt;letter-spacing:.1em;text-transform:uppercase;color:var(--leather);padding-top:.3mm}
+  .ref dd{margin:0;color:var(--body)}
+  .ref dd.avoid{color:#7a5a4a}
+
+  /* ---------- palette ---------- */
+  .swatches{display:grid;grid-template-columns:repeat(4,1fr);gap:3mm;margin-bottom:6mm}
+  .sw{border:1px solid var(--line);background:var(--paper-2)}
+  .sw .chip{height:20mm}
+  .sw .meta{padding:2.4mm}
+  .sw .name{font-family:var(--serif);font-size:9pt;color:var(--ink);margin-bottom:.6mm}
+  .sw .hex{font-family:var(--mono);font-size:6.4pt;letter-spacing:.08em;color:var(--body)}
+  .sw .role{font-size:6.2pt;color:var(--moss);margin-top:1mm;line-height:1.4}
+  .ratio{display:flex;height:10mm;border:1px solid var(--line);margin-bottom:2mm}
+  .ratio i{display:block}
+  .ratio-labels{display:flex;justify-content:space-between;font-family:var(--mono);font-size:5.6pt;letter-spacing:.1em;text-transform:uppercase;color:var(--moss);margin-bottom:5mm}
+  .rules{display:grid;grid-template-columns:1fr 1fr;gap:6mm}
+  .rules h3{font-family:var(--mono);font-size:6.6pt;letter-spacing:.14em;text-transform:uppercase;color:var(--ink);margin:0 0 2mm;border-bottom:1px solid var(--line);padding-bottom:1.4mm}
+  .rules ul{margin:0;padding-left:4mm;font-size:7.6pt;line-height:1.6}
+  .rules li{margin-bottom:1.2mm}
+  .rules .no{color:#7a5a4a}
+
+  /* ---------- type ---------- */
+  .type-top{display:grid;grid-template-columns:1.2fr .8fr;gap:8mm;margin-bottom:6mm}
+  .spec-serif{font-family:var(--serif);font-size:44pt;line-height:.9;letter-spacing:-.02em;color:var(--ink);margin:0}
+  .spec-serif em{color:var(--leather)}
+  .spec-sans{font-family:var(--sans);font-weight:300;font-size:13pt;line-height:1.45;color:var(--body);margin:2mm 0 0}
+  .spec-mono{font-family:var(--mono);font-size:8pt;letter-spacing:.18em;text-transform:uppercase;color:var(--moss);margin:4mm 0 0}
+  .type-meta{border-left:1px solid var(--line);padding-left:5mm}
+  .type-meta h3{font-family:var(--serif);font-size:11pt;font-weight:500;margin:0 0 1mm;color:var(--ink)}
+  .type-meta p{font-size:7.2pt;line-height:1.55;margin:0 0 3mm;color:var(--body)}
+  .type-meta span{font-family:var(--mono);font-size:5.8pt;letter-spacing:.1em;text-transform:uppercase;color:var(--moss)}
+  table.scale{width:100%;border-collapse:collapse;font-size:7.2pt}
+  table.scale th{font-family:var(--mono);font-size:5.8pt;letter-spacing:.12em;text-transform:uppercase;color:var(--moss);text-align:left;padding:1.6mm 2mm;border-bottom:1px solid var(--ink);font-weight:400}
+  table.scale td{padding:1.6mm 2mm;border-bottom:1px solid var(--line-soft);vertical-align:top}
+  table.scale td:first-child{font-family:var(--mono);font-size:6pt;letter-spacing:.08em;color:var(--leather);text-transform:uppercase}
+  .type-note{display:grid;grid-template-columns:1fr 1fr;gap:6mm;margin-top:5mm;font-size:7.4pt;line-height:1.6}
+  .type-note b{font-family:var(--mono);font-size:6pt;letter-spacing:.12em;text-transform:uppercase;color:var(--ink);display:block;margin-bottom:1mm}
+
+  /* ---------- art direction ---------- */
+  .art-grid{display:grid;grid-template-columns:1fr 1fr;gap:4mm;flex:none;align-items:start;align-content:start}
+  .art{border:1px solid var(--line);background:var(--paper-2);display:flex;flex-direction:column;min-height:0}
+  .art .frame{height:56mm;overflow:hidden;position:relative;background:var(--stone)}
+  .art .frame img{width:100%;height:100%;object-fit:cover;filter:saturate(.82) contrast(1.03) sepia(.1)}
+  .art .frame.graphic{background:linear-gradient(135deg,#3c4a3a 0%,#604848 55%,#a47148 100%)}
+  .art .frame.graphic::after{content:attr(data-word);position:absolute;inset:0;display:grid;place-items:center;font-family:var(--serif);font-size:24pt;letter-spacing:-.02em;color:rgba(242,235,208,.9)}
+  .art .copy{padding:3mm 3.4mm}
+  .art h3{font-family:var(--serif);font-size:11pt;font-weight:500;margin:0 0 1mm;color:var(--ink)}
+  .art p{font-size:7.2pt;line-height:1.55;margin:0;color:var(--body)}
+  .art .tag{font-family:var(--mono);font-size:5.4pt;letter-spacing:.12em;text-transform:uppercase;color:var(--brass);margin-bottom:1.4mm}
+  .treatment{display:flex;gap:5mm;margin-top:auto;border-top:1px solid var(--line);padding-top:3mm;font-size:7pt;line-height:1.55}
+  .treatment div{flex:1}
+  .treatment b{font-family:var(--mono);font-size:5.8pt;letter-spacing:.12em;text-transform:uppercase;color:var(--ink);display:block;margin-bottom:.8mm}
+
+  /* ---------- UI language ---------- */
+  .ui-grid{display:grid;grid-template-columns:1fr 1fr;gap:5mm}
+  .ui-box{border:1px solid var(--line);padding:4mm;background:var(--paper-2)}
+  .ui-box > .label{font-family:var(--mono);font-size:5.6pt;letter-spacing:.14em;text-transform:uppercase;color:var(--moss);margin-bottom:3mm;display:block}
+  .btn-primary{display:inline-flex;align-items:center;justify-content:center;gap:2mm;background:var(--ink);color:var(--paper);border:1px solid transparent;border-radius:999px;padding:2.4mm 5mm;font-size:8pt;font-weight:500}
+  .btn-secondary{display:inline-flex;align-items:center;justify-content:center;gap:2mm;background:transparent;color:var(--ink);border:1px solid var(--line);border-radius:999px;padding:2.4mm 5mm;font-size:8pt;font-weight:500}
+  .chip-row{display:flex;gap:2mm;flex-wrap:wrap}
+  .chip{font-family:var(--mono);font-size:5.8pt;letter-spacing:.1em;text-transform:uppercase;border:1px solid var(--line);border-radius:999px;padding:1.4mm 2.6mm;color:var(--body)}
+  .chip.on{background:var(--ink);color:var(--paper);border-color:var(--ink)}
+  .swatch-row{display:flex;gap:2mm;margin-top:2mm}
+  .swatch-row i{width:9mm;height:9mm;border-radius:999px;border:1px solid var(--line);display:block}
+  .mini-card{display:grid;grid-template-columns:24mm 1fr;gap:3mm;align-items:center}
+  .mini-card .ph{height:26mm;border-radius:12mm 12mm 3mm 3mm;overflow:hidden;background:var(--stone)}
+  .mini-card .ph img{width:100%;height:100%;object-fit:cover;filter:saturate(.82) sepia(.08)}
+  .mini-card .m{font-family:var(--mono);font-size:5.4pt;letter-spacing:.12em;text-transform:uppercase;color:var(--moss)}
+  .mini-card h4{font-family:var(--serif);font-size:10pt;font-weight:500;margin:.6mm 0 1mm;color:var(--ink)}
+  .mini-card .price{font-family:var(--mono);font-size:6.4pt;color:var(--body)}
+  .spec-line{display:flex;justify-content:space-between;border-bottom:1px solid var(--line-soft);padding:1.4mm 0;font-size:6.8pt}
+  .spec-line span:first-child{font-family:var(--mono);font-size:5.6pt;letter-spacing:.1em;text-transform:uppercase;color:var(--moss)}
+  .progress{display:flex;align-items:center;gap:1mm;margin-top:2mm}
+  .progress i{width:5mm;height:5mm;border-radius:50%;border:1px solid var(--line);display:grid;place-items:center;font-family:var(--mono);font-style:normal;font-size:5pt;color:var(--moss)}
+  .progress i.done{background:var(--forest);border-color:var(--forest);color:var(--paper)}
+  .progress i.now{background:var(--brass);border-color:var(--brass);color:var(--ink)}
+  .progress span{height:1px;flex:1;background:var(--line)}
+  .quote{font-family:var(--serif);font-style:italic;font-size:12pt;line-height:1.35;color:var(--leather);margin:0}
+  .quote small{display:block;font-family:var(--mono);font-style:normal;font-size:5.6pt;letter-spacing:.12em;text-transform:uppercase;color:var(--moss);margin-top:2mm}
+
+  /* ---------- wireframe ---------- */
+  .wf{display:flex;flex-direction:column;gap:2.2mm;flex:1}
+  .wf-row{display:grid;gap:2.2mm}
+  .wf-box{border:1px dashed rgba(48,48,24,.36);padding:2.2mm 2.6mm;background:rgba(247,242,227,.45);position:relative}
+  .wf-box .t{font-family:var(--mono);font-size:5.4pt;letter-spacing:.12em;text-transform:uppercase;color:var(--leather)}
+  .wf-box .d{font-size:6.6pt;line-height:1.4;color:var(--body);margin-top:.6mm}
+  .wf-box .ref{position:absolute;right:2mm;top:2mm;font-family:var(--mono);font-size:4.8pt;color:var(--moss);letter-spacing:.08em}
+  .wf-hero{display:grid;grid-template-columns:1.15fr .85fr;gap:2.2mm;min-height:34mm}
+  .wf-hero .ph{border-radius:14mm 14mm 2mm 2mm;background:var(--stone);border:1px solid var(--line);overflow:hidden}
+  .wf-hero .ph img{width:100%;height:100%;object-fit:cover;filter:saturate(.8) sepia(.1)}
+  .wf-grid3{display:grid;grid-template-columns:repeat(3,1fr);gap:2.2mm}
+  .wf-grid2{display:grid;grid-template-columns:1fr 1fr;gap:2.2mm}
+  .wf-small{font-family:var(--mono);font-size:4.8pt;letter-spacing:.08em;color:var(--moss);margin-top:1mm}
+
+  /* ---------- closing ---------- */
+  .two-col{display:grid;grid-template-columns:1fr 1fr;gap:6mm}
+  .list{list-style:none;margin:0;padding:0;font-size:7.6pt;line-height:1.6}
+  .list li{display:grid;grid-template-columns:4mm 1fr;gap:1.6mm;padding:1.2mm 0;border-bottom:1px solid var(--line-soft)}
+  .list li::before{content:"✓";font-family:var(--mono);font-size:7pt;color:var(--forest)}
+  .list.no li::before{content:"×";color:var(--rust)}
+  .motion{display:grid;grid-template-columns:repeat(3,1fr);gap:3mm;margin-top:3mm}
+  .motion div{border-top:1px solid var(--line);padding-top:2mm}
+  .motion b{font-family:var(--mono);font-size:5.8pt;letter-spacing:.12em;text-transform:uppercase;color:var(--ink);display:block;margin-bottom:.8mm}
+  .motion p{margin:0;font-size:7pt;line-height:1.55;color:var(--body)}
+  .field{width:100%;border:1px solid var(--line);background:#fff;padding:2.2mm 2.6mm;font-family:var(--sans);font-size:7pt;color:var(--body);margin-bottom:1.6mm}
+  .field.err{border-color:var(--rust)}
+  .field-msg{font-family:var(--mono);font-size:5.2pt;letter-spacing:.06em;text-transform:uppercase;color:var(--rust)}
+  .field-msg.ok{color:var(--forest)}
+  .next{display:grid;grid-template-columns:repeat(3,1fr);gap:3mm;margin-top:5mm}
+  .next div{border-top:1px solid var(--line);padding-top:2mm}
+  .next b{font-family:var(--mono);font-size:5.8pt;letter-spacing:.12em;text-transform:uppercase;color:var(--leather);display:block;margin-bottom:.8mm}
+  .next p{margin:0;font-size:7pt;line-height:1.55;color:var(--body)}
+  .signoff{display:grid;grid-template-columns:1fr 1fr;gap:8mm;margin-top:auto;border-top:1px solid var(--ink);padding-top:5mm}
+  .signoff div span{font-family:var(--mono);font-size:5.8pt;letter-spacing:.12em;text-transform:uppercase;color:var(--moss)}
+  .signoff .line{height:14mm;border-bottom:1px solid var(--line);margin-bottom:1.6mm}
+
+  @media print{
+    body{background:#fff;padding:0}
+    .page{margin:0;box-shadow:none;page-break-after:always;break-after:page}
+    .page:last-of-type{page-break-after:auto;break-after:auto}
+  }
+  @page{size:A4;margin:0}
+</style>
+</head>
+<body>
+
+<!-- ============ COVER ============ -->
+<section class="page cover">
+  <div class="cover-head mono">
+    <span>SHOESHOP.ID — Foot Fashion</span>
+    <span>Visual Moodboard · v1.0</span>
+  </div>
+
+  <div class="cover-body">
+    <div class="cover-copy">
+      <p class="kicker">Direction 01 · 28 October 2026</p>
+      <h1>Everyday<br><em>Heirloom.</em></h1>
+      <p class="lead">Warm heritage craft for the way a modern man actually lives.</p>
+      <p class="sub">A visual direction distilled from seven footwear brands the client admires — Beckett Simonon, RUJO, Crockett &amp; Jones, Edward Green, John Lobb, Berwick 1707, and Baxter.</p>
+    </div>
+    <figure class="cover-art">
+      <img src="../../public/assets/images/products/boots/front-side.jpeg" alt="Brown leather lace-up boot, front view">
+      <figcaption>Full grain · Goodyear welt · Made in Indonesia</figcaption>
+    </figure>
+  </div>
+
+  <div class="cover-foot">
+    <div><span>Disiapkan untuk</span><strong>Foot Fashion / SHOESHOP.ID</strong></div>
+    <div><span>Positioning</span><strong>Daily casual leather</strong></div>
+    <div><span>Audience</span><strong>Gen Z &amp; Millennial men</strong></div>
+    <div><span>References</span><strong>7 footwear brands</strong></div>
+  </div>
+
+  <div class="cover-palette">
+    <i style="background:#f2ebd0"></i>
+    <i style="background:#f7f2e3"></i>
+    <i style="background:#d8d8c0"></i>
+    <i style="background:#909078"></i>
+    <i style="background:#c9a24a"></i>
+    <i style="background:#a47148"></i>
+    <i style="background:#604848"></i>
+    <i style="background:#3b2722"></i>
+    <i style="background:#303018"></i>
+  </div>
+</section>
+
+<!-- ============ 01 DIRECTION ============ -->
+<section class="page">
+  <div class="phead">
+    <span class="num">01</span>
+    <h2>Arah visual</h2>
+    <span class="note">Bukan menyalin satu brand — mengambil benang merahnya.</span>
+  </div>
+
+  <p class="kicker">The idea</p>
+  <p class="statement">Tujuh referensi ini berbicara tentang hal yang sama: <em>kejujuran bahan, bukti kerajinan, dan ketenangan editorial.</em> Tugas kita menerjemahkannya ke bahasa yang lebih muda, ringan, dan relevan untuk pria Gen Z &amp; Millennial Indonesia.</p>
+
+  <div class="pillars">
+    <div class="pillar">
+      <div class="n">01 / PROVENANCE</div>
+      <h3>Heritage warmth</h3>
+      <p>Kulit, kuningan, kertas, jahitan. Rasa brand yang sudah lama ada. Warisan dipakai sebagai kualitas, bukan kostum vintage.</p>
+    </div>
+    <div class="pillar">
+      <div class="n">02 / USE</div>
+      <h3>Everyday ease</h3>
+      <p>Sepatu untuk kerja, kuliah, kafe, dan jalan malam. Foto dan copy harus terasa bisa dipakai hari ini, bukan dipajang di museum.</p>
+    </div>
+    <div class="pillar">
+      <div class="n">03 / TONE</div>
+      <h3>Modern editorial</h3>
+      <p>Grid asimetris, serif besar, label mono, whitespace. Premium tapi tidak kaku; muda tapi tidak murah.</p>
+    </div>
+  </div>
+
+  <div class="rule"></div>
+
+  <p class="pull-quote">“Heritage is not a costume. It is a standard.”<span>Design principle · SHOESHOP.ID</span></p>
+
+  <p class="kicker">The formula</p>
+  <div class="formula">
+    <div><span>Base</span><b>50%</b>Heritage craft. Bahan, konstruksi, proses, dan cerita pengrajin sebagai fondasi kepercayaan.</div>
+    <div><span>Structure</span><b>30%</b>Contemporary editorial. Tipografi, grid, dan fotografi yang membuat brand terasa sekarang.</div>
+    <div><span>Accent</span><b>20%</b>Street energy. Hanya untuk Boots &amp; Docmart: low angle, beton, denim, irama yang lebih cepat.</div>
+  </div>
+
+  <div class="note-box">
+    <strong>Prinsip pengambilan referensi.</strong> Ambil sistemnya, bukan tampilannya. Kita tidak meniru layout Crockett &amp; Jones atau palet Edward Green secara literal; kita memakai cara mereka membangun kepercayaan — lalu menyesuaikannya dengan model bisnis made-to-order 7 hari, customizer, dan audiens yang lebih muda.
+  </div>
+
+  <div class="pfoot"><span>SHOESHOP.ID · Moodboard</span><span>01 / Direction</span></div>
+</section>
+
+<!-- ============ 02 REFERENCE DNA ============ -->
+<section class="page">
+  <div class="phead">
+    <span class="num">02</span>
+    <h2>Reference DNA</h2>
+    <span class="note">Apa yang diambil, apa yang sengaja tidak diambil.</span>
+  </div>
+
+  <div class="ref-grid">
+    <article class="ref">
+      <div class="ref-top"><i>01</i><h3>Beckett Simonon</h3></div>
+      <div class="ref-type">DTC · made-to-order · accessible luxury</div>
+      <dl>
+        <dt>Ambil</dt><dd>Alur belanja yang jelas, trust badge, best-seller tabs, cerita “how it works”, transparansi harga.</dd>
+        <dt>Hindari</dt><dd class="avoid">Diskon yang terlalu sering; kesan katalog murah.</dd>
+      </dl>
+    </article>
+
+    <article class="ref">
+      <div class="ref-top"><i>02</i><h3>RUJO</h3></div>
+      <div class="ref-type">Western · material-led · conversion</div>
+      <dl>
+        <dt>Ambil</dt><dd>Navigasi berbasis material, journal, loyalty, private events, keberanian bercerita.</dd>
+        <dt>Hindari</dt><dd class="avoid">Urgency dan promo agresif yang menurunkan persepsi premium.</dd>
+      </dl>
+    </article>
+
+    <article class="ref">
+      <div class="ref-top"><i>03</i><h3>Crockett &amp; Jones</h3></div>
+      <div class="ref-type">Heritage authority · education</div>
+      <dl>
+        <dt>Ambil</dt><dd>Mega menu by style / collection / season, guides (last, sole, material, fit), repair &amp; editorial.</dd>
+        <dt>Hindari</dt><dd class="avoid">Menu terlalu padat dan bahasa terlalu teknis untuk pembeli baru.</dd>
+      </dl>
+    </article>
+
+    <article class="ref">
+      <div class="ref-top"><i>04</i><h3>Edward Green</h3></div>
+      <div class="ref-type">Top-tier · quiet luxury</div>
+      <dl>
+        <dt>Ambil</dt><dd>Palet antique green/earth, small-batch story, hand-finish, kampanye editorial yang tenang.</dd>
+        <dt>Hindari</dt><dd class="avoid">Tone terlalu eksklusif dan tertutup untuk audiens muda.</dd>
+      </dl>
+    </article>
+
+    <article class="ref">
+      <div class="ref-top"><i>05</i><h3>John Lobb</h3></div>
+      <div class="ref-type">Bespoke romance · narrative luxury</div>
+      <dl>
+        <dt>Ambil</dt><dd>Arsip sebagai sumber identitas, serif, warna russet, ilustrasi, whitespace, cerita pengrajin.</dd>
+        <dt>Hindari</dt><dd class="avoid">Narasi bespoke yang tidak cocok dengan produksi 7 hari.</dd>
+      </dl>
+    </article>
+
+    <article class="ref">
+      <div class="ref-top"><i>06</i><h3>Berwick 1707</h3></div>
+      <div class="ref-type">Accessible craft · product-first</div>
+      <dl>
+        <dt>Ambil</dt><dd>Kesederhanaan halaman, fokus produk, “quiet luxury” yang tetap ramah dan mudah dibeli.</dd>
+        <dt>Hindari</dt><dd class="avoid">Layout terlalu polos tanpa cerita dan konteks.</dd>
+      </dl>
+    </article>
+
+    <article class="ref" style="grid-column:1 / -1">
+      <div class="ref-top"><i>07</i><h3>Baxter</h3></div>
+      <div class="ref-type">Family heritage · practical · Australian owned</div>
+      <dl>
+        <dt>Ambil</dt><dd>Provenance yang jujur, kategori jelas, video hero, segmentasi, stockist, dan rasa komunitas.</dd>
+        <dt>Hindari</dt><dd class="avoid">Kesan workwear murni yang terlalu jauh dari daily casual leather.</dd>
+      </dl>
+    </article>
+  </div>
+
+  <div class="note-box" style="margin-top:5mm">
+    <strong>Kesimpulan.</strong> Base visual kita adalah <em>warm heritage editorial</em> (Crockett &amp; Jones, Edward Green, John Lobb, Berwick), dengan kemudahan DTC (Beckett Simonon, Baxter) dan sedikit energi street (RUJO) yang hanya muncul di konteks Boots/Docmart. Ini menjaga brand tetap punya karakter, tetapi tidak mengunci diri ke satu gaya hidup.
+  </div>
+
+  <p class="kicker" style="margin-top:7mm">Mood keywords</p>
+  <div class="keyword-row">
+    <span class="chip">#WarmHeritage</span>
+    <span class="chip">#EverydayCraft</span>
+    <span class="chip">#QuietConfidence</span>
+    <span class="chip">#Editorial</span>
+    <span class="chip">#LocalPride</span>
+    <span class="chip">#MadeToLast</span>
+    <span class="chip">#ModernMasculine</span>
+  </div>
+
+  <div class="pfoot"><span>SHOESHOP.ID · Moodboard</span><span>02 / Reference DNA</span></div>
+</section>
+
+<!-- ============ 03 COLOR ============ -->
+<section class="page">
+  <div class="phead">
+    <span class="num">03</span>
+    <h2>Palet warna</h2>
+    <span class="note">Warm, tactile, dan cukup tenang untuk membuat produk berbicara.</span>
+  </div>
+
+  <p class="body-copy" style="margin-bottom:5mm">Palet diambil dari material sepatu itu sendiri: kertas, kulit, kuningan, dan lumut. Tidak ada hitam pekat atau putih steril. Warna disusun 60–30–10 agar halaman terasa lapang, bukan ramai.</p>
+
+  <div class="swatches">
+    <div class="sw"><div class="chip" style="background:#f2ebd0"></div><div class="meta"><div class="name">Paper</div><div class="hex">#F2EBD0</div><div class="role">Base / background utama — 55%</div></div></div>
+    <div class="sw"><div class="chip" style="background:#f7f2e3"></div><div class="meta"><div class="name">Ivory</div><div class="hex">#F7F2E3</div><div class="role">Surface / kartu — 10%</div></div></div>
+    <div class="sw"><div class="chip" style="background:#d8d8c0"></div><div class="meta"><div class="name">Stone</div><div class="hex">#D8D8C0</div><div class="role">Image bg, divider — 5%</div></div></div>
+    <div class="sw"><div class="chip" style="background:#909078"></div><div class="meta"><div class="name">Moss</div><div class="hex">#909078</div><div class="role">Meta, caption — 5%</div></div></div>
+    <div class="sw"><div class="chip" style="background:#303018"></div><div class="meta"><div class="name">Ink</div><div class="hex">#303018</div><div class="role">Teks utama, tombol — 12%</div></div></div>
+    <div class="sw"><div class="chip" style="background:#3b2722"></div><div class="meta"><div class="name">Espresso</div><div class="hex">#3B2722</div><div class="role">Body text — 5%</div></div></div>
+    <div class="sw"><div class="chip" style="background:#604848"></div><div class="meta"><div class="name">Leather</div><div class="hex">#604848</div><div class="role">Accent utama — 5%</div></div></div>
+    <div class="sw"><div class="chip" style="background:#a47148"></div><div class="meta"><div class="name">Cognac</div><div class="hex">#A47148</div><div class="role">Accent sekunder — 3%</div></div></div>
+    <div class="sw"><div class="chip" style="background:#c9a24a"></div><div class="meta"><div class="name">Brass</div><div class="hex">#C9A24A</div><div class="role">Detail, nomor, highlight — 2%</div></div></div>
+    <div class="sw"><div class="chip" style="background:#3c4a3a"></div><div class="meta"><div class="name">Forest</div><div class="hex">#3C4A3A</div><div class="role">Craft section — 2%</div></div></div>
+    <div class="sw"><div class="chip" style="background:#a9502e"></div><div class="meta"><div class="name">Rust</div><div class="hex">#A9502E</div><div class="role">Street / boot accent — 1%</div></div></div>
+    <div class="sw"><div class="chip" style="background:#ffffff;border-bottom:1px solid rgba(48,48,24,.15)"></div><div class="meta"><div class="name">Pure White</div><div class="hex">#FFFFFF</div><div class="role">Hindari sebagai background</div></div></div>
+  </div>
+
+  <p class="kicker">Usage ratio</p>
+  <div class="ratio">
+    <i style="flex:55;background:#f2ebd0"></i>
+    <i style="flex:10;background:#f7f2e3"></i>
+    <i style="flex:12;background:#303018"></i>
+    <i style="flex:5;background:#3b2722"></i>
+    <i style="flex:5;background:#604848"></i>
+    <i style="flex:3;background:#a47148"></i>
+    <i style="flex:10;background:#d8d8c0"></i>
+  </div>
+  <div class="ratio-labels"><span>Paper + Ivory 65%</span><span>Ink + Espresso 17%</span><span>Leather + Cognac 8%</span><span>Stone + Moss 10%</span></div>
+
+  <div class="rules">
+    <div>
+      <h3>Do</h3>
+      <ul>
+        <li>Gunakan Paper sebagai kanvas utama; biarkan whitespace bernapas.</li>
+        <li>Ink untuk teks dan tombol primer agar kontras kuat.</li>
+        <li>Brass hanya untuk detail kecil: nomor, garis, label, hover.</li>
+        <li>Foto produk dipadukan dengan Stone/Paper, bukan putih murni.</li>
+        <li>Forest/Rust hanya di section craft atau boot, tidak di seluruh halaman.</li>
+      </ul>
+    </div>
+    <div>
+      <h3 class="no">Don't</h3>
+      <ul class="no">
+        <li>Jangan pakai gradien ungu-biru, neon, atau glassmorphism.</li>
+        <li>Jangan pakai shadow tebal atau border radius besar di semua elemen.</li>
+        <li>Jangan taruh brass sebagai warna body text (kontras rendah).</li>
+        <li>Jangan membuat foto terlalu jenuh; kulit harus terlihat seperti kulit.</li>
+        <li>Jangan mencampur terlalu banyak aksen dalam satu section.</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="pfoot"><span>SHOESHOP.ID · Moodboard</span><span>03 / Colour</span></div>
+</section>
+
+<!-- ============ 04 TYPOGRAPHY ============ -->
+<section class="page">
+  <div class="phead">
+    <span class="num">04</span>
+    <h2>Tipografi</h2>
+    <span class="note">Serif untuk rasa, sans untuk kejelasan, mono untuk presisi.</span>
+  </div>
+
+  <div class="type-top">
+    <div>
+      <p class="kicker">Display · Playfair Display</p>
+      <p class="spec-serif">Walk your<br><em>own way.</em></p>
+      <p class="spec-sans">Daily leather shoes, built with enough character to become entirely yours. Full grain, Goodyear welted, re-solable.</p>
+      <p class="spec-mono">Handmade · 7 days · Made in Indonesia</p>
+    </div>
+    <div class="type-meta">
+      <h3>Playfair Display</h3>
+      <p>Judul kampanye, nama model, angka besar. Gunakan italic untuk penekanan emosional. Jangan dipakai untuk body atau tombol.</p>
+      <span>Display / 400–500 / italic accent</span>
+      <div class="rule" style="margin:4mm 0"></div>
+      <h3>Inter</h3>
+      <p>Body copy, deskripsi produk, form, navigasi. Ukuran minimal 16px di web. Line-height 1.55–1.7.</p>
+      <span>Body / 300–600</span>
+      <div class="rule" style="margin:4mm 0"></div>
+      <h3>DM Mono</h3>
+      <p>Eyebrow, label spesifikasi, SKU, nomor tahapan, harga kecil. Huruf kapital dengan tracking lebar.</p>
+      <span>Label / 400–500 / tracking .08–.18em</span>
+    </div>
+  </div>
+
+  <p class="kicker">Type scale</p>
+  <table class="scale">
+    <thead><tr><th>Token</th><th>Desktop</th><th>Mobile</th><th>Dipakai untuk</th></tr></thead>
+    <tbody>
+      <tr><td>Display</td><td>96–200 px</td><td>64–104 px</td><td>Hero headline, statement</td></tr>
+      <tr><td>H2</td><td>56–88 px</td><td>40–56 px</td><td>Section title</td></tr>
+      <tr><td>H3</td><td>24–32 px</td><td>20–26 px</td><td>Nama model, sub-section</td></tr>
+      <tr><td>Body</td><td>16–18 px</td><td>16 px</td><td>Deskripsi, paragraf</td></tr>
+      <tr><td>Small</td><td>13–14 px</td><td>13 px</td><td>Caption, catatan</td></tr>
+      <tr><td>Label</td><td>11–12 px</td><td>10–11 px</td><td>Eyebrow, spec, step</td></tr>
+    </tbody>
+  </table>
+
+  <div class="type-note">
+    <div><b>Aturan</b>Maksimal dua keluarga font per section. Serif untuk emosi, sans untuk informasi. Italic hanya untuk satu kata/frasa, bukan seluruh paragraf.</div>
+    <div><b>Hindari</b>Font script dekoratif, letter-spacing negatif di body, teks semua kapital panjang, dan ukuran di bawah 14px untuk konten penting.</div>
+  </div>
+
+  <div class="pfoot"><span>SHOESHOP.ID · Moodboard</span><span>04 / Typography</span></div>
+</section>
+
+<!-- ============ 05 ART DIRECTION ============ -->
+<section class="page">
+  <div class="phead">
+    <span class="num">05</span>
+    <h2>Art direction</h2>
+    <span class="note">Fotografi harus terasa seperti hidup, bukan seperti katalog.</span>
+  </div>
+
+  <div class="art-grid">
+    <article class="art">
+      <div class="frame"><img src="../../public/assets/images/products/boots/front-side.jpeg" alt="Leather boot product shot"></div>
+      <div class="copy">
+        <div class="tag">01 / Product</div>
+        <h3>Quiet product</h3>
+        <p>Cahaya jendela, latar batu/kertas, fokus ke tekstur dan jahitan. Netral, tidak over-white. Biarkan bentuk sepatu yang berbicara.</p>
+      </div>
+    </article>
+
+    <article class="art">
+      <div class="frame"><img src="../../public/assets/images/products/loafers/front-side.jpeg" alt="Leather loafer detail"></div>
+      <div class="copy">
+        <div class="tag">02 / Detail</div>
+        <h3>Close enough to touch</h3>
+        <p>Makro grain, welt, sol, eyelet, benang. Detail ini yang menjual customizer dan membenarkan harga. Gunakan satu foto detail per section.</p>
+      </div>
+    </article>
+
+    <article class="art">
+      <div class="frame graphic" data-word="HANDS"><div class="copy"></div></div>
+      <div class="copy">
+        <div class="tag">03 / Craft</div>
+        <h3>Documentary, not staged</h3>
+        <p>Tangan, alat, last, mesin jahit, debu workshop. Warm tone, sedikit grain. Foto proses harus terasa diambil, bukan disutradarai.</p>
+      </div>
+    </article>
+
+    <article class="art">
+      <div class="frame graphic" data-word="WALK" style="background:linear-gradient(135deg,#303018 0%,#604848 60%,#a47148 100%)"></div>
+      <div class="copy">
+        <div class="tag">04 / Model</div>
+        <h3>Two ages, one world</h3>
+        <p>Model muda untuk casual (loafer, boot, docmart), model matang untuk formal (pantofel, chelsea). Lingkungan nyata: kantor, kafe, jalan, workshop.</p>
+      </div>
+    </article>
+  </div>
+
+  <div class="treatment">
+    <div><b>Treatment</b>Warm grade, saturasi turun sedikit, grain halus. Jangan pakai filter vintage berat atau vignette tebal.</div>
+    <div><b>Composition</b>Banyak ruang kosong. Subjek tidak selalu di tengah. Gunakan arch/oval mask untuk foto utama.</div>
+    <div><b>Avoid</b>Stock photo senyum berlebihan, background studio putih steril, HDR, dan bayangan palsu.</div>
+  </div>
+
+  <div class="pfoot"><span>SHOESHOP.ID · Moodboard</span><span>05 / Art Direction</span></div>
+</section>
+
+<!-- ============ 06 UI LANGUAGE ============ -->
+<section class="page">
+  <div class="phead">
+    <span class="num">06</span>
+    <h2>UI language</h2>
+    <span class="note">Tenang di permukaan, presisi di detail.</span>
+  </div>
+
+  <div class="ui-grid">
+    <div class="ui-box">
+      <span class="label">Buttons &amp; chips</span>
+      <div style="display:flex;gap:2mm;flex-wrap:wrap;margin-bottom:3mm">
+        <span class="btn-primary">Build yours →</span>
+        <span class="btn-secondary">View collection</span>
+      </div>
+      <div class="chip-row">
+        <span class="chip on">Boots</span><span class="chip">Chelsea</span><span class="chip">Pantofel</span><span class="chip">Docmart</span><span class="chip">Loafers</span>
+      </div>
+      <p style="font-size:6.8pt;line-height:1.5;margin:3mm 0 0;color:var(--moss)">Pill radius, tinggi minimal 44px, border 1px. Tidak ada shadow.</p>
+    </div>
+
+    <div class="ui-box">
+      <span class="label">Product card</span>
+      <div class="mini-card">
+        <div class="ph"><img src="../../public/assets/images/products/chelsea-boots/front-side.jpeg" alt="Chelsea boot"></div>
+        <div>
+          <div class="m">Smart formal · 01</div>
+          <h4>Chelsea Boots</h4>
+          <div class="price">From IDR 1.250.000</div>
+        </div>
+      </div>
+      <p style="font-size:6.8pt;line-height:1.5;margin:3mm 0 0;color:var(--moss)">Foto arch, nomor mono, nama serif, harga mono. Hover: zoom 1.04.</p>
+    </div>
+
+    <div class="ui-box">
+      <span class="label">Material selector</span>
+      <div class="swatch-row">
+        <i style="background:#3b2722"></i><i style="background:#604848"></i><i style="background:#a47148"></i><i style="background:#c9a24a"></i><i style="background:#3c4a3a"></i><i style="background:#a9502e"></i>
+      </div>
+      <p style="font-size:6.8pt;line-height:1.5;margin:3mm 0 0;color:var(--moss)">Swatch bulat 36px, ring 1px saat aktif, label nama material di bawah. Ini jantung customizer.</p>
+    </div>
+
+    <div class="ui-box">
+      <span class="label">Spec rows &amp; quote</span>
+      <div class="spec-line"><span>Upper</span><span>Full-grain leather</span></div>
+      <div class="spec-line"><span>Construction</span><span>Goodyear welt</span></div>
+      <div class="spec-line"><span>Lead time</span><span>7 working days</span></div>
+      <p class="quote" style="margin-top:3mm">“Handcrafted, not mass-produced.”<small>Brand line</small></p>
+    </div>
+
+    <div class="ui-box">
+      <span class="label">Price breakdown</span>
+      <div class="spec-line"><span>Base · Chelsea</span><span>IDR 1.250.000</span></div>
+      <div class="spec-line"><span>Leather upgrade</span><span>+ IDR 150.000</span></div>
+      <div class="spec-line"><span>Outsole</span><span>+ IDR 75.000</span></div>
+      <div class="spec-line" style="border-bottom:1px solid var(--ink);font-weight:600"><span>Subtotal</span><span>IDR 1.475.000</span></div>
+      <p style="font-size:6.8pt;line-height:1.5;margin:2mm 0 0;color:var(--moss)">Harga berubah real-time; breakdown selalu terlihat, tidak disembunyikan.</p>
+    </div>
+
+    <div class="ui-box">
+      <span class="label">Production tracker</span>
+      <div class="progress"><i class="done">✓</i><span></span><i class="done">✓</i><span></span><i class="now">3</i><span></span><i>4</i><span></span><i>5</i></div>
+      <div style="display:flex;justify-content:space-between;font-family:var(--mono);font-size:5pt;letter-spacing:.06em;text-transform:uppercase;color:var(--moss);margin-top:1.6mm">
+        <span>Cutting</span><span>Stitch</span><span>Soling</span><span>QC</span><span>Delivery</span>
+      </div>
+      <p style="font-size:6.8pt;line-height:1.5;margin:2.4mm 0 0;color:var(--moss)">Lima tahap, jelas dan jujur. Bukan tracking kurir palsu.</p>
+    </div>
+
+    <div class="ui-box">
+      <span class="label">Navigation &amp; mega menu</span>
+      <div style="display:flex;gap:3mm;flex-wrap:wrap;font-family:var(--mono);font-size:6pt;letter-spacing:.1em;text-transform:uppercase;color:var(--ink);border-bottom:1px solid var(--line);padding-bottom:2mm">
+        <span>Collection</span><span>3D Custom</span><span>Craft</span><span>Size Guide</span>
+      </div>
+      <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:2mm;margin-top:2.4mm;font-size:6.4pt;line-height:1.6">
+        <div><b style="font-family:var(--mono);font-size:5.2pt;letter-spacing:.1em;color:var(--leather)">BY MODEL</b><br>Boots · Chelsea<br>Pantofel · Docmart<br>Loafers</div>
+        <div><b style="font-family:var(--mono);font-size:5.2pt;letter-spacing:.1em;color:var(--leather)">BY STYLE</b><br>Formal<br>Smart casual<br>Street</div>
+        <div><b style="font-family:var(--mono);font-size:5.2pt;letter-spacing:.1em;color:var(--leather)">BY MATERIAL</b><br>Full grain<br>Suede<br>Pull-up</div>
+      </div>
+      <p style="font-size:6.8pt;line-height:1.5;margin:2.4mm 0 0;color:var(--moss)">Mega menu ringkas, bukan katalog penuh. Setiap grup punya satu gambar.</p>
+    </div>
+
+    <div class="ui-box">
+      <span class="label">Form &amp; feedback</span>
+      <input class="field" value="nama@email.com" aria-label="Email example">
+      <input class="field err" value="Ukuran belum dipilih" aria-label="Error example">
+      <div class="field-msg">Wajib diisi sebelum checkout</div>
+      <div class="field-msg ok" style="margin-top:1.4mm">✓ Ukuran tersimpan</div>
+      <p style="font-size:6.8pt;line-height:1.5;margin:2.4mm 0 0;color:var(--moss)">Error jelas, tidak menghukum. Label selalu terlihat; jangan hanya placeholder.</p>
+    </div>
+  </div>
+
+  <div class="pfoot"><span>SHOESHOP.ID · Moodboard</span><span>06 / UI Language</span></div>
+</section>
+
+<!-- ============ 07 HOMEPAGE ============ -->
+<section class="page">
+  <div class="phead">
+    <span class="num">07</span>
+    <h2>Homepage blueprint</h2>
+    <span class="note">Urutan yang membangun rasa percaya sebelum meminta pembelian.</span>
+  </div>
+
+  <div class="wf">
+    <div class="wf-row wf-hero">
+      <div class="wf-box">
+        <span class="t">Hero · editorial split</span>
+        <div class="d">Eyebrow mono, headline serif besar (“WALK YOUR WAY.”), satu paragraf pendek, dua CTA: Shop the collection / Open 3D studio.</div>
+        <span class="ref">ref 03 · 04 · 05</span>
+      </div>
+      <div class="ph"><img src="../../public/assets/images/products/boots/boots.jpeg" alt="Boot hero"></div>
+    </div>
+
+    <div class="wf-box"><span class="t">Trust strip</span><div class="d">Full grain · Goodyear welt · Handmade in Indonesia · Re-solable. Satu baris, mono, huruf kecil.</div></div>
+
+    <div class="wf-row wf-grid2">
+      <div class="wf-box" style="min-height:30mm">
+        <span class="t">Collection intro (sticky)</span>
+        <div class="d">“Start with your silhouette.” Lima model, masing-masing punya dunia visual sendiri.</div>
+        <span class="ref">ref 01 · 04</span>
+      </div>
+      <div class="wf-row wf-grid2">
+        <div class="wf-box" style="padding:0;overflow:hidden"><img src="../../public/assets/images/products/pantofel/front-side.jpeg" style="width:100%;height:22mm;object-fit:cover;display:block"></div>
+        <div class="wf-box" style="padding:0;overflow:hidden"><img src="../../public/assets/images/products/docmart/docmart.jpeg" style="width:100%;height:22mm;object-fit:cover;display:block"></div>
+        <div class="wf-box" style="padding:0;overflow:hidden"><img src="../../public/assets/images/products/loafers/front-side.jpeg" style="width:100%;height:22mm;object-fit:cover;display:block"></div>
+        <div class="wf-box" style="padding:0;overflow:hidden"><img src="../../public/assets/images/products/chelsea-boots/front-side.jpeg" style="width:100%;height:22mm;object-fit:cover;display:block"></div>
+      </div>
+    </div>
+
+    <div class="wf-row wf-grid2">
+      <div class="wf-box">
+        <span class="t">Customizer teaser</span>
+        <div class="d">“Your pair, in 3D.” Preview model, tiga langkah, satu CTA.</div>
+        <span class="ref">ref 01 · 02</span>
+      </div>
+      <div class="wf-box">
+        <span class="t">Craft story</span>
+        <div class="d">Dua feature bergantian: “Closer to the craft” dan “Details, in your hands.”</div>
+        <span class="ref">ref 03 · 05</span>
+      </div>
+    </div>
+
+    <div class="wf-box"><span class="t">Detail gallery · horizontal</span><div class="d">Foto makro kulit, welt, sol, jahitan. Scroll horizontal, snap, tanpa scrollbar.</div><span class="ref">ref 04</span></div>
+
+    <div class="wf-row wf-grid2">
+      <div class="wf-box"><span class="t">Material swatches</span><div class="d">“Choose your material.” Enam warna kulit + tekstur. Menghubungkan homepage ke customizer.</div></div>
+      <div class="wf-box"><span class="t">Press / reviews</span><div class="d">Logo media atau quote pelanggan. Satu baris, tidak ramai.</div><span class="ref">ref 01 · 07</span></div>
+    </div>
+
+    <div class="wf-row wf-grid2">
+      <div class="wf-box"><span class="t">Journal / craft notes</span><div class="d">Dua atau tiga artikel: proses, perawatan, gaya pakai.</div><span class="ref">ref 02 · 03</span></div>
+      <div class="wf-box"><span class="t">Newsletter + final CTA</span><div class="d">Diskon pertama, lalu “Make every step yours.”</div><span class="ref">ref 01 · 06</span></div>
+    </div>
+
+    <div class="wf-box"><span class="t">Footer</span><div class="d">Shop, craft, size guide, order tracking, payment, shipping, care, policies.</div></div>
+  </div>
+
+  <div class="pfoot"><span>SHOESHOP.ID · Moodboard</span><span>07 / Homepage</span></div>
+</section>
+
+<!-- ============ 08 MOTION / VOICE / DO-DON'T ============ -->
+<section class="page">
+  <div class="phead">
+    <span class="num">08</span>
+    <h2>Motion, voice &amp; guardrails</h2>
+    <span class="note">Gerak harus terasa seperti membuka halaman buku, bukan slideshow.</span>
+  </div>
+
+  <p class="kicker">Motion</p>
+  <div class="motion">
+    <div><b>Reveal</b><p>Fade + translate 16–24px, 400–600ms, cubic-bezier(.2,.8,.2,1). Sekali per section.</p></div>
+    <div><b>Parallax</b><p>Maksimal 32px. Halus, tidak mengganggu. Matikan saat prefers-reduced-motion.</p></div>
+    <div><b>Hover</b><p>Gambar scale 1.03–1.05, arrow bergeser 4px. Tidak ada bounce berlebihan.</p></div>
+  </div>
+
+  <div class="rule"></div>
+
+  <div class="two-col">
+    <div>
+      <p class="kicker">Voice</p>
+      <p class="body-copy">Tenang, spesifik, percaya diri. Sebut bahan dan proses, bukan slogan kosong. Boleh hangat, tapi tidak berlebihan.</p>
+      <div class="note-box" style="margin-top:3mm">
+        <strong>Yes:</strong> “Full-grain leather. Goodyear welted. Re-solable.”<br>
+        <strong>No:</strong> “Sepatu paling keren sedunia, wajib punya!”
+      </div>
+    </div>
+    <div>
+      <p class="kicker">Do / Don't</p>
+      <ul class="list">
+        <li>Editorial, lapang, dan terasa manusiawi.</li>
+        <li>Satu ide per section; satu CTA utama per layar.</li>
+        <li>Detail craft selalu punya konteks, bukan sekadar estetika.</li>
+      </ul>
+      <ul class="list no" style="margin-top:2mm">
+        <li>Jangan menumpuk promo, badge, dan banner sekaligus.</li>
+        <li>Jangan meniru layout referensi secara literal.</li>
+        <li>Jangan mengorbankan kejelasan customizer demi gaya.</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="rule"></div>
+
+  <p class="kicker">What success looks like</p>
+  <p class="statement" style="font-size:14pt;margin-bottom:6mm">Ketika orang membuka halaman ini, mereka tidak hanya melihat sepatu. Mereka melihat <em>cara sepatu itu dibuat, siapa yang membuatnya, dan bagaimana ia akan menemani hidup mereka.</em></p>
+
+  <div class="next">
+    <div><b>01 / Review</b><p>Klien menandai elemen yang disukai dan tidak. Maksimal satu putaran revisi arah visual.</p></div>
+    <div><b>02 / Approve</b><p>Arah, palet, dan tipografi dikunci menjadi UI Style Guide sebelum wireframe.</p></div>
+    <div><b>03 / Apply</b><p>Terapkan ke design brief, wireframe, lalu high-fidelity mockup per halaman.</p></div>
+  </div>
+
+  <div class="signoff">
+    <div>
+      <span>Disetujui oleh · Klien</span>
+      <div class="line"></div>
+      <span>Nama &amp; tanggal</span>
+    </div>
+    <div>
+      <span>Disiapkan oleh · Tim Desain</span>
+      <div class="line"></div>
+      <span>Nama &amp; tanggal</span>
+    </div>
+  </div>
+
+  <div class="pfoot"><span>SHOESHOP.ID · Moodboard</span><span>08 / Closing</span></div>
+</section>
+
+</body>
+</html>

@@ -1,0 +1,913 @@
+<!doctype html>
+<html lang="id">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>SHOESHOP.ID — Design Brief</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=Inter:wght@300;400;500;600&family=Playfair+Display:ital,wght@0,400;0,500;0,600;1,400;1,500&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --paper:#f2ebd0;
+    --paper-2:#f7f2e3;
+    --ink:#303018;
+    --body:#3b2722;
+    --leather:#604848;
+    --cognac:#a47148;
+    --brass:#c9a24a;
+    --moss:#909078;
+    --stone:#d8d8c0;
+    --forest:#3c4a3a;
+    --rust:#a9502e;
+    --line:rgba(48,48,24,.18);
+    --line-soft:rgba(48,48,24,.10);
+    --serif:"Playfair Display",Georgia,serif;
+    --sans:"Inter",Arial,sans-serif;
+    --mono:"DM Mono",Consolas,monospace;
+  }
+  *{box-sizing:border-box}
+  html,body{margin:0;padding:0}
+  body{background:#ddd6c2;color:var(--body);font-family:var(--sans);font-size:9pt;line-height:1.55;-webkit-font-smoothing:antialiased;padding:18px 0 40px}
+  .page{width:210mm;min-height:297mm;margin:0 auto 14px;padding:14mm 15mm 11mm;background:var(--paper);position:relative;display:flex;flex-direction:column;overflow:hidden;box-shadow:0 10px 30px rgba(24,23,20,.16)}
+  .page::after{content:"";position:absolute;inset:0;pointer-events:none;opacity:.26;background-image:radial-gradient(rgba(48,48,24,.22) .45px, transparent .45px);background-size:5px 5px;mix-blend-mode:multiply}
+  .page > *{position:relative;z-index:1}
+  .mono{font-family:var(--mono);font-size:7pt;letter-spacing:.14em;text-transform:uppercase}
+  .phead{display:flex;align-items:flex-start;justify-content:space-between;gap:10mm;border-top:1px solid var(--ink);padding-top:2.6mm;margin-bottom:6mm}
+  .phead .num{font-family:var(--mono);font-size:7.5pt;letter-spacing:.12em;color:var(--moss);padding-top:1.2mm}
+  .phead h2{font-family:var(--serif);font-weight:500;font-size:21pt;line-height:.95;letter-spacing:-.02em;margin:0;color:var(--ink);flex:1}
+  .phead .note{font-family:var(--mono);font-size:6pt;letter-spacing:.1em;text-transform:uppercase;color:var(--moss);text-align:right;max-width:46mm;line-height:1.6;padding-top:.8mm}
+  .pfoot{display:flex;justify-content:space-between;align-items:center;margin-top:auto;padding-top:3mm;border-top:1px solid var(--line);font-family:var(--mono);font-size:5.6pt;letter-spacing:.12em;text-transform:uppercase;color:var(--moss)}
+  .kicker{font-family:var(--mono);font-size:6.4pt;letter-spacing:.16em;text-transform:uppercase;color:var(--moss);margin:0 0 2.4mm}
+  .lead{font-family:var(--serif);font-size:12.5pt;line-height:1.35;letter-spacing:-.01em;color:var(--ink);margin:0}
+  .body-copy{font-size:8pt;line-height:1.65;margin:0}
+  .body-copy + .body-copy{margin-top:2mm}
+  .accent{color:var(--leather)}
+  .rule{height:1px;background:var(--line);margin:4mm 0}
+  .note-box{border-left:3px solid var(--brass);padding:2mm 0 2mm 3.4mm;font-size:7.6pt;line-height:1.6;margin-top:3mm}
+  .note-box strong{color:var(--ink)}
+  .two-col{display:grid;grid-template-columns:1fr 1fr;gap:6mm}
+  .three-col{display:grid;grid-template-columns:repeat(3,1fr);gap:4mm}
+  .list{list-style:none;margin:0;padding:0;font-size:7.4pt;line-height:1.55}
+  .list li{display:grid;grid-template-columns:3.6mm 1fr;gap:1.4mm;padding:1mm 0;border-bottom:1px solid var(--line-soft)}
+  .list li::before{content:"✓";font-family:var(--mono);font-size:6.6pt;color:var(--forest)}
+  .list.no li::before{content:"×";color:var(--rust)}
+
+  /* cover */
+  .cover{background:var(--paper);padding:16mm 16mm 0}
+  .cover-head{display:flex;justify-content:space-between;align-items:baseline;border-bottom:1px solid var(--ink);padding-bottom:2.6mm;color:var(--ink)}
+  .cover-head span:last-child{color:var(--leather)}
+  .cover-body{padding-top:14mm}
+  .cover h1{font-family:var(--serif);font-weight:400;font-size:54pt;line-height:.86;letter-spacing:-.025em;margin:0 0 6mm;color:var(--ink)}
+  .cover h1 em{font-style:italic;color:var(--leather)}
+  .cover .lead{max-width:125mm;font-size:14pt}
+  .cover .sub{font-size:8pt;line-height:1.7;color:var(--moss);max-width:118mm;margin-top:5mm}
+  .cover-meta{display:grid;grid-template-columns:1.5fr 1fr 1fr 1fr;gap:4mm;border-top:1px solid var(--line);border-bottom:1px solid var(--line);padding:4mm 0;margin-top:10mm}
+  .cover-meta span{display:block;font-family:var(--mono);font-size:5.6pt;letter-spacing:.14em;text-transform:uppercase;color:var(--moss);margin-bottom:1.2mm}
+  .cover-meta strong{font-weight:400;font-size:8pt;color:var(--ink)}
+  .cover-strip{display:grid;grid-template-columns:repeat(5,1fr);gap:2mm;margin:8mm -16mm 0;height:92mm}
+  .cover-strip figure{margin:0;overflow:hidden;background:var(--stone);position:relative}
+  .cover-strip img{width:100%;height:100%;object-fit:cover;filter:saturate(.82) contrast(1.03) sepia(.1)}
+  .cover-strip figcaption{position:absolute;left:2mm;bottom:2mm;font-family:var(--mono);font-size:5pt;letter-spacing:.1em;text-transform:uppercase;color:var(--paper);background:rgba(48,48,24,.7);padding:1mm 1.6mm}
+
+  /* tables */
+  table{width:100%;border-collapse:collapse}
+  table.req{font-size:6.9pt;line-height:1.45}
+  table.req th{font-family:var(--mono);font-size:5.4pt;letter-spacing:.1em;text-transform:uppercase;color:var(--moss);font-weight:400;text-align:left;padding:1.6mm 1.8mm;border-bottom:1px solid var(--ink);vertical-align:bottom}
+  table.req td{padding:1.8mm;border-bottom:1px solid var(--line-soft);vertical-align:top}
+  table.req td:first-child{font-family:var(--mono);font-size:5.8pt;letter-spacing:.06em;text-transform:uppercase;color:var(--leather);white-space:nowrap}
+  table.req tr:nth-child(even) td{background:rgba(247,242,227,.32)}
+  table.tokens{font-size:6.8pt}
+  table.tokens th{font-family:var(--mono);font-size:5.2pt;letter-spacing:.1em;text-transform:uppercase;color:var(--moss);font-weight:400;text-align:left;padding:1.4mm 1.6mm;border-bottom:1px solid var(--ink)}
+  table.tokens td{padding:1.4mm 1.6mm;border-bottom:1px solid var(--line-soft);vertical-align:top}
+  table.tokens td:first-child{font-family:var(--mono);font-size:5.8pt;color:var(--leather);text-transform:uppercase;letter-spacing:.06em}
+
+  /* snapshot */
+  .snapshot{display:grid;grid-template-columns:repeat(4,1fr);border:1px solid var(--line);margin-bottom:5mm}
+  .snapshot div{padding:2.6mm;border-right:1px solid var(--line-soft);border-bottom:1px solid var(--line-soft)}
+  .snapshot div:nth-child(4n){border-right:0}
+  .snapshot span{display:block;font-family:var(--mono);font-size:5.2pt;letter-spacing:.12em;text-transform:uppercase;color:var(--moss);margin-bottom:.8mm}
+  .snapshot strong{font-weight:500;font-size:7.4pt;color:var(--ink);line-height:1.35;display:block}
+
+  /* goals */
+  .goal-grid{display:grid;grid-template-columns:1fr 1fr;gap:4mm}
+  .goal{border-top:2px solid var(--ink);padding-top:2.4mm}
+  .goal h3{font-family:var(--serif);font-size:10.5pt;font-weight:500;margin:0 0 1.4mm;color:var(--ink)}
+  .goal p{margin:0;font-size:7.2pt;line-height:1.55}
+  .constraints{display:grid;grid-template-columns:1fr 1fr;gap:3.4mm 6mm;margin-top:2.4mm}
+  .constraint{border-top:1px solid var(--ink);padding-top:2mm}
+  .constraint h4{font-family:var(--mono);font-size:5.8pt;letter-spacing:.12em;text-transform:uppercase;color:var(--brass);font-weight:400;margin:0 0 1mm}
+  .constraint p{margin:0;font-size:7.1pt;line-height:1.5}
+
+  /* persona */
+  .persona{border:1px solid var(--line);padding:3.4mm;background:rgba(247,242,227,.35)}
+  .persona .top{display:flex;align-items:baseline;justify-content:space-between;border-bottom:1px solid var(--line-soft);padding-bottom:1.6mm;margin-bottom:2mm}
+  .persona h3{font-family:var(--serif);font-size:11pt;font-weight:500;margin:0;color:var(--ink)}
+  .persona .age{font-family:var(--mono);font-size:5.6pt;letter-spacing:.1em;color:var(--brass)}
+  .persona dl{margin:0;display:grid;grid-template-columns:20mm 1fr;gap:.8mm 2mm;font-size:6.9pt;line-height:1.5}
+  .persona dt{font-family:var(--mono);font-size:5.2pt;letter-spacing:.1em;text-transform:uppercase;color:var(--moss);padding-top:.3mm}
+  .persona dd{margin:0}
+  .positioning{border:1px solid var(--ink);padding:4mm;margin-top:4mm;background:var(--paper-2)}
+  .positioning p{font-family:var(--serif);font-size:13pt;line-height:1.3;color:var(--ink);margin:0}
+  .positioning p em{color:var(--leather)}
+
+  /* principles */
+  .principles{display:grid;grid-template-columns:1fr 1fr;gap:3.4mm}
+  .principle{border-top:1px solid var(--ink);padding-top:2.4mm}
+  .principle .n{font-family:var(--mono);font-size:5.6pt;letter-spacing:.12em;color:var(--brass);margin-bottom:1mm}
+  .principle h3{font-family:var(--serif);font-size:10.5pt;font-weight:500;margin:0 0 1.2mm;color:var(--ink)}
+  .principle p{margin:0;font-size:7.1pt;line-height:1.55}
+  .attr{display:flex;flex-wrap:wrap;gap:2mm;margin-top:4mm}
+  .attr span{font-family:var(--mono);font-size:5.8pt;letter-spacing:.1em;text-transform:uppercase;border:1px solid var(--line);border-radius:999px;padding:1.2mm 2.4mm;color:var(--body)}
+
+  /* sitemap */
+  .map{display:grid;grid-template-columns:1.1fr 1fr .9fr;gap:3mm;flex:1}
+  .map-col{border:1px solid var(--line);padding:2.6mm;background:rgba(247,242,227,.3)}
+  .map-col > h3{font-family:var(--mono);font-size:5.6pt;letter-spacing:.14em;text-transform:uppercase;color:var(--brass);margin:0 0 2mm;border-bottom:1px solid var(--line);padding-bottom:1.2mm}
+  .node{border-left:2px solid var(--stone);padding-left:2mm;margin-bottom:1.4mm}
+  .node b{display:block;font-size:7pt;font-weight:600;color:var(--ink);line-height:1.35}
+  .node span{display:block;font-size:6.2pt;color:var(--moss);line-height:1.45}
+  .node.child{margin-left:3mm;border-left-color:var(--line)}
+  .flow{border:1px solid var(--line);padding:3mm;margin-top:3mm;background:var(--paper-2)}
+  .flow .line{display:flex;flex-wrap:wrap;align-items:center;gap:1.4mm;font-family:var(--mono);font-size:5.6pt;letter-spacing:.06em;text-transform:uppercase;color:var(--body)}
+  .flow .line b{font-weight:400;border:1px solid var(--line);padding:1mm 1.6mm;background:var(--paper)}
+  .flow .line i{font-style:normal;color:var(--brass)}
+  .flow .line + .line{margin-top:2mm}
+
+  /* misc blocks */
+  .callout{display:grid;grid-template-columns:28mm 1fr;gap:3mm;border:1px solid var(--line);padding:2.6mm;margin-top:3mm;background:rgba(247,242,227,.35)}
+  .callout .tag{font-family:var(--mono);font-size:5.4pt;letter-spacing:.1em;text-transform:uppercase;color:var(--leather)}
+  .callout p{margin:0;font-size:7pt;line-height:1.5}
+  .checklist{display:grid;grid-template-columns:1fr 1fr;gap:2mm 6mm}
+  .check{display:grid;grid-template-columns:4mm 1fr;gap:1.4mm;font-size:7pt;line-height:1.45;border-bottom:1px solid var(--line-soft);padding:1mm 0}
+  .check::before{content:"";width:2.6mm;height:2.6mm;border:1px solid var(--moss);display:block;margin-top:.6mm}
+  .metric{display:grid;grid-template-columns:1.4fr .8fr 1fr;gap:2mm;border-bottom:1px solid var(--line-soft);padding:1.4mm 0;font-size:6.9pt}
+  .metric span:first-child{color:var(--ink);font-weight:500}
+  .metric span:last-child{color:var(--moss)}
+  .metric.head span{font-family:var(--mono);font-size:5.2pt;letter-spacing:.1em;text-transform:uppercase;color:var(--moss);font-weight:400}
+  .signoff{display:grid;grid-template-columns:1fr 1fr;gap:8mm;margin-top:auto;border-top:1px solid var(--ink);padding-top:4mm}
+  .signoff span{font-family:var(--mono);font-size:5.6pt;letter-spacing:.12em;text-transform:uppercase;color:var(--moss)}
+  .signoff .line{height:13mm;border-bottom:1px solid var(--line);margin-bottom:1.4mm}
+  .page.final{min-height:295mm;padding-bottom:5mm}
+  .page.final .rule{margin:2.6mm 0}
+  .page.final .metric{padding:1.15mm 0}
+  .page.final .signoff{padding-top:3mm}
+  .page.final .signoff .line{height:11mm}
+  .toc{display:grid;grid-template-columns:1fr 1fr;gap:0 10mm;font-size:7.6pt}
+  .toc div{display:flex;justify-content:space-between;gap:4mm;border-bottom:1px solid var(--line-soft);padding:1.6mm 0}
+  .toc b{font-weight:500;color:var(--ink)}
+  .toc span{font-family:var(--mono);font-size:6pt;color:var(--moss)}
+
+  @media print{
+    body{background:#fff;padding:0}
+    .page{margin:0;box-shadow:none;page-break-after:always;break-after:page}
+    .page:last-of-type{page-break-after:auto;break-after:auto}
+  }
+  @page{size:A4;margin:0}
+</style>
+</head>
+<body>
+
+<!-- ================= COVER ================= -->
+<section class="page cover">
+  <div class="cover-head mono">
+    <span>SHOESHOP.ID — Foot Fashion</span>
+    <span>Design Brief · v1.0</span>
+  </div>
+
+  <div class="cover-body">
+    <p class="kicker">Website e-commerce &amp; custom leather shoes · 28 October 2026</p>
+    <h1>Design<br><em>Brief.</em></h1>
+    <p class="lead">A warm heritage editorial system for daily casual leather — built to explain the craft, guide the customizer, and earn the sale.</p>
+    <p class="sub">This brief translates the visual direction in the moodboard into page requirements, design system rules, content needs, and acceptance criteria for the MVP. It is the shared reference between client, designer, and developer before wireframe and high-fidelity mockup.</p>
+
+    <div class="cover-meta">
+      <div><span>Prepared for</span><strong>Foot Fashion / SHOESHOP.ID</strong></div>
+      <div><span>Positioning</span><strong>Daily casual leather</strong></div>
+      <div><span>Audience</span><strong>Gen Z &amp; Millennial men</strong></div>
+      <div><span>References</span><strong>7 footwear brands</strong></div>
+    </div>
+  </div>
+
+  <div class="cover-strip">
+    <figure><img src="../../public/assets/images/products/boots/front-side.jpeg" alt="Boots"><figcaption>Boots</figcaption></figure>
+    <figure><img src="../../public/assets/images/products/chelsea-boots/front-side.jpeg" alt="Chelsea"><figcaption>Chelsea</figcaption></figure>
+    <figure><img src="../../public/assets/images/products/pantofel/front-side.jpeg" alt="Pantofel"><figcaption>Pantofel</figcaption></figure>
+    <figure><img src="../../public/assets/images/products/docmart/docmart.jpeg" alt="Docmart"><figcaption>Docmart</figcaption></figure>
+    <figure><img src="../../public/assets/images/products/loafers/front-side.jpeg" alt="Loafers"><figcaption>Loafers</figcaption></figure>
+  </div>
+</section>
+
+<!-- ================= 01 SNAPSHOT ================= -->
+<section class="page">
+  <div class="phead">
+    <span class="num">01</span>
+    <h2>Ringkasan proyek</h2>
+    <span class="note">Apa yang dibangun, untuk siapa, dan mengapa.</span>
+  </div>
+
+  <p class="lead" style="font-size:11pt;max-width:165mm">SHOESHOP.ID adalah toko online sepatu kulit lokal dengan dua jalur: <span class="accent">preset design</span> dan <span class="accent">custom made-to-order</span>. Situs harus terasa seperti brand craft yang matang, tetapi tetap mudah dipakai oleh pembeli muda yang baru pertama kali membeli sepatu kulit.</p>
+
+  <p class="kicker" style="margin-top:6mm">Project snapshot</p>
+  <div class="snapshot">
+    <div><span>Kategori</span><strong>Daily casual leather</strong></div>
+    <div><span>Model</span><strong>Boots · Chelsea · Pantofel · Docmart · Loafers</strong></div>
+    <div><span>Custom elements</span><strong>8 elemen, kondisional per model</strong></div>
+    <div><span>Harga</span><strong>Base price + opsi, real-time</strong></div>
+    <div><span>Pembayaran</span><strong>QRIS &amp; Virtual Account</strong></div>
+    <div><span>Skema bayar</span><strong>DP 50% · Pelunasan 50%</strong></div>
+    <div><span>Produksi</span><strong>± 7 hari kerja per pesanan</strong></div>
+    <div><span>Pengiriman</span><strong>JNE · AnterAja · ID Express · SiCepat · Pos</strong></div>
+    <div><span>Tracking</span><strong>Cutting → Stitching → Soling → QC → Delivery</strong></div>
+    <div><span>Garansi</span><strong>3 hari · video unboxing · ongkir buyer</strong></div>
+    <div><span>Ukuran</span><strong>Foto jejak kaki + size chart</strong></div>
+    <div><span>Bahasa</span><strong>Headline EN · body ID</strong></div>
+  </div>
+
+  <p class="kicker">Tujuan</p>
+  <div class="goal-grid">
+    <div class="goal"><h3>Bisnis</h3><p>Meluncurkan MVP yang bisa menerima pesanan preset &amp; custom, menurunkan pertanyaan berulang ke CS, dan membangun kepercayaan pada kualitas serta proses produksi.</p></div>
+    <div class="goal"><h3>Desain</h3><p>Menyatukan tujuh referensi menjadi satu sistem visual yang konsisten, mudah diimplementasikan di React + Tailwind, dan bisa tumbuh ke fitur V2 tanpa redesign.</p></div>
+    <div class="goal"><h3>Pengguna</h3><p>Membantu pembeli menemukan model, memahami bahan, memesan ukuran dengan yakin, dan melihat progres pesanan tanpa harus bertanya lewat chat.</p></div>
+    <div class="goal"><h3>Ukuran sukses</h3><p>Customizer selesai &lt; 5 menit, add-to-cart naik, pertanyaan ukuran turun, dan 80% pengguna yang membuka halaman craft melanjutkan ke katalog.</p></div>
+  </div>
+
+  <div class="note-box"><strong>Prinsip lingkup.</strong> MVP mengutamakan alur yang <em>selesai dan terpercaya</em>, bukan fitur terbanyak. 3D 360°, sizing otomatis dari foto, dan WhatsApp API masuk V2 setelah alur 2D + verifikasi manual terbukti berjalan.</div>
+
+  <p class="kicker" style="margin-top:7mm">Batasan &amp; asumsi</p>
+  <div class="constraints">
+    <div class="constraint"><h4>Platform</h4><p>Mobile-first pada 390px. Mayoritas trafik datang dari Instagram dan TikTok, jadi hero, produk, dan customizer harus selesai dengan satu tangan.</p></div>
+    <div class="constraint"><h4>Konten</h4><p>Foto produk existing dipakai sebagai placeholder. Foto craft, lifestyle, dan video unboxing masuk bertahap tanpa mengubah layout.</p></div>
+    <div class="constraint"><h4>Teknis</h4><p>Laravel + Inertia + React + Tailwind. Customizer 2D berbasis layer; harga dihitung di server dan diperbarui tanpa reload.</p></div>
+    <div class="constraint"><h4>Operasional</h4><p>Produksi ± 7 hari kerja, verifikasi ukuran manual, dan DP 50% sebelum pesanan masuk antrean. Status diupdate admin per tahap.</p></div>
+  </div>
+
+  <p class="kicker" style="margin-top:5mm">Keputusan yang sudah dikunci</p>
+  <div class="attr" style="margin-top:0">
+    <span>Warm heritage</span><span>Editorial serif</span><span>2D customizer</span><span>DP 50%</span><span>5-stage tracking</span><span>Headline EN · body ID</span>
+  </div>
+
+  <div class="pfoot"><span>SHOESHOP.ID · Design Brief</span><span>01 / Snapshot</span></div>
+</section>
+
+<!-- ================= 02 AUDIENCE ================= -->
+<section class="page">
+  <div class="phead">
+    <span class="num">02</span>
+    <h2>Audiens &amp; positioning</h2>
+    <span class="note">Satu brand, banyak cara pakai. Tiga persona, satu standar craft.</span>
+  </div>
+
+  <p class="kicker">Primary audience</p>
+  <div class="three-col">
+    <div class="persona">
+      <div class="top"><h3>Raka</h3><span class="age">27 · PRIMARY</span></div>
+      <dl>
+        <dt>Kerja</dt><dd>Profesional muda di kota besar, hybrid office.</dd>
+        <dt>Kebutuhan</dt><dd>Sepatu serbaguna untuk kerja dan akhir pekan.</dd>
+        <dt>Perilaku</dt><dd>Riset di Instagram/TikTok, baca review, bandingkan bahan.</dd>
+        <dt>Harga</dt><dd>Rp 800rb–1,5jt; rela bayar lebih untuk craft.</dd>
+        <dt>Pain</dt><dd>Takut salah ukuran dan kualitas tidak sesuai foto.</dd>
+      </dl>
+    </div>
+    <div class="persona">
+      <div class="top"><h3>Dimas</h3><span class="age">22 · SECONDARY</span></div>
+      <dl>
+        <dt>Kerja</dt><dd>Mahasiswa / first job, urban, streetwear-aware.</dd>
+        <dt>Kebutuhan</dt><dd>Boots/Docmart untuk ekspresi gaya dan komunitas.</dd>
+        <dt>Perilaku</dt><dd>Impulse + visual; suka konten proses dan behind the scenes.</dd>
+        <dt>Harga</dt><dd>Rp 600rb–1,2jt; sensitif promo tapi tidak mau murah.</dd>
+        <dt>Pain</dt><dd>Bingung membedakan kualitas; ingin terlihat “tidak pasaran”.</dd>
+      </dl>
+    </div>
+    <div class="persona">
+      <div class="top"><h3>Arif</h3><span class="age">38 · TERTIARY</span></div>
+      <dl>
+        <dt>Kerja</dt><dd>Manajer / profesional mapan, kebutuhan formal.</dd>
+        <dt>Kebutuhan</dt><dd>Pantofel &amp; Chelsea yang nyaman dipakai seharian.</dd>
+        <dt>Perilaku</dt><dd>Langsung ke model, membaca spesifikasi, tidak eksperimen.</dd>
+        <dt>Harga</dt><dd>Rp 1,2jt–2jt; prioritas kenyamanan dan daya tahan.</dd>
+        <dt>Pain</dt><dd>Tidak punya waktu; butuh kepastian ukuran dan garansi.</dd>
+      </dl>
+    </div>
+  </div>
+
+  <div class="positioning">
+    <p>Untuk pria yang ingin sepatu kulit <em>berkarakter tetapi bisa dipakai setiap hari</em>, SHOESHOP.ID membuat sepatu lokal yang bisa dikustom, dibangun dengan konstruksi yang bisa di-re-soling, dan dijelaskan dengan jujur dari bahan sampai proses.</p>
+  </div>
+
+  <div class="two-col" style="margin-top:5mm">
+    <div>
+      <p class="kicker">Jobs to be done</p>
+      <ul class="list">
+        <li>Menemukan model yang cocok untuk kerja, kuliah, atau jalan malam.</li>
+        <li>Memahami kualitas sebelum membeli — bukan sekadar percaya foto.</li>
+        <li>Membuat sepatu terasa “milik sendiri” lewat kustomisasi.</li>
+        <li>Yakin pada ukuran tanpa harus datang ke toko.</li>
+        <li>Mengetahui pesanan sedang di tahap mana.</li>
+      </ul>
+    </div>
+    <div>
+      <p class="kicker">Tone of voice</p>
+      <ul class="list">
+        <li>Tenang, spesifik, percaya diri — bukan hype.</li>
+        <li>Sebut bahan, konstruksi, dan proses; hindari klaim kosong.</li>
+        <li>Hangat dan manusiawi; boleh sedikit jenaka, tidak berlebihan.</li>
+        <li>Headline Inggris pendek; penjelasan Indonesia yang jelas.</li>
+        <li>Jangan pernah merendahkan pembeli baru.</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="pfoot"><span>SHOESHOP.ID · Design Brief</span><span>02 / Audience</span></div>
+</section>
+
+<!-- ================= 03 PRINCIPLES ================= -->
+<section class="page">
+  <div class="phead">
+    <span class="num">03</span>
+    <h2>Prinsip desain</h2>
+    <span class="note">Enam aturan yang menyelesaikan perdebatan desain.</span>
+  </div>
+
+  <p class="lead" style="font-size:11pt;max-width:160mm">Setiap keputusan visual harus bisa dijelaskan lewat salah satu prinsip ini. Kalau tidak, itu preferensi — bukan kebutuhan.</p>
+
+  <div class="principles" style="margin-top:6mm">
+    <div class="principle"><div class="n">01</div><h3>Craft you can see</h3><p>Setiap klaim kualitas harus punya bukti visual: grain, welt, jahitan, sol, tangan pengrajin. Jangan minta dipercaya tanpa menunjukkan.</p></div>
+    <div class="principle"><div class="n">02</div><h3>One shoe, many lives</h3><p>Satu model bisa masuk beberapa gaya hidup. Foto dan copy harus menunjukkan konteks pemakaian, bukan mengunci sepatu ke satu persona.</p></div>
+    <div class="principle"><div class="n">03</div><h3>Calm, not cold</h3><p>Premium bukan berarti dingin. Gunakan warna hangat, bahasa manusiawi, dan ruang kosong yang mengundang, bukan mengintimidasi.</p></div>
+    <div class="principle"><div class="n">04</div><h3>Guide, don't overwhelm</h3><p>Customizer punya banyak pilihan. Tampilkan satu keputusan per langkah, jelaskan konsekuensi harga, dan jangan menampilkan semua opsi sekaligus.</p></div>
+    <div class="principle"><div class="n">05</div><h3>Local pride, global standard</h3><p>Made in Indonesia adalah kekuatan, bukan tempelan. Tampilkan pengrajin dan proses dengan standar editorial yang setara brand internasional.</p></div>
+    <div class="principle"><div class="n">06</div><h3>Performance is part of luxury</h3><p>Halaman cepat, gambar tajam, form jelas, dan tidak ada layout shift. Pengalaman yang lambat merusak persepsi kualitas.</p></div>
+  </div>
+
+  <div class="rule"></div>
+
+  <p class="kicker">Brand attributes</p>
+  <div class="attr">
+    <span>Warm</span><span>Honest</span><span>Refined</span><span>Grounded</span><span>Quietly confident</span><span>Tactile</span><span>Local</span><span>Built to last</span>
+  </div>
+
+  <div class="two-col" style="margin-top:6mm">
+    <div>
+      <p class="kicker">Do</p>
+      <ul class="list">
+        <li>Satu ide besar per section; satu CTA utama per layar.</li>
+        <li>Biarkan foto dan tipografi melakukan sebagian besar pekerjaan.</li>
+        <li>Gunakan detail craft sebagai bukti, bukan dekorasi.</li>
+        <li>Jelaskan harga dan proses sedini mungkin.</li>
+        <li>Rancang mobile lebih dulu; desktop adalah perluasan.</li>
+      </ul>
+    </div>
+    <div>
+      <p class="kicker">Don't</p>
+      <ul class="list no">
+        <li>Menumpuk promo, badge, dan banner sekaligus.</li>
+        <li>Meniru layout referensi secara literal.</li>
+        <li>Mengorbankan kejelasan customizer demi gaya.</li>
+        <li>Menggunakan stock photo yang tidak terasa lokal.</li>
+        <li>Menjanjikan hal yang tidak bisa dibuktikan prosesnya.</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="pfoot"><span>SHOESHOP.ID · Design Brief</span><span>03 / Principles</span></div>
+</section>
+
+<!-- ================= 04 IA ================= -->
+<section class="page">
+  <div class="phead">
+    <span class="num">04</span>
+    <h2>Information architecture</h2>
+    <span class="note">Tiga jalur utama: beli, kustom, percaya.</span>
+  </div>
+
+  <div class="map">
+    <div class="map-col">
+      <h3>Public · Shop</h3>
+      <div class="node"><b>Home</b><span>Hero, collection, customizer teaser, craft, journal</span></div>
+      <div class="node"><b>Shop / Collection</b><span>Semua preset, filter model/gaya/bahan</span></div>
+      <div class="node child"><b>Product detail</b><span>Galeri, cerita, spesifikasi, ukuran, CTA custom</span></div>
+      <div class="node"><b>Custom Studio</b><span>Pilih model → kustomisasi → review</span></div>
+      <div class="node child"><b>Customizer</b><span>Preview, 8 elemen, harga real-time</span></div>
+      <div class="node"><b>Cart</b><span>Item preset &amp; custom, ringkasan desain</span></div>
+      <div class="node"><b>Checkout</b><span>Alamat, ongkir, pembayaran DP 50%</span></div>
+    </div>
+
+    <div class="map-col">
+      <h3>Public · Trust</h3>
+      <div class="node"><b>Craft / Our Story</b><span>Sejarah, pengrajin, proses 5 tahap, nilai</span></div>
+      <div class="node"><b>Materials</b><span>Kulit, benang, sol, eyelet, storm welt</span></div>
+      <div class="node"><b>Journal</b><span>Proses, perawatan, gaya pakai</span></div>
+      <div class="node"><b>Size Guide</b><span>Foto jejak kaki, ukur manual, chart</span></div>
+      <div class="node"><b>Support</b><span>FAQ, shipping, returns, contact</span></div>
+      <div class="node"><b>Order tracking</b><span>5 tahap produksi + status pembayaran</span></div>
+    </div>
+
+    <div class="map-col">
+      <h3>Account &amp; Admin</h3>
+      <div class="node"><b>Auth</b><span>Login, register, reset password</span></div>
+      <div class="node"><b>Account</b><span>Profil, alamat, pesanan, klaim</span></div>
+      <div class="node"><b>Order detail</b><span>Tracker, invoice, pelunasan, reorder</span></div>
+      <div class="node"><b>Warranty claim</b><span>Upload video unboxing, status klaim</span></div>
+      <div class="node"><b>Admin</b><span>Produk, material, elemen, price list</span></div>
+      <div class="node"><b>Admin</b><span>Pesanan, status produksi, klaim, konten</span></div>
+      <div class="node"><b>Admin</b><span>Verifikasi ukuran, pembayaran, laporan</span></div>
+    </div>
+  </div>
+
+  <div class="flow">
+    <div class="line"><b>Beli preset</b><i>→</i><span>Shop</span><i>→</i><span>Product</span><i>→</i><span>Size</span><i>→</i><span>Cart</span><i>→</i><span>Checkout DP</span><i>→</i><span>Tracking</span><i>→</i><span>Pelunasan</span></div>
+    <div class="line"><b>Custom</b><i>→</i><span>Choose model</span><i>→</i><span>Customize</span><i>→</i><span>Review &amp; price</span><i>→</i><span>Cart</span><i>→</i><span>Checkout DP</span><i>→</i><span>Production</span></div>
+    <div class="line"><b>Ukuran</b><i>→</i><span>Size guide</span><i>→</i><span>Upload foto</span><i>→</i><span>Admin verifikasi</span><i>→</i><span>Produksi</span></div>
+    <div class="line"><b>Klaim</b><i>→</i><span>Order</span><i>→</i><span>Upload video unboxing</span><i>→</i><span>Admin review</span><i>→</i><span>Resize / repair</span></div>
+  </div>
+
+  <div class="note-box"><strong>Aturan navigasi.</strong> Maksimal 3 klik dari Home ke product detail. Custom Studio selalu bisa diakses dari header, product detail, dan homepage. Size guide muncul di product, customizer, dan checkout — bukan hanya di footer.</div>
+
+  <div class="pfoot"><span>SHOESHOP.ID · Design Brief</span><span>04 / IA</span></div>
+</section>
+
+<!-- ================= 05 PAGE REQ 1 ================= -->
+<section class="page">
+  <div class="phead">
+    <span class="num">05</span>
+    <h2>Page requirements · 1</h2>
+    <span class="note">Home, shop, dan product detail.</span>
+  </div>
+
+  <table class="req">
+    <thead><tr><th>Page</th><th>Tujuan</th><th>Section wajib</th><th>CTA utama</th><th>Referensi</th></tr></thead>
+    <tbody>
+      <tr>
+        <td>Home</td>
+        <td>Membangun rasa percaya dan mengarahkan ke dua jalur: preset atau custom.</td>
+        <td>Hero editorial · trust strip · collection grid · customizer teaser · craft story · detail gallery · material swatches · press/review · journal · newsletter · final CTA.</td>
+        <td>Shop the collection / Open 3D studio</td>
+        <td>03, 04, 05, 01</td>
+      </tr>
+      <tr>
+        <td>Shop</td>
+        <td>Membantu memilih model tanpa membuat bingung.</td>
+        <td>Judul &amp; intro · filter (model, gaya, bahan, warna) · sort · grid produk · quick view · empty state · pagination/load more.</td>
+        <td>View product</td>
+        <td>01, 03, 06</td>
+      </tr>
+      <tr>
+        <td>Product</td>
+        <td>Menjawab “apakah ini cocok untuk saya?” dan “apakah kualitasnya sepadan?”.</td>
+        <td>Galeri (5–6 sudut) · nama &amp; harga · cerita singkat · spesifikasi · size guide link · preset variants · CTA custom · review · shipping &amp; care accordion · sticky buy bar (mobile).</td>
+        <td>Customize this pair / Add to cart</td>
+        <td>03, 05, 06</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <div class="rule"></div>
+
+  <p class="kicker">Home · urutan &amp; alasan</p>
+  <table class="tokens">
+    <thead><tr><th>#</th><th>Section</th><th>Fungsi</th><th>Catatan desain</th></tr></thead>
+    <tbody>
+      <tr><td>01</td><td>Hero</td><td>Emosi + posisi</td><td>Headline serif besar, satu foto arch, dua CTA. Jangan ada carousel.</td></tr>
+      <tr><td>02</td><td>Trust strip</td><td>Kredibilitas cepat</td><td>Full grain · Goodyear welt · Made in Indonesia · Re-solable.</td></tr>
+      <tr><td>03</td><td>Collection</td><td>Eksplorasi produk</td><td>Grid asimetris 5 model; tiap kartu punya dunia visual sendiri.</td></tr>
+      <tr><td>04</td><td>Customizer teaser</td><td>Diferensiasi</td><td>Preview + 3 langkah; jelaskan bahwa 3D/2D dibuka setelah pilih model.</td></tr>
+      <tr><td>05</td><td>Craft story</td><td>Justifikasi harga</td><td>Dua feature bergantian; foto proses, bukan studio.</td></tr>
+      <tr><td>06</td><td>Detail gallery</td><td>Bukti material</td><td>Scroll horizontal, snap; tanpa scrollbar.</td></tr>
+      <tr><td>07</td><td>Material swatches</td><td>Jembatan ke customizer</td><td>6 warna kulit; klik menuju customizer dengan material terpilih.</td></tr>
+      <tr><td>08</td><td>Press / review</td><td>Sosial proof</td><td>Satu baris logo atau 2–3 quote; jangan berlebihan.</td></tr>
+      <tr><td>09</td><td>Journal</td><td>Kedalaman brand</td><td>2–3 artikel; bisa dihide di MVP jika konten belum siap.</td></tr>
+      <tr><td>10</td><td>Newsletter + final CTA</td><td>Konversi</td><td>Diskon pertama 10–15%; CTA “Make every step yours.”</td></tr>
+    </tbody>
+  </table>
+
+  <div class="note-box"><strong>Product page · aturan penting.</strong> Harga “From” harus jelas. Jika custom menambah biaya, tampilkan rentang atau tombol “See custom options”. Jangan menaruh CTA custom di bawah 3 layar tanpa sticky bar.</div>
+
+  <div class="pfoot"><span>SHOESHOP.ID · Design Brief</span><span>05 / Pages 1</span></div>
+</section>
+
+<!-- ================= 06 PAGE REQ 2 ================= -->
+<section class="page">
+  <div class="phead">
+    <span class="num">06</span>
+    <h2>Page requirements · 2</h2>
+    <span class="note">Custom studio, craft, dan size guide.</span>
+  </div>
+
+  <p class="kicker">Custom Studio · tiga langkah</p>
+  <div class="three-col">
+    <div class="persona">
+      <div class="top"><h3>01 · Model</h3><span class="age">PILIH</span></div>
+      <p class="body-copy">Lima kartu model dengan foto, nama, harga mulai, dan catatan outsole. Jelaskan aturan: casual (Boots + Docmart) dan formal (Chelsea + Pantofel + Loafers) memakai bentuk outsole berbeda.</p>
+    </div>
+    <div class="persona">
+      <div class="top"><h3>02 · Customize</h3><span class="age">ATUR</span></div>
+      <p class="body-copy">Preview sticky di kiri (desktop) / atas (mobile). Opsi di kanan: 8 elemen, hanya yang relevan untuk model terpilih. Harga berubah real-time dengan breakdown.</p>
+    </div>
+    <div class="persona">
+      <div class="top"><h3>03 · Review</h3><span class="age">KUNCI</span></div>
+      <p class="body-copy">Ringkasan desain, material, ukuran, harga, dan estimasi produksi. CTA “Add to cart”. Simpan desain ke akun agar bisa dilihat lagi.</p>
+    </div>
+  </div>
+
+  <div class="callout" style="margin-top:4mm">
+    <div class="tag">Elemen</div>
+    <p>Motif kulit sapi · warna benang jahitan kulit · warna benang outsole · warna eyelet · warna panel elastis (Chelsea) · warna tali · motif storm welt · bentuk outsole. Setiap model hanya menampilkan elemen yang valid.</p>
+  </div>
+
+  <div class="callout">
+    <div class="tag">State wajib</div>
+    <p>Loading preview · opsi belum dipilih · kombinasi tidak valid · outsole tidak tersedia untuk model · harga berubah · desain tersimpan · error koneksi. Setiap state harus punya pesan yang menjelaskan langkah berikutnya.</p>
+  </div>
+
+  <div class="rule"></div>
+
+  <p class="kicker">Craft / Our Story</p>
+  <table class="tokens">
+    <thead><tr><th>Section</th><th>Isi</th><th>Catatan</th></tr></thead>
+    <tbody>
+      <tr><td>Hero</td><td>Statement tentang tangan, bahan, dan waktu.</td><td>Foto workshop, bukan produk.</td></tr>
+      <tr><td>Origins</td><td>Kenapa brand ini ada; hubungan dengan pengrajin lokal.</td><td>Nada jujur, tanpa klaim berlebihan.</td></tr>
+      <tr><td>Process</td><td>Pola/Cutting → Jahit/Stitching → Soling → QC → Delivery.</td><td>Lima langkah, masing-masing satu foto dan satu kalimat.</td></tr>
+      <tr><td>Materials</td><td>Kulit, benang, sol, eyelet, storm welt.</td><td>Hubungkan ke pilihan di customizer.</td></tr>
+      <tr><td>Artisan</td><td>Profil singkat pengrajin; tangan dan alat.</td><td>Manusia, bukan “tenaga kerja”.</td></tr>
+      <tr><td>Values</td><td>Daya tahan, re-solable, produksi kecil, lokal.</td><td>Bukti, bukan slogan.</td></tr>
+      <tr><td>CTA</td><td>“Start your pair” / “See the collection”.</td><td>Satu CTA di akhir.</td></tr>
+    </tbody>
+  </table>
+
+  <div class="rule"></div>
+
+  <p class="kicker">Size guide</p>
+  <div class="two-col">
+    <div>
+      <ul class="list">
+        <li>Metode 1: upload foto jejak kaki di atas kertas + penggaris.</li>
+        <li>Metode 2: ukur panjang kaki manual (panduan langkah).</li>
+        <li>Metode 3: size chart standar EU/US/UK → cm.</li>
+        <li>Verifikasi manual oleh admin sebelum produksi.</li>
+      </ul>
+    </div>
+    <div>
+      <ul class="list no">
+        <li>Jangan klaim “otomatis akurat” jika masih diverifikasi manual.</li>
+        <li>Jangan sembunyikan risiko salah ukuran.</li>
+        <li>Jangan memaksa upload foto jika user hanya butuh chart.</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="pfoot"><span>SHOESHOP.ID · Design Brief</span><span>06 / Pages 2</span></div>
+</section>
+
+<!-- ================= 07 PAGE REQ 3 ================= -->
+<section class="page">
+  <div class="phead">
+    <span class="num">07</span>
+    <h2>Page requirements · 3</h2>
+    <span class="note">Cart, checkout, account, dan tracking.</span>
+  </div>
+
+  <table class="req">
+    <thead><tr><th>Page</th><th>Tujuan</th><th>Section wajib</th><th>CTA utama</th></tr></thead>
+    <tbody>
+      <tr>
+        <td>Cart</td>
+        <td>Memastikan item, desain, ukuran, dan harga sudah benar.</td>
+        <td>Item preset &amp; custom · ringkasan desain (thumbnail + opsi) · edit design · hapus · catatan DP 50% · subtotal · CTA checkout · empty state.</td>
+        <td>Continue to checkout</td>
+      </tr>
+      <tr>
+        <td>Checkout</td>
+        <td>Menyelesaikan pesanan dengan risiko dan kebingungan minimal.</td>
+        <td>Kontak · alamat · ongkir real-time · metode bayar QRIS/VA · ringkasan DP 50% &amp; pelunasan · syarat · konfirmasi.</td>
+        <td>Pay 50% DP</td>
+      </tr>
+      <tr>
+        <td>Account</td>
+        <td>Memberi kontrol penuh atas pesanan dan data.</td>
+        <td>Profil · alamat · daftar pesanan · detail pesanan · invoice · status pembayaran · klaim garansi · reorder.</td>
+        <td>View order</td>
+      </tr>
+      <tr>
+        <td>Order tracking</td>
+        <td>Menjawab “pesanan saya sudah sampai mana?” tanpa chat.</td>
+        <td>Tracker 5 tahap · tanggal estimasi · status bayar (DP/lunas) · foto progres (jika ada) · tombol hubungi CS · tombol klaim.</td>
+        <td>Pay remaining balance</td>
+      </tr>
+      <tr>
+        <td>Auth</td>
+        <td>Masuk cepat, tanpa menghalangi checkout.</td>
+        <td>Login · register · reset password · guest checkout (opsional) · error &amp; success states.</td>
+        <td>Continue</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <div class="rule"></div>
+
+  <p class="kicker">Checkout · prinsip</p>
+  <div class="goal-grid">
+    <div class="goal"><h3>Transparan</h3><p>DP 50% dan sisa pelunasan ditampilkan sejak cart. Tidak ada biaya kejutan. Ongkir muncul setelah alamat valid.</p></div>
+    <div class="goal"><h3>Singkat</h3><p>Satu halaman atau tiga langkah maksimal. Autofill, label jelas, error inline. Jangan minta akun sebelum pembayaran.</p></div>
+    <div class="goal"><h3>Yakin</h3><p>Ringkasan item + desain + ukuran + estimasi produksi selalu terlihat. Ada tombol kembali ke customizer tanpa kehilangan desain.</p></div>
+    <div class="goal"><h3>Pulih</h3><p>Pembayaran gagal/expired punya halaman pemulihan yang jelas: coba lagi, ganti metode, atau hubungi CS.</p></div>
+  </div>
+
+  <div class="rule"></div>
+
+  <p class="kicker">Order tracking · lima tahap</p>
+  <div class="snapshot" style="grid-template-columns:repeat(5,1fr)">
+    <div><span>01</span><strong>Pola / Cutting</strong></div>
+    <div><span>02</span><strong>Jahit / Stitching</strong></div>
+    <div><span>03</span><strong>Soling</strong></div>
+    <div><span>04</span><strong>Quality Control</strong></div>
+    <div><span>05</span><strong>Delivery</strong></div>
+  </div>
+
+  <div class="note-box"><strong>Kejujuran status.</strong> Tampilkan tanggal update terakhir dan siapa yang mengubah status. Jika estimasi molor, beri catatan — jangan biarkan tracker diam di tahap yang sama tanpa penjelasan.</div>
+
+  <div class="pfoot"><span>SHOESHOP.ID · Design Brief</span><span>07 / Pages 3</span></div>
+</section>
+
+<!-- ================= 08 DESIGN SYSTEM ================= -->
+<section class="page">
+  <div class="phead">
+    <span class="num">08</span>
+    <h2>Design system</h2>
+    <span class="note">Token yang cukup sedikit untuk dihafal, cukup banyak untuk konsisten.</span>
+  </div>
+
+  <div class="two-col">
+    <div>
+      <p class="kicker">Colour tokens</p>
+      <table class="tokens">
+        <thead><tr><th>Token</th><th>Hex</th><th>Pakai untuk</th></tr></thead>
+        <tbody>
+          <tr><td>paper</td><td>#F2EBD0</td><td>Background utama</td></tr>
+          <tr><td>ivory</td><td>#F7F2E3</td><td>Surface, kartu</td></tr>
+          <tr><td>stone</td><td>#D8D8C0</td><td>Image bg, divider</td></tr>
+          <tr><td>moss</td><td>#909078</td><td>Meta, caption</td></tr>
+          <tr><td>ink</td><td>#303018</td><td>Teks utama, tombol</td></tr>
+          <tr><td>espresso</td><td>#3B2722</td><td>Body text</td></tr>
+          <tr><td>leather</td><td>#604848</td><td>Accent utama</td></tr>
+          <tr><td>cognac</td><td>#A47148</td><td>Accent sekunder</td></tr>
+          <tr><td>brass</td><td>#C9A24A</td><td>Detail &amp; highlight</td></tr>
+          <tr><td>forest</td><td>#3C4A3A</td><td>Craft section</td></tr>
+          <tr><td>rust</td><td>#A9502E</td><td>Street/boot accent</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <div>
+      <p class="kicker">Type &amp; spacing</p>
+      <table class="tokens">
+        <thead><tr><th>Token</th><th>Nilai</th><th>Catatan</th></tr></thead>
+        <tbody>
+          <tr><td>font.display</td><td>Playfair Display</td><td>400–500, italic accent</td></tr>
+          <tr><td>font.body</td><td>Inter</td><td>300–600</td></tr>
+          <tr><td>font.label</td><td>DM Mono</td><td>tracking .08–.18em</td></tr>
+          <tr><td>space</td><td>4 · 8 · 12 · 16 · 24 · 32 · 48 · 64 · 96</td><td>Kelipatan 4px</td></tr>
+          <tr><td>radius.pill</td><td>999px</td><td>Tombol, foto arch</td></tr>
+          <tr><td>radius.card</td><td>2–4px</td><td>Kartu, input</td></tr>
+          <tr><td>border</td><td>1px</td><td>Garis, bukan shadow</td></tr>
+          <tr><td>shadow</td><td>none</td><td>Kecuali overlay/modal</td></tr>
+          <tr><td>container</td><td>1120–1240px</td><td>12 kolom, gutter 24px</td></tr>
+          <tr><td>breakpoint</td><td>480 / 768 / 1024 / 1280</td><td>Mobile-first</td></tr>
+          <tr><td>motion</td><td>400–600ms</td><td>cubic-bezier(.2,.8,.2,1)</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <div class="rule"></div>
+
+  <p class="kicker">Component inventory</p>
+  <div class="checklist">
+    <div class="check">Header &amp; mobile overlay</div>
+    <div class="check">Mega menu / filter panel</div>
+    <div class="check">Footer</div>
+    <div class="check">Button primary / secondary / text link</div>
+    <div class="check">Product card</div>
+    <div class="check">Product gallery + lightbox</div>
+    <div class="check">Swatch selector</div>
+    <div class="check">Stepper</div>
+    <div class="check">Price breakdown</div>
+    <div class="check">Production tracker</div>
+    <div class="check">Accordion</div>
+    <div class="check">Tabs</div>
+    <div class="check">Spec table</div>
+    <div class="check">Form field / error / success</div>
+    <div class="check">Toast &amp; inline alert</div>
+    <div class="check">Modal &amp; confirmation</div>
+    <div class="check">Empty state &amp; skeleton</div>
+    <div class="check">Review / quote block</div>
+  </div>
+
+  <div class="note-box"><strong>Aturan implementasi.</strong> Semua token masuk ke Tailwind config dan CSS variables. Jangan membuat warna atau ukuran baru di tengah halaman. Jika butuh variasi, buat token turunan yang terdokumentasi.</div>
+
+  <div class="pfoot"><span>SHOESHOP.ID · Design Brief</span><span>08 / System</span></div>
+</section>
+
+<!-- ================= 09 UX ================= -->
+<section class="page">
+  <div class="phead">
+    <span class="num">09</span>
+    <h2>UX, accessibility &amp; performance</h2>
+    <span class="note">Kualitas yang tidak terlihat tetap dirasakan.</span>
+  </div>
+
+  <div class="two-col">
+    <div>
+      <p class="kicker">Accessibility · WCAG AA</p>
+      <ul class="list">
+        <li>Kontras teks minimal 4.5:1; teks besar 3:1.</li>
+        <li>Semua fungsi bisa diakses keyboard; focus ring 2px terlihat.</li>
+        <li>Touch target minimal 44×44px.</li>
+        <li>Label form selalu terlihat, bukan hanya placeholder.</li>
+        <li>Alt text deskriptif untuk foto produk &amp; proses.</li>
+        <li>Hormati prefers-reduced-motion.</li>
+        <li>Error dijelaskan dengan teks, bukan hanya warna.</li>
+      </ul>
+    </div>
+    <div>
+      <p class="kicker">Responsive</p>
+      <ul class="list">
+        <li>Mobile-first; desain 390px adalah baseline.</li>
+        <li>Hero: teks di atas, foto di bawah/overlay ringan.</li>
+        <li>Customizer: preview sticky di atas, opsi accordion, harga sticky di bawah.</li>
+        <li>Tabel spesifikasi berubah menjadi daftar label–nilai.</li>
+        <li>Galeri horizontal tetap bisa di-swipe; tanpa scrollbar.</li>
+        <li>Navigasi utama menjadi overlay penuh, bukan dropdown kecil.</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="rule"></div>
+
+  <p class="kicker">Performance budget</p>
+  <div class="snapshot" style="grid-template-columns:repeat(4,1fr)">
+    <div><span>LCP</span><strong>&lt; 2.5 s</strong></div>
+    <div><span>CLS</span><strong>&lt; 0.1</strong></div>
+    <div><span>Customizer load</span><strong>&lt; 3 s</strong></div>
+    <div><span>Price update</span><strong>&lt; 200 ms</strong></div>
+  </div>
+  <ul class="list">
+    <li>Gunakan WebP/AVIF, srcset, dan lazy-loading; hero image di-prioritaskan.</li>
+    <li>Font: display swap, subset Latin; jangan memuat 5 keluarga sekaligus.</li>
+    <li>3D/2D preview: placeholder + skeleton; fallback gambar statis jika WebGL gagal.</li>
+    <li>Hindari layout shift pada galeri, tracker, dan harga.</li>
+  </ul>
+
+  <div class="rule"></div>
+
+  <p class="kicker">UX writing · contoh</p>
+  <table class="tokens">
+    <thead><tr><th>Konteks</th><th>Jangan</th><th>Gunakan</th></tr></thead>
+    <tbody>
+      <tr><td>Ukuran</td><td>“Ukuran salah? Bukan tanggung jawab kami.”</td><td>“Ukuran belum diverifikasi. Unggah foto jejak kaki atau pilih chart standar.”</td></tr>
+      <tr><td>DP</td><td>“Bayar sekarang.”</td><td>“Bayar DP 50% untuk memulai produksi. Sisa 50% saat sepatu siap.”</td></tr>
+      <tr><td>Customizer</td><td>“Pilih opsi.”</td><td>“Pilih warna benang. Harga bertambah Rp 25.000.”</td></tr>
+      <tr><td>Tracking</td><td>“Status: proses.”</td><td>“Tahap 3 dari 5 — Soling. Update terakhir 2 hari lalu.”</td></tr>
+      <tr><td>Klaim</td><td>“Kirim bukti.”</td><td>“Unggah video unboxing (maks. 60 detik) dan foto ukuran sepatu.”</td></tr>
+    </tbody>
+  </table>
+
+  <div class="pfoot"><span>SHOESHOP.ID · Design Brief</span><span>09 / UX</span></div>
+</section>
+
+<!-- ================= 10 CONTENT ================= -->
+<section class="page">
+  <div class="phead">
+    <span class="num">10</span>
+    <h2>Content, assets &amp; references</h2>
+    <span class="note">Desain yang baik tidak bisa menutupi foto yang belum ada.</span>
+  </div>
+
+  <p class="kicker">Asset checklist</p>
+  <table class="tokens">
+    <thead><tr><th>Asset</th><th>Jumlah minimum</th><th>Spesifikasi</th><th>Pemilik</th></tr></thead>
+    <tbody>
+      <tr><td>Product photo</td><td>5 model × 6 sudut</td><td>2000px+, natural light, background netral</td><td>Klien / fotografer</td></tr>
+      <tr><td>Detail macro</td><td>8–12 foto</td><td>Grain, welt, sol, jahitan, eyelet</td><td>Fotografer</td></tr>
+      <tr><td>Lifestyle</td><td>6–10 foto</td><td>Model muda (casual) &amp; matang (formal)</td><td>Klien / fotografer</td></tr>
+      <tr><td>Craft documentary</td><td>10–15 foto + 1 video</td><td>Tangan, alat, last, workshop, QC</td><td>Klien / videografer</td></tr>
+      <tr><td>Packaging / unboxing</td><td>3–5 foto + 1 video</td><td>Untuk halaman garansi &amp; kepercayaan</td><td>Klien</td></tr>
+      <tr><td>Brand identity</td><td>Logo, warna, font</td><td>SVG + guideline</td><td>Klien / desainer</td></tr>
+      <tr><td>Copy</td><td>Home, 5 produk, craft, size, FAQ</td><td>Headline EN, body ID</td><td>Copywriter / klien</td></tr>
+      <tr><td>Legal &amp; policies</td><td>Shipping, return, warranty, privacy</td><td>Bahasa Indonesia</td><td>Klien</td></tr>
+    </tbody>
+  </table>
+
+  <div class="note-box"><strong>Strategi aset.</strong> Untuk MVP, gunakan foto produk yang sudah ada sebagai placeholder. Foto asli masuk sebagai update konten tanpa mengubah layout. Video craft bisa dimulai dari 30–60 detik BTS, bukan produksi sinematik.</div>
+
+  <div class="rule"></div>
+
+  <p class="kicker">Reference mapping · keputusan desain</p>
+  <table class="tokens">
+    <thead><tr><th>Keputusan</th><th>Mengambil dari</th><th>Alasan</th></tr></thead>
+    <tbody>
+      <tr><td>Hero editorial + serif besar</td><td>Edward Green, John Lobb, Crockett &amp; Jones</td><td>Membangun rasa premium dan craft tanpa banyak ornamen.</td></tr>
+      <tr><td>Grid koleksi + best seller</td><td>Beckett Simonon, Berwick 1707</td><td>Memudahkan eksplorasi produk dan konversi.</td></tr>
+      <tr><td>Navigasi berbasis material</td><td>RUJO</td><td>Cocok untuk brand kulit dan customizer.</td></tr>
+      <tr><td>Education &amp; guides</td><td>Crockett &amp; Jones</td><td>Mengurangi keraguan dan menambah otoritas.</td></tr>
+      <tr><td>Palet warm heritage</td><td>Edward Green, Berwick, John Lobb</td><td>Hangat, tactile, dan tidak generik.</td></tr>
+      <tr><td>Trust &amp; conversion</td><td>Beckett Simonon, RUJO</td><td>Kejelasan alur, garansi, dan sosial proof.</td></tr>
+      <tr><td>Provenance &amp; komunitas</td><td>Baxter</td><td>Kesan lokal, keluarga, dan jangka panjang.</td></tr>
+      <tr><td>Street energy</td><td>RUJO</td><td>Hanya untuk Boots/Docmart agar tidak mengganggu formal.</td></tr>
+    </tbody>
+  </table>
+
+  <div class="pfoot"><span>SHOESHOP.ID · Design Brief</span><span>10 / Content</span></div>
+</section>
+
+<!-- ================= 11 SCOPE ================= -->
+<section class="page final">
+  <div class="phead">
+    <span class="num">11</span>
+    <h2>Scope, deliverables &amp; acceptance</h2>
+    <span class="note">Apa yang selesai di MVP, apa yang menunggu V2.</span>
+  </div>
+
+  <div class="two-col">
+    <div>
+      <p class="kicker">MVP · Fase 1</p>
+      <ul class="list">
+        <li>Home, Shop, Product detail, Craft, Size Guide.</li>
+        <li>Customizer 2D layer + harga real-time.</li>
+        <li>Cart, checkout DP 50%, QRIS/VA.</li>
+        <li>Ongkir real-time via API.</li>
+        <li>Order tracking 5 tahap.</li>
+        <li>Garansi 3 hari + upload video unboxing.</li>
+        <li>Auth, akun, riwayat pesanan.</li>
+        <li>Admin: produk, material, elemen, harga, status.</li>
+      </ul>
+    </div>
+    <div>
+      <p class="kicker">V2 · setelah validasi</p>
+      <ul class="list no">
+        <li>3D 360° interaktif (photogrammetry/CGI).</li>
+        <li>Sizing otomatis dari foto kaki.</li>
+        <li>WhatsApp Business API.</li>
+        <li>Review &amp; rating produk.</li>
+        <li>Integrasi marketplace.</li>
+        <li>Dashboard analytics owner.</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="rule"></div>
+
+  <p class="kicker">Design deliverables</p>
+  <div class="checklist">
+    <div class="check">Moodboard &amp; arah visual</div>
+    <div class="check">Design brief (dokumen ini)</div>
+    <div class="check">Sitemap &amp; user flow</div>
+    <div class="check">Wireframe low-fidelity</div>
+    <div class="check">High-fidelity mockup desktop</div>
+    <div class="check">High-fidelity mockup mobile</div>
+    <div class="check">Clickable prototype (Figma)</div>
+    <div class="check">UI style guide &amp; token</div>
+    <div class="check">Developer handoff</div>
+    <div class="check">1× revisi batch di fase mockup</div>
+  </div>
+
+  <div class="rule"></div>
+
+  <p class="kicker">Acceptance criteria</p>
+  <div class="metrics">
+    <div class="metric head"><span>Kriteria</span><span>Target</span><span>Cara uji</span></div>
+    <div class="metric"><span>Menemukan produk</span><span>≤ 3 klik</span><span>Usability test 5 orang</span></div>
+    <div class="metric"><span>Customizer selesai</span><span>&lt; 5 menit</span><span>Task-based test</span></div>
+    <div class="metric"><span>Harga real-time</span><span>&lt; 200 ms</span><span>DevTools performance</span></div>
+    <div class="metric"><span>Checkout DP jelas</span><span>100% paham</span><span>Post-task interview</span></div>
+    <div class="metric"><span>Tracking 5 tahap</span><span>Terlihat &amp; update</span><span>UAT admin + user</span></div>
+    <div class="metric"><span>Mobile LCP</span><span>&lt; 2.5 s</span><span>Lighthouse 4G</span></div>
+    <div class="metric"><span>Aksesibilitas</span><span>AA</span><span>axe + keyboard test</span></div>
+  </div>
+
+  <div class="rule"></div>
+
+  <p class="kicker">Risiko desain &amp; mitigasi</p>
+  <table class="tokens">
+    <thead><tr><th>Risiko</th><th>Dampak</th><th>Mitigasi</th></tr></thead>
+    <tbody>
+      <tr><td>Aset foto belum siap</td><td>Tinggi</td><td>Placeholder produk existing; foto asli sebagai update konten.</td></tr>
+      <tr><td>Customizer terlalu kompleks</td><td>Tinggi</td><td>Satu keputusan per langkah; tampilkan hanya elemen valid; progress jelas.</td></tr>
+      <tr><td>Revisi setelah mockup</td><td>Tinggi</td><td>Kunci arah di moodboard; 1× revisi batch; selebihnya change request.</td></tr>
+      <tr><td>Mobile performance</td><td>Sedang</td><td>Image budget, lazy load, fallback static preview, uji di 4G.</td></tr>
+      <tr><td>Copy belum ada</td><td>Sedang</td><td>Template copy di brief; klien mengisi; jangan menunda desain.</td></tr>
+      <tr><td>Perbedaan persepsi “premium”</td><td>Sedang</td><td>Gunakan moodboard sebagai acuan; review visual tiap milestone.</td></tr>
+    </tbody>
+  </table>
+
+  <div class="signoff">
+    <div><span>Disetujui oleh · Klien</span><div class="line"></div><span>Nama &amp; tanggal</span></div>
+    <div><span>Disiapkan oleh · Tim Desain</span><div class="line"></div><span>Nama &amp; tanggal</span></div>
+  </div>
+
+  <div class="pfoot"><span>SHOESHOP.ID · Design Brief</span><span>11 / Scope</span></div>
+</section>
+
+</body>
+</html>
