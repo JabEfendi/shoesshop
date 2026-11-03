@@ -212,7 +212,7 @@
   <div class="snapshot">
     <div><span>Kategori</span><strong>Daily casual leather</strong></div>
     <div><span>Model</span><strong>Boots · Chelsea · Pantofel · Docmart · Loafers</strong></div>
-    <div><span>Custom elements</span><strong>8 elemen, kondisional per model</strong></div>
+    <div><span>Custom elements</span><strong>8 elemen 3D, kondisional per model</strong></div>
     <div><span>Harga</span><strong>Base price + opsi, real-time</strong></div>
     <div><span>Pembayaran</span><strong>QRIS &amp; Virtual Account</strong></div>
     <div><span>Skema bayar</span><strong>DP 50% · Pelunasan 50%</strong></div>
@@ -232,19 +232,19 @@
     <div class="goal"><h3>Ukuran sukses</h3><p>Customizer selesai &lt; 5 menit, add-to-cart naik, pertanyaan ukuran turun, dan 80% pengguna yang membuka halaman craft melanjutkan ke katalog.</p></div>
   </div>
 
-  <div class="note-box"><strong>Prinsip lingkup.</strong> MVP mengutamakan alur yang <em>selesai dan terpercaya</em>, bukan fitur terbanyak. 3D 360°, sizing otomatis dari foto, dan WhatsApp API masuk V2 setelah alur 2D + verifikasi manual terbukti berjalan.</div>
+  <div class="note-box"><strong>Prinsip lingkup.</strong> MVP mengutamakan alur yang <em>selesai dan terpercaya</em>, bukan fitur terbanyak. 3D interaktif menjadi bagian inti karena membantu pengguna memahami bentuk dan material. Sizing otomatis dari foto, photogrammetry tingkat lanjut, dan WhatsApp API masuk V2 setelah alur 3D + verifikasi manual terbukti berjalan.</div>
 
   <p class="kicker" style="margin-top:7mm">Batasan &amp; asumsi</p>
   <div class="constraints">
     <div class="constraint"><h4>Platform</h4><p>Mobile-first pada 390px. Mayoritas trafik datang dari Instagram dan TikTok, jadi hero, produk, dan customizer harus selesai dengan satu tangan.</p></div>
     <div class="constraint"><h4>Konten</h4><p>Foto produk existing dipakai sebagai placeholder. Foto craft, lifestyle, dan video unboxing masuk bertahap tanpa mengubah layout.</p></div>
-    <div class="constraint"><h4>Teknis</h4><p>Laravel + Inertia + React + Tailwind. Customizer 2D berbasis layer; harga dihitung di server dan diperbarui tanpa reload.</p></div>
+    <div class="constraint"><h4>Teknis</h4><p>Laravel + Inertia + React + Tailwind + React Three Fiber. Customizer 3D berbasis GLB dengan mesh/material yang dapat dikustom; harga dihitung di server dan diperbarui tanpa reload.</p></div>
     <div class="constraint"><h4>Operasional</h4><p>Produksi ± 7 hari kerja, verifikasi ukuran manual, dan DP 50% sebelum pesanan masuk antrean. Status diupdate admin per tahap.</p></div>
   </div>
 
   <p class="kicker" style="margin-top:5mm">Keputusan yang sudah dikunci</p>
   <div class="attr" style="margin-top:0">
-    <span>Warm heritage</span><span>Editorial serif</span><span>2D customizer</span><span>DP 50%</span><span>5-stage tracking</span><span>Headline EN · body ID</span>
+    <span>Warm heritage</span><span>Editorial serif</span><span>3D-first customizer</span><span>Parallax terukur</span><span>DP 50%</span><span>5-stage tracking</span><span>Headline EN · body ID</span>
   </div>
 
   <div class="pfoot"><span>SHOESHOP.ID · Design Brief</span><span>01 / Snapshot</span></div>
@@ -336,7 +336,7 @@
     <div class="principle"><div class="n">01</div><h3>Craft you can see</h3><p>Setiap klaim kualitas harus punya bukti visual: grain, welt, jahitan, sol, tangan pengrajin. Jangan minta dipercaya tanpa menunjukkan.</p></div>
     <div class="principle"><div class="n">02</div><h3>One shoe, many lives</h3><p>Satu model bisa masuk beberapa gaya hidup. Foto dan copy harus menunjukkan konteks pemakaian, bukan mengunci sepatu ke satu persona.</p></div>
     <div class="principle"><div class="n">03</div><h3>Calm, not cold</h3><p>Premium bukan berarti dingin. Gunakan warna hangat, bahasa manusiawi, dan ruang kosong yang mengundang, bukan mengintimidasi.</p></div>
-    <div class="principle"><div class="n">04</div><h3>Guide, don't overwhelm</h3><p>Customizer punya banyak pilihan. Tampilkan satu keputusan per langkah, jelaskan konsekuensi harga, dan jangan menampilkan semua opsi sekaligus.</p></div>
+    <div class="principle"><div class="n">04</div><h3>Guide, don't overwhelm</h3><p>Customizer 3D punya banyak pilihan. Tampilkan satu keputusan per langkah, jelaskan konsekuensi harga, batasi kontrol kamera, dan jangan menampilkan semua opsi sekaligus.</p></div>
     <div class="principle"><div class="n">05</div><h3>Local pride, global standard</h3><p>Made in Indonesia adalah kekuatan, bukan tempelan. Tampilkan pengrajin dan proses dengan standar editorial yang setara brand internasional.</p></div>
     <div class="principle"><div class="n">06</div><h3>Performance is part of luxury</h3><p>Halaman cepat, gambar tajam, form jelas, dan tidak ada layout shift. Pengalaman yang lambat merusak persepsi kualitas.</p></div>
   </div>
@@ -472,7 +472,7 @@
       <tr><td>01</td><td>Hero</td><td>Emosi + posisi</td><td>Headline serif besar, satu foto arch, dua CTA. Jangan ada carousel.</td></tr>
       <tr><td>02</td><td>Trust strip</td><td>Kredibilitas cepat</td><td>Full grain · Goodyear welt · Made in Indonesia · Re-solable.</td></tr>
       <tr><td>03</td><td>Collection</td><td>Eksplorasi produk</td><td>Grid asimetris 5 model; tiap kartu punya dunia visual sendiri.</td></tr>
-      <tr><td>04</td><td>Customizer teaser</td><td>Diferensiasi</td><td>Preview + 3 langkah; jelaskan bahwa 3D/2D dibuka setelah pilih model.</td></tr>
+      <tr><td>04</td><td>Customizer teaser</td><td>Diferensiasi</td><td>Preview 3D ringan + 3 langkah; jelaskan bahwa model dapat diputar, di-zoom, dan dikustom setelah memilih model.</td></tr>
       <tr><td>05</td><td>Craft story</td><td>Justifikasi harga</td><td>Dua feature bergantian; foto proses, bukan studio.</td></tr>
       <tr><td>06</td><td>Detail gallery</td><td>Bukti material</td><td>Scroll horizontal, snap; tanpa scrollbar.</td></tr>
       <tr><td>07</td><td>Material swatches</td><td>Jembatan ke customizer</td><td>6 warna kulit; klik menuju customizer dengan material terpilih.</td></tr>
@@ -503,7 +503,7 @@
     </div>
     <div class="persona">
       <div class="top"><h3>02 · Customize</h3><span class="age">ATUR</span></div>
-      <p class="body-copy">Preview sticky di kiri (desktop) / atas (mobile). Opsi di kanan: 8 elemen, hanya yang relevan untuk model terpilih. Harga berubah real-time dengan breakdown.</p>
+      <p class="body-copy">Preview 3D sticky di kiri (desktop) / atas (mobile). Opsi di kanan: 8 elemen, hanya yang relevan untuk model terpilih. Rotate dan zoom harus halus, pan dibatasi. Harga berubah real-time dengan breakdown.</p>
     </div>
     <div class="persona">
       <div class="top"><h3>03 · Review</h3><span class="age">KUNCI</span></div>
@@ -518,7 +518,7 @@
 
   <div class="callout">
     <div class="tag">State wajib</div>
-    <p>Loading preview · opsi belum dipilih · kombinasi tidak valid · outsole tidak tersedia untuk model · harga berubah · desain tersimpan · error koneksi. Setiap state harus punya pesan yang menjelaskan langkah berikutnya.</p>
+    <p>Loading model 3D · WebGL tidak tersedia · fallback gambar · opsi belum dipilih · kombinasi tidak valid · outsole tidak tersedia untuk model · harga berubah · desain tersimpan · error koneksi. Setiap state harus punya pesan yang menjelaskan langkah berikutnya.</p>
   </div>
 
   <div class="rule"></div>
@@ -735,7 +735,7 @@
       <ul class="list">
         <li>Mobile-first; desain 390px adalah baseline.</li>
         <li>Hero: teks di atas, foto di bawah/overlay ringan.</li>
-        <li>Customizer: preview sticky di atas, opsi accordion, harga sticky di bawah.</li>
+        <li>Customizer: preview 3D sticky di atas, opsi accordion, harga sticky di bawah.</li>
         <li>Tabel spesifikasi berubah menjadi daftar label–nilai.</li>
         <li>Galeri horizontal tetap bisa di-swipe; tanpa scrollbar.</li>
         <li>Navigasi utama menjadi overlay penuh, bukan dropdown kecil.</li>
@@ -755,7 +755,7 @@
   <ul class="list">
     <li>Gunakan WebP/AVIF, srcset, dan lazy-loading; hero image di-prioritaskan.</li>
     <li>Font: display swap, subset Latin; jangan memuat 5 keluarga sekaligus.</li>
-    <li>3D/2D preview: placeholder + skeleton; fallback gambar statis jika WebGL gagal.</li>
+    <li>3D preview: placeholder + progress; fallback gambar statis jika WebGL gagal. Fallback bukan jalur customizer utama.</li>
     <li>Hindari layout shift pada galeri, tracker, dan harga.</li>
   </ul>
 
@@ -834,7 +834,7 @@
       <p class="kicker">MVP · Fase 1</p>
       <ul class="list">
         <li>Home, Shop, Product detail, Craft, Size Guide.</li>
-        <li>Customizer 2D layer + harga real-time.</li>
+        <li>Customizer 3D GLB + material/mesh controls + harga real-time.</li>
         <li>Cart, checkout DP 50%, QRIS/VA.</li>
         <li>Ongkir real-time via API.</li>
         <li>Order tracking 5 tahap.</li>
@@ -846,7 +846,7 @@
     <div>
       <p class="kicker">V2 · setelah validasi</p>
       <ul class="list no">
-        <li>3D 360° interaktif (photogrammetry/CGI).</li>
+        <li>Photogrammetry/CGI resolusi tinggi dan detail material tingkat lanjut.</li>
         <li>Sizing otomatis dari foto kaki.</li>
         <li>WhatsApp Business API.</li>
         <li>Review &amp; rating produk.</li>
