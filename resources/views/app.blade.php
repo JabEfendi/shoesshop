@@ -5,8 +5,9 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="csrf-token" content="{{ csrf_token() }}">
     <title inertia>{{ config('app.name', 'ShoeShop') }}</title>
+    <link rel="icon" href="{{ asset('favicon.svg') }}" type="image/svg+xml">
     <link rel="preconnect" href="https://fonts.bunny.net">
-    <link href="https://fonts.bunny.net/css?family=inter:400,500,600,700,800|oswald:400,500,600,700|playfair-display:400,500,600,700,800,900|jetbrains-mono:400,500,600|caveat:500,600,700" rel="stylesheet" />
+    <link href="https://fonts.bunny.net/css?family=dm-mono:400,500|inter:300,400,500,600,700|playfair-display:400,500,600,700,800,900" rel="stylesheet" />
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/admin-lte@3.2.0/dist/css/adminlte.min.css">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.4.0/css/all.min.css">
     <style>

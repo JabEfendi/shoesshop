@@ -16,6 +16,12 @@ Route::middleware('guest')->group(function () {
 });
 Route::post('/logout', [AuthController::class, 'destroy'])->middleware('auth')->name('logout');
 
+Route::get('/favicon.ico', function () {
+    return response()->file(public_path('favicon.svg'), [
+        'Content-Type' => 'image/svg+xml',
+    ]);
+});
+
 Route::post('/cart', [CartController::class, 'store'])->name('cart.store');
 Route::patch('/cart/{item}', [CartController::class, 'update'])->name('cart.update');
 Route::delete('/cart/{item}', [CartController::class, 'destroy'])->name('cart.destroy');

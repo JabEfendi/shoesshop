@@ -1,5 +1,6 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { Head, Link, usePage } from '@inertiajs/react';
+import { useLanguage } from '../../lib/i18n';
 
 const NAV = [
     { href: '/sketch/home',      label: 'Home',       icon: 'fa-house-chimney' },
@@ -42,6 +43,7 @@ function Header({ active }) {
     const [scrolled, setScrolled] = useState(false);
     const [open, setOpen] = useState(false);
     const menuButton = useRef(null);
+    const { language, setLanguage, t } = useLanguage();
 
     useEffect(() => {
         const on = () => setScrolled(window.scrollY > 24);
@@ -63,10 +65,10 @@ function Header({ active }) {
     return <header className={`shoe-shell-header ${scrolled ? 'is-scrolled' : ''}`}>
         <Link href="/sketch/home" className="shoe-shell-wordmark" aria-label="SHOESHOP.ID home">SHOE<span>SHOP</span>.ID</Link>
         <nav className="shoe-shell-nav" aria-label="Primary navigation">
-            {NAV.map((item) => <Link key={item.href} href={item.href} className={active === item.label ? 'is-active' : ''}>{item.label}</Link>)}
-            <Link href="/sketch/cart" className={active === 'Cart' ? 'is-active' : ''}>Cart</Link>
+            {NAV.map((item) => <Link key={item.href} href={item.href} className={active === item.label ? 'is-active' : ''}>{({ Home: t.nav.home, Collection: t.nav.collection, '3D Custom': t.nav.custom, Craft: t.nav.craft, 'Size Guide': t.nav.sizing })[item.label]}</Link>)}
+            <Link href="/sketch/cart" className={active === 'Cart' ? 'is-active' : ''}>{t.nav.cart}</Link>
         </nav>
-        <div className="shoe-shell-actions"><Link href="/sketch/custom" className="shoe-shell-button">Build yours <span aria-hidden="true">&rarr;</span></Link><button ref={menuButton} type="button" onClick={() => setOpen(true)} className="shoe-shell-menu" aria-label="Open menu" aria-expanded={open} aria-controls="storefront-mobile-menu"><i /><i /></button></div>
+        <div className="shoe-shell-actions"><div className="shoe-language-switch" role="group" aria-label="Language"><button type="button" className={language === 'id' ? 'is-active' : ''} onClick={() => setLanguage('id')}>ID</button><button type="button" className={language === 'en' ? 'is-active' : ''} onClick={() => setLanguage('en')}>EN</button></div><Link href="/sketch/custom" className="shoe-shell-button">{t.nav.build} <span aria-hidden="true">&rarr;</span></Link><button ref={menuButton} type="button" onClick={() => setOpen(true)} className="shoe-shell-menu" aria-label="Open menu" aria-expanded={open} aria-controls="storefront-mobile-menu"><i /><i /></button></div>
         {open && <div id="storefront-mobile-menu" className="shoe-shell-overlay" role="dialog" aria-modal="true" aria-label="Navigation menu"><div className="shoe-shell-overlay__top"><Link href="/sketch/home" className="shoe-shell-wordmark" onClick={() => setOpen(false)}>SHOE<span>SHOP</span>.ID</Link><button type="button" onClick={() => setOpen(false)} className="shoe-shell-close">Close</button></div><nav>{[...NAV, { href: '/sketch/cart', label: 'Cart' }].map((item, index) => <Link key={item.href} href={item.href} onClick={() => setOpen(false)}><small>0{index + 1}</small>{item.label}</Link>)}</nav><Link href="/sketch/custom" className="shoe-shell-button" onClick={() => setOpen(false)}>Build your pair <span aria-hidden="true">&rarr;</span></Link></div>}
     </header>;
 }

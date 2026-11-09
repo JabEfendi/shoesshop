@@ -48,7 +48,7 @@ export function useForm(initialData) {
         }
         setErrors({});
         window.setTimeout(() => {
-            if (url === '/checkout') {
+        if (url === '/checkout' || url === '/sketch/checkout') {
                 createOrder(data);
                 navigate('/sketch/account/orders');
             } else {

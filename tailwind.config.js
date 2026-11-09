@@ -10,6 +10,16 @@ export default {
     theme: {
         extend: {
             colors: {
+                paper: '#f2ebd0',
+                ivory: '#f7f2e3',
+                stone: '#d8d8c0',
+                moss: '#909078',
+                ink: '#303018',
+                espresso: '#3b2722',
+                cognac: '#a47148',
+                brass: '#c9a24a',
+                forest: '#3c4a3a',
+                rust: '#a9502e',
                 industrial: {
                     50:  '#f6f5f4',
                     100: '#e9e7e3',
@@ -36,8 +46,9 @@ export default {
                 },
             },
             fontFamily: {
-                sans: ['Roboto', 'sans-serif'],
-                header: ['Oswald', 'Impact', 'sans-serif'],
+                sans: ['Inter', 'Arial', 'sans-serif'],
+                display: ['Playfair Display', 'Georgia', 'serif'],
+                mono: ['DM Mono', 'Consolas', 'monospace'],
             },
             boxShadow: {
                 'industrial': '0 4px 14px 0 rgba(24,23,20,0.25)',

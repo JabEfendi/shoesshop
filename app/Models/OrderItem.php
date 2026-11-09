@@ -10,7 +10,7 @@ class OrderItem extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['order_id', 'type', 'model_slug', 'name', 'variant_summary', 'configuration', 'size', 'quantity', 'base_price', 'add_ons', 'unit_total'];
+    protected $fillable = ['order_id', 'type', 'model_slug', 'design_id', 'design_signature', 'name', 'variant_summary', 'configuration', 'size', 'quantity', 'base_price', 'add_ons', 'unit_total'];
 
     protected function casts(): array
     {
@@ -20,5 +20,10 @@ class OrderItem extends Model
     public function order(): BelongsTo
     {
         return $this->belongsTo(Order::class);
+    }
+
+    public function design(): BelongsTo
+    {
+        return $this->belongsTo(Design::class);
     }
 }

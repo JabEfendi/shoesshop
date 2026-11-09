@@ -3,6 +3,7 @@ import { ShoeConfiguratorCanvas } from '../ShoeConfigurator/ShoeModel';
 import { useShoeStore } from '../ShoeConfigurator/useShoeStore';
 import PhotorealRecoloringPreview from '../ShoeConfigurator/PhotorealRecoloringPreview';
 import { resolveHeadRequestViteDevUrl } from '../ShoeConfigurator/resolveAssetUrl';
+import { useLanguage } from '../../lib/i18n';
 export { useSyncShoeStore } from './useSyncShoeStore';
 
 /* Peta elemen kustomisasi Sketch → kategori mesh 3D / photo-recolor. */
@@ -36,6 +37,7 @@ export default function Shoe3DStage({
     showControls = true,
     onMeshReport,
 }) {
+    const { t } = useLanguage();
     const wrapRef = useRef(null);
     const [checking, setChecking] = useState(true);
     const [glbOk, setGlbOk] = useState(false);
@@ -67,7 +69,7 @@ export default function Shoe3DStage({
         <div ref={wrapRef} className="hm-3d-stage" style={{ minHeight: height, height }}>
             <span className="hm-3d-badge" style={{ top: 14, left: 14 }}>
                 <i className={`fas ${glbOk ? 'fa-cube' : 'fa-wand-magic-sparkles'}`} />
-                {glbOk ? badge : 'Preview Foto · Realtime Warna'}
+                {glbOk ? badge : t.custom.photoPreview || 'Preview Foto · Realtime Warna'}
             </span>
 
             {showControls && glbOk && (
@@ -94,8 +96,8 @@ export default function Shoe3DStage({
                 <>
                     <PhotorealRecoloringPreview productSlug={slug} />
                     {meshes.length === 0 && (
-                        <span className="hm-3d-badge" style={{ bottom: 14, left: 14 }}>
-                            <i className="fas fa-circle-info" /> Asset GLB menyusul — preview foto aktif
+                            <span className="hm-3d-badge" style={{ bottom: 14, left: 14 }}>
+                            <i className="fas fa-circle-info" /> {t.custom.missing3d}
                         </span>
                     )}
                 </>

@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Order;
+use App\Models\Design;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Inertia\Inertia;
@@ -71,8 +72,16 @@ class CheckoutController extends Controller
             ]);
 
             foreach ($items as $item) {
+                $designId = null;
+                if ($item['type'] === 'custom' && ! empty($item['design_signature'])) {
+                    $design = Design::firstOrCreate(
+                        ['signature' => $item['design_signature']],
+                        ['model_slug' => $item['model_slug'], 'configuration' => $item['configuration']]
+                    );
+                    $designId = $design->id;
+                }
                 $order->items()->create([
-                    'type' => $item['type'], 'model_slug' => $item['model_slug'], 'name' => $item['name'],
+                    'type' => $item['type'], 'model_slug' => $item['model_slug'], 'design_id' => $designId, 'design_signature' => $item['design_signature'] ?? null, 'name' => $item['name'],
                     'variant_summary' => $item['variant_summary'], 'configuration' => $item['configuration'],
                     'size' => $item['size'], 'quantity' => $item['qty'], 'base_price' => $item['base_price'],
                     'add_ons' => $item['add_ons'], 'unit_total' => $item['unit_total'],

@@ -39,6 +39,8 @@ function OptionRow({ v, active, onClick }) {
 }
 
 export default function Customizer({ model, elements }) {
+    const modelElements = model.customElements || model.custom_elements;
+    elements = modelElements ? elements.filter((element) => modelElements.includes(element.slug)) : elements;
     const defaults = useMemo(() => Object.fromEntries(elements.map(e => [e.slug, 0])), [elements]);
     const { url } = usePage();
     const [sel, setSel] = useState(() => {

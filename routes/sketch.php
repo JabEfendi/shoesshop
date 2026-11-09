@@ -2,6 +2,7 @@
 
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
+use App\Support\SketchCatalog;
 
 $MODELS = [
     ['slug' => 'boots',        'name' => 'Boots 6"',        'desc' => 'Classic high-top daily boots',  'price' => 1250000, 'icon' => 'fa-boot',     'color' => '#4a2c1a', 'image' => '/assets/images/products/boots/boots.jpeg',            'gallery' => ['/assets/images/products/boots/front-side.jpeg', '/assets/images/products/boots/out-side.jpeg', '/assets/images/products/boots/in-side.jpeg', '/assets/images/products/boots/back-side.jpeg', '/assets/images/products/boots/down-side.jpeg', '/assets/images/products/boots/v2/atas.jpeg', '/assets/images/products/boots/v2/all.png'], 'type' => 'casual', 'glb' => '/3d-assets/leather-boot-optimized.glb'],
@@ -79,8 +80,8 @@ Route::middleware('inertia')->prefix('sketch')->name('sketch.')->group(function 
         abort_unless($m, 404);
 
         return Inertia::render('Sketch/Customizer', [
-            'model' => $m,
-            'elements' => $CUSTOM_ELEMENTS,
+            'model' => [...$m, 'custom_elements' => SketchCatalog::MODEL_ELEMENTS[$slug] ?? []],
+            'elements' => array_values(array_filter($CUSTOM_ELEMENTS, fn ($element) => in_array($element['slug'], SketchCatalog::MODEL_ELEMENTS[$slug] ?? [], true))),
         ]);
     })->name('customizer');
 
@@ -89,8 +90,8 @@ Route::middleware('inertia')->prefix('sketch')->name('sketch.')->group(function 
         abort_unless($m, 404);
 
         return Inertia::render('Sketch/CustomizerPreview', [
-            'model' => $m,
-            'elements' => $CUSTOM_ELEMENTS,
+            'model' => [...$m, 'custom_elements' => SketchCatalog::MODEL_ELEMENTS[$slug] ?? []],
+            'elements' => array_values(array_filter($CUSTOM_ELEMENTS, fn ($element) => in_array($element['slug'], SketchCatalog::MODEL_ELEMENTS[$slug] ?? [], true))),
             'lead_time' => '± 7 hari kerja',
             'garansi' => '3 hari (video unboxing wajib)',
         ]);

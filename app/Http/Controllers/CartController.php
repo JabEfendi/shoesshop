@@ -6,6 +6,7 @@ use App\Support\SketchCatalog;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
 use Inertia\Response;
+use Illuminate\Support\Facades\Storage;
 
 class CartController extends Controller
 {
@@ -23,14 +24,24 @@ class CartController extends Controller
             'model_slug' => ['required', 'string'],
             'size' => ['required', 'integer', 'between:39,45'],
             'selection' => ['nullable', 'array'],
+            'fit' => ['nullable', 'array'],
+            'foot_photo' => ['nullable', 'image', 'max:5120'],
         ]);
 
+        if ($request->hasFile('foot_photo')) {
+            $data['fit']['foot_photo_path'] = $request->file('foot_photo')->store('foot-measurements', 'public');
+        }
+
         $item = $data['type'] === 'custom'
-            ? SketchCatalog::customLine($data['model_slug'], $data['selection'] ?? [], $data['size'])
+            ? SketchCatalog::customLine($data['model_slug'], $data['selection'] ?? [], $data['size'], $data['fit'] ?? [])
             : SketchCatalog::presetLine($data['model_slug'], $data['size']);
 
         $cart = $request->session()->get('cart.items', []);
-        $cart[$item['id']] = $item;
+        if (isset($cart[$item['id']])) {
+            $cart[$item['id']]['qty'] = min(10, $cart[$item['id']]['qty'] + 1);
+        } else {
+            $cart[$item['id']] = $item;
+        }
         $request->session()->put('cart.items', $cart);
 
         return redirect()->route('sketch.cart')->with('success', 'Produk ditambahkan ke keranjang.');

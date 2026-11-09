@@ -17,6 +17,14 @@ export const ELEMENTS = [
     { slug: 'outsole', label: 'Outsole', icon: 'fa-shoe-prints', defaults: [{ n: 'Karet Hitam', p: 0, c: '#1a1a1a' }, { n: 'Kulit Dress Coklat', p: 125000, c: '#6b3a0d' }, { n: 'Commando Lug', p: 150000, c: '#2a2a2a' }] },
 ];
 
+export const MODEL_ELEMENTS = {
+    boots: ['kulit', 'benang-kulit', 'benang-outsole', 'eyelet', 'tali', 'storm-welt', 'outsole'],
+    chelsea: ['kulit', 'benang-kulit', 'benang-outsole', 'panel-chelsea', 'storm-welt', 'outsole'],
+    pantofel: ['kulit', 'benang-kulit', 'benang-outsole', 'eyelet', 'tali', 'outsole'],
+    docmart: ['kulit', 'benang-kulit', 'benang-outsole', 'eyelet', 'tali', 'storm-welt', 'outsole'],
+    loafers: ['kulit', 'benang-kulit', 'benang-outsole', 'outsole'],
+};
+
 export const SIZE_CHART = [
     { size: 39, insole_cm: '24.5', recommended_for: 'Panjang kaki 23.8 - 24.2 cm' },
     { size: 40, insole_cm: '25.2', recommended_for: 'Panjang kaki 24.5 - 24.9 cm' },

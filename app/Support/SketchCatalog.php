@@ -23,6 +23,14 @@ class SketchCatalog
         'outsole' => [['n' => 'Karet Hitam', 'p' => 0], ['n' => 'Kulit Dress Coklat', 'p' => 125000], ['n' => 'Commando Lug', 'p' => 150000]],
     ];
 
+    public const MODEL_ELEMENTS = [
+        'boots' => ['kulit', 'benang-kulit', 'benang-outsole', 'eyelet', 'tali', 'storm-welt', 'outsole'],
+        'chelsea' => ['kulit', 'benang-kulit', 'benang-outsole', 'panel-chelsea', 'storm-welt', 'outsole'],
+        'pantofel' => ['kulit', 'benang-kulit', 'benang-outsole', 'eyelet', 'tali', 'outsole'],
+        'docmart' => ['kulit', 'benang-kulit', 'benang-outsole', 'eyelet', 'tali', 'storm-welt', 'outsole'],
+        'loafers' => ['kulit', 'benang-kulit', 'benang-outsole', 'outsole'],
+    ];
+
     public static function model(string $slug): array
     {
         abort_unless(isset(self::MODELS[$slug]), 404);
@@ -30,13 +38,14 @@ class SketchCatalog
         return self::MODELS[$slug];
     }
 
-    public static function customLine(string $slug, array $selection, int $size): array
+    public static function customLine(string $slug, array $selection, int $size, array $fit = []): array
     {
         $model = self::model($slug);
         $chosen = [];
         $addOns = 0;
 
         foreach (self::CUSTOMIZATION_OPTIONS as $element => $options) {
+            if (! in_array($element, self::MODEL_ELEMENTS[$slug] ?? [], true)) continue;
             $index = (int) ($selection[$element] ?? 0);
             abort_if(! isset($options[$index]), 422, 'Pilihan kustomisasi tidak valid.');
             $option = $options[$index];
@@ -44,13 +53,16 @@ class SketchCatalog
             $addOns += $option['p'];
         }
 
+        $configuration = ['model' => $slug, 'options' => $chosen, 'fit' => $fit];
+        $signature = hash('sha256', json_encode(['model' => $slug, 'options' => $chosen], JSON_UNESCAPED_UNICODE | JSON_THROW_ON_ERROR));
         return [
-            'id' => (string) str()->uuid(),
+            'id' => 'custom-'.$signature.'-size-'.$size,
+            'design_signature' => $signature,
             'type' => 'custom',
             'model_slug' => $slug,
             'name' => 'Custom '.$model['name'],
             'variant_summary' => implode(' + ', $chosen),
-            'configuration' => $chosen,
+            'configuration' => $configuration,
             'size' => $size,
             'qty' => 1,
             'base_price' => $model['price'],
@@ -64,7 +76,8 @@ class SketchCatalog
         $model = self::model($slug);
 
         return [
-            'id' => (string) str()->uuid(),
+            'id' => 'preset-'.$slug.'-size-'.$size,
+            'design_signature' => null,
             'type' => 'preset',
             'model_slug' => $slug,
             'name' => $model['name'].' (Preset)',

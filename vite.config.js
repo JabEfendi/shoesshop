@@ -19,12 +19,16 @@ const copyPublicAssets = {
             if (!stats.isFile()) return next();
 
             const contentTypes = {
+                '.css': 'text/css; charset=utf-8',
                 '.glb': 'model/gltf-binary',
                 '.gltf': 'model/gltf+json',
+                '.ico': 'image/x-icon',
+                '.js': 'application/javascript; charset=utf-8',
                 '.json': 'application/json',
                 '.jpeg': 'image/jpeg',
                 '.jpg': 'image/jpeg',
                 '.png': 'image/png',
+                '.svg': 'image/svg+xml',
                 '.webp': 'image/webp',
             };
             response.statusCode = 200;
@@ -37,11 +41,11 @@ const copyPublicAssets = {
     },
     closeBundle() {
         const source = resolve('public/assets');
-        const destination = resolve('dist/assets');
+        const destination = resolve('public/build/assets');
         const modelsSource = resolve('public/3d-assets');
-        const modelsDestination = resolve('dist/3d-assets');
+        const modelsDestination = resolve('public/build/3d-assets');
         const faviconSource = resolve('public/favicon.svg');
-        const faviconDestination = resolve('dist/favicon.svg');
+        const faviconDestination = resolve('public/build/favicon.svg');
 
         if (existsSync(source)) {
             cpSync(source, destination, {
@@ -69,7 +73,11 @@ export default defineConfig({
     },
     publicDir: false,
     build: {
+        outDir: 'public/build',
+        manifest: 'manifest.json',
+        emptyOutDir: true,
         rollupOptions: {
+            input: resolve('resources/js/app.jsx'),
             output: {
                 manualChunks: {
                     three: ['three', '@react-three/fiber', '@react-three/drei'],

@@ -6,6 +6,8 @@ import { Reveal, SectionHeading } from '../../Components/Parallax/index.jsx';
 const Shoe3DStage = lazy(() => import('../../Components/Sketch/Shoe3DStage'));
 
 export default function CustomizerPreview({ model, elements, lead_time, garansi }) {
+    const modelElements = model.customElements || model.custom_elements;
+    elements = modelElements ? elements.filter((element) => modelElements.includes(element.slug)) : elements;
     const { url } = usePage();
     const selected = useMemo(() => {
         let raw;

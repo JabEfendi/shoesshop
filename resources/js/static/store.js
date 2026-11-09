@@ -1,4 +1,4 @@
-import { ELEMENTS, getModel } from './catalog';
+import { ELEMENTS, getModel, MODEL_ELEMENTS } from './catalog';
 
 const CART_KEY = 'shoesshop-static-cart';
 const ORDER_KEY = 'shoesshop-static-orders';
@@ -18,14 +18,18 @@ export const cartSubtotal = (items = getCart()) => items.reduce((total, item) =>
 export const updateCart = (id, qty) => write(CART_KEY, getCart().map((item) => item.id === id ? { ...item, qty: Math.max(1, Math.min(10, qty)) } : item));
 export const removeCart = (id) => write(CART_KEY, getCart().filter((item) => item.id !== id));
 
-export const addCartItem = ({ type, model_slug, size, selection = {} }) => {
+export const addCartItem = ({ type, model_slug, size, selection = {}, fit = {}, foot_photo = null }) => {
     const model = getModel(model_slug);
     const choices = type === 'custom'
-        ? ELEMENTS.map((element) => element.defaults[selection[element.slug] ?? 0]).filter(Boolean)
+        ? ELEMENTS.filter((element) => MODEL_ELEMENTS[model.slug]?.includes(element.slug)).map((element) => element.defaults[selection[element.slug] ?? 0]).filter(Boolean)
         : [];
     const add_ons = choices.reduce((total, choice) => total + (choice.p || 0), 0);
+    const designSignature = type === 'custom'
+        ? `${model.slug}|${Object.keys(selection).sort().map((key) => `${key}:${selection[key]}`).join('|')}`
+        : `preset|${model.slug}`;
     const item = {
-        id: `${type}-${model.slug}-${size}-${Date.now()}`,
+        id: `${type}-${model.slug}-${size}-${designSignature}`,
+        design_signature: type === 'custom' ? designSignature : null,
         type,
         model_slug: model.slug,
         name: model.name,
@@ -35,6 +39,8 @@ export const addCartItem = ({ type, model_slug, size, selection = {} }) => {
         add_ons,
         unit_total: model.price + add_ons,
         configuration: selection,
+        fit,
+        foot_photo: foot_photo ? { name: foot_photo.name, type: foot_photo.type, size: foot_photo.size } : null,
         variant_summary: type === 'custom' ? choices.map((choice) => choice.n).join(' - ') : `Classic ${model.name}`,
     };
     write(CART_KEY, [...getCart(), item]);

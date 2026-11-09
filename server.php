@@ -13,27 +13,27 @@ if ($uri !== '/' && file_exists(__DIR__ . '/public' . $uri)) {
         $mtime = filemtime($filePath);
         $size  = filesize($filePath);
 
-        $finfo = new finfo(FILEINFO_MIME_TYPE);
-        $mimeType = $finfo->file($filePath);
-        if ($mimeType === false) {
-            $ext = strtolower(pathinfo($filePath, PATHINFO_EXTENSION));
-            $mimeType = match ($ext) {
-                'glb'  => 'model/gltf-binary',
-                'gltf' => 'model/gltf+json',
-                'bin'  => 'application/octet-stream',
-                'jpg', 'jpeg' => 'image/jpeg',
-                'png'  => 'image/png',
-                'webp' => 'image/webp',
-                'css'  => 'text/css',
-                'js', 'mjs' => 'application/javascript',
-                'json' => 'application/json',
-                'svg'  => 'image/svg+xml',
-                'woff' => 'font/woff',
-                'woff2' => 'font/woff2',
-                'ttf'  => 'font/ttf',
-                default => 'application/octet-stream',
-            };
-        }
+        $ext = strtolower(pathinfo($filePath, PATHINFO_EXTENSION));
+        $knownMimeTypes = [
+            'css' => 'text/css; charset=utf-8',
+            'glb' => 'model/gltf-binary',
+            'gltf' => 'model/gltf+json',
+            'bin' => 'application/octet-stream',
+            'jpg' => 'image/jpeg',
+            'jpeg' => 'image/jpeg',
+            'png' => 'image/png',
+            'webp' => 'image/webp',
+            'js' => 'application/javascript; charset=utf-8',
+            'mjs' => 'application/javascript; charset=utf-8',
+            'json' => 'application/json; charset=utf-8',
+            'svg' => 'image/svg+xml',
+            'ico' => 'image/x-icon',
+            'woff' => 'font/woff',
+            'woff2' => 'font/woff2',
+            'ttf' => 'font/ttf',
+        ];
+        $mimeType = $knownMimeTypes[$ext] ?? (new finfo(FILEINFO_MIME_TYPE))->file($filePath);
+        $mimeType = $mimeType ?: 'application/octet-stream';
 
         $lastModified = gmdate('D, d M Y H:i:s', $mtime ?: time()) . ' GMT';
 

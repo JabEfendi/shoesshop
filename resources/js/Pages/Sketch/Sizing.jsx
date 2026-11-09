@@ -12,11 +12,13 @@ export default function Sizing({ chart, next_url }) {
         try { return JSON.parse(params.get('selection') || '{}'); } catch { return {}; }
     }, [params]);
     const [processing, setProcessing] = useState(false);
+    const [fit, setFit] = useState({ left_length: '', right_length: '', left_width: '', right_width: '', notes: '' });
+    const [footPhoto, setFootPhoto] = useState(null);
     const reviewUrl = `/sketch/custom/${modelSlug}/preview?selection=${encodeURIComponent(JSON.stringify(selection))}`;
     const addToCart = () => {
         if (processing) return;
         setProcessing(true);
-        router.post('/cart', { type: 'custom', model_slug: modelSlug, size, selection }, { onFinish: () => setProcessing(false) });
+        router.post('/cart', { type: 'custom', model_slug: modelSlug, size, selection, fit, foot_photo: footPhoto }, { forceFormData: true, onFinish: () => setProcessing(false) });
     };
     return (
         <SketchLayout title="Sizing — SHOESHOP.ID" active="Size Guide"
@@ -47,7 +49,13 @@ export default function Sizing({ chart, next_url }) {
                                     <span className="hm-kicker">Fit guide / Ukur di rumah</span>
                                     <h2 className="hm-serif mt-3">Pas dimulai dari ukuran.</h2>
                                     <ol className="atelier-measure-steps">{['Berdiri di atas kertas, dengan tumit menempel pada dinding.', 'Tandai ujung jari terpanjang. Ukur jarak dari tumit dalam sentimeter.', 'Ukur kedua kaki. Gunakan ukuran kaki yang lebih panjang.'].map((step, i) => <Reveal as="li" key={step} delay={i + 1}><span>0{i + 1}</span><p>{step}</p></Reveal>)}</ol>
-                                    <p className="hm-mono" style={{ fontSize: 11 }}>Panduan ini menggunakan ukuran EU. Upload foto belum tersedia.</p>
+                                     <p className="hm-mono" style={{ fontSize: 11 }}>Kamu dapat memasukkan ukuran manual dan upload foto outline kaki sebagai referensi pengrajin.</p>
+                                     <div className="row mt-3">
+                                         {['left_length', 'right_length', 'left_width', 'right_width'].map((field) => <div className="col-6 mb-2" key={field}><label className="hm-mono" style={{ fontSize: 9, color: '#6b665d' }}>{field.replace('_', ' ').toUpperCase()} (CM)</label><input type="number" step="0.1" min="0" className="form-control" value={fit[field]} onChange={(e) => setFit((current) => ({ ...current, [field]: e.target.value }))} /></div>)}
+                                     </div>
+                                     <label className="hm-mono mt-2" style={{ fontSize: 10, color: '#6b665d' }}>FOTO OUTLINE KAKI (OPSIONAL)</label>
+                                     <input type="file" accept="image/*" className="form-control" onChange={(e) => setFootPhoto(e.target.files?.[0] || null)} />
+                                     <textarea className="form-control mt-2" rows="2" placeholder="Catatan fit atau kenyamanan" value={fit.notes} onChange={(e) => setFit((current) => ({ ...current, notes: e.target.value }))} />
                                     <div className="mt-3 p-3" style={{ background: '#eef5fb', borderRadius: 8, fontSize: 13 }}>
                                         <i className="fas fa-circle-info mr-1" style={{ color: '#3a7ca5' }} />
                                         <b>Contoh:</b> panjang telapak 26.4 cm → rekomendasi <b>Size 42</b> (insole 26.8 cm).

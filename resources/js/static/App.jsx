@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import { StaticRouter } from './inertia';
-import { ELEMENTS, getModel, getProduct, MODELS, PRESETS, SIZE_CHART } from './catalog';
+import { ELEMENTS, getModel, getProduct, MODELS, MODEL_ELEMENTS, PRESETS, SIZE_CHART } from './catalog';
 import { cartSubtotal, getCart, getOrders } from './store';
 import Home from '../Pages/Sketch/Home';
 import Shop from '../Pages/Sketch/Shop';
@@ -45,9 +45,9 @@ function resolvePage(pathname) {
     if (pathname === '/register') return ['Auth/Register', <Register />];
 
     const preview = pathname.match(/^\/sketch\/custom\/([^/]+)\/preview$/);
-    if (preview) return ['Sketch/CustomizerPreview', <CustomizerPreview model={getModel(preview[1])} elements={ELEMENTS} lead_time="+/- 7 hari kerja" garansi="3 hari (video unboxing wajib)" />];
+    if (preview) { const model = getModel(preview[1]); return ['Sketch/CustomizerPreview', <CustomizerPreview model={model} elements={ELEMENTS.filter((element) => MODEL_ELEMENTS[model.slug]?.includes(element.slug))} lead_time="+/- 7 hari kerja" garansi="3 hari (video unboxing wajib)" />]; }
     const customizer = pathname.match(/^\/sketch\/custom\/([^/]+)$/);
-    if (customizer) return ['Sketch/Customizer', <Customizer model={getModel(customizer[1])} elements={ELEMENTS} />];
+    if (customizer) { const model = getModel(customizer[1]); return ['Sketch/Customizer', <Customizer model={model} elements={ELEMENTS.filter((element) => MODEL_ELEMENTS[model.slug]?.includes(element.slug))} />]; }
     const product = pathname.match(/^\/sketch\/shop\/([^/]+)$/);
     if (product) return ['Sketch/ProductDetail', <ProductDetail product={getProduct(product[1])} />];
     return ['NotFound', <NotFound />];
