@@ -1,4 +1,5 @@
 import { createContext, useContext, useEffect, useMemo, useState } from 'react';
+import { createPortal } from 'react-dom';
 import { addCartItem, createOrder, removeCart, updateCart } from './store';
 
 const NavigationContext = createContext({ navigate: () => {}, url: '/' });
@@ -23,7 +24,8 @@ export function Head({ title, children }) {
     useEffect(() => {
         if (title) document.title = title;
     }, [title]);
-    return children || null;
+    if (!children) return null;
+    return createPortal(children, document.head);
 }
 
 export function usePage() {

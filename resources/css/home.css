@@ -1,4 +1,3 @@
-@import url('https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=Inter:wght@300;400;500;600&family=Playfair+Display:ital,wght@0,400;0,500;1,400;1,500&display=swap');
 .shoe-landing{--paper:#f2ebd0;--ink:#303018;--body:#3b2722;--leather:#604848;--brass:#f0c048;--stone:#d8d8c0;--moss:#909078;--line:rgba(48,48,24,.18);background:var(--paper);color:var(--body);font:400 14px/1.6 Inter,Arial,sans-serif;overflow:clip}.shoe-landing *{box-sizing:border-box;box-shadow:none}.shoe-landing :is(h1,h2,h3,p,figure){margin:0}.shoe-landing a{color:inherit;text-decoration:none}.shoe-landing button{font:inherit;cursor:pointer}.shoe-landing :is(a,button):focus-visible{outline:2px solid var(--ink);outline-offset:4px}.shoe-landing h1,.shoe-landing h2,.shoe-wordmark{color:var(--ink);font-weight:400;letter-spacing:-.07em}.shoe-landing h1 em,.shoe-landing h2 em{color:var(--leather);font-style:normal}.shoe-eyebrow{color:var(--moss);font:500 12px/1.4 'DM Mono',monospace;letter-spacing:.08em;text-transform:uppercase}.shoe-button{min-height:48px;display:inline-flex;align-items:center;justify-content:center;gap:12px;padding:12px 24px;border:1px solid transparent;border-radius:999px;font-weight:500;transition:transform 240ms cubic-bezier(.2,.9,.25,1.35),filter 150ms,background-color 150ms}.shoe-button--primary{background:var(--ink);color:#fff}.shoe-button--primary:hover{filter:brightness(1.08);transform:scale(1.04)}.shoe-button--secondary{border-color:rgba(0,0,0,.2)}.shoe-button--secondary:hover,.shoe-menu-button:hover,.shoe-close:hover{background:var(--stone);transform:scale(1.04)}.shoe-skip{position:fixed;z-index:100;top:-80px;left:24px;padding:12px 24px;border-radius:999px;background:var(--ink);color:#fff}.shoe-skip:focus{top:16px}
 .shoe-header{position:fixed;z-index:40;inset:0 0 auto;height:80px;display:flex;align-items:center;justify-content:space-between;gap:24px;padding-inline:32px;border-bottom:1px solid transparent;transition:background-color 150ms,border-color 150ms}.shoe-header.is-scrolled{background:var(--paper);border-color:var(--line)}.shoe-wordmark{display:inline-flex;align-items:center;min-height:44px;font-size:18px;font-weight:600;letter-spacing:-.09em;white-space:nowrap}.shoe-wordmark span{color:var(--leather)}.shoe-nav{display:flex;gap:24px;align-items:center}.shoe-nav a,.shoe-footer nav a{position:relative;display:inline-flex;align-items:center;min-height:44px;font-size:12px}.shoe-nav a:after,.shoe-footer nav a:after{content:'';position:absolute;inset:auto 0 9px;height:1px;background:var(--ink);transform:scaleX(0);transform-origin:left;transition:transform 180ms}.shoe-nav a:hover:after,.shoe-footer nav a:hover:after{transform:scaleX(1)}.shoe-header__actions{display:flex;align-items:center;gap:8px}.shoe-menu-button{display:none;width:44px;height:44px;place-content:center;gap:6px;padding:0;border:1px solid var(--line);border-radius:999px;background:transparent}.shoe-menu-button i{display:block;width:16px;height:1px;background:var(--ink)}.shoe-menu-overlay{position:fixed;z-index:50;inset:0;display:flex;flex-direction:column;padding:16px 24px 32px;background:var(--paper)}.shoe-menu-overlay__top{display:flex;align-items:center;justify-content:space-between}.shoe-close{min-height:44px;padding:0 16px;border:1px solid var(--line);border-radius:999px;background:transparent}.shoe-menu-overlay nav{display:grid;margin:auto 0 32px;border-top:1px solid var(--line)}.shoe-menu-overlay nav a{display:flex;align-items:baseline;gap:16px;min-height:72px;border-bottom:1px solid var(--line);font-size:clamp(36px,10vw,64px);line-height:1;letter-spacing:-.07em}.shoe-menu-overlay nav a:hover{color:var(--leather)}.shoe-menu-overlay small{color:var(--moss);font:11px 'DM Mono',monospace}.shoe-menu-overlay .shoe-button{align-self:flex-start}.shoe-menu-overlay__mark{position:absolute;right:9%;bottom:5%;width:110px;color:var(--brass);transform:rotate(-12deg)}
 .shoe-hero{position:relative;isolation:isolate;display:grid;grid-template-columns:minmax(0,1fr) minmax(380px,.9fr);align-items:center;gap:clamp(32px,7vw,112px);min-height:100svh;padding:120px max(32px,calc((100vw - 1240px)/2)) 72px}.shoe-hero__shape{position:absolute;z-index:-1;border:2px solid var(--brass);border-radius:50%}.shoe-hero__shape--one{width:clamp(220px,36vw,600px);aspect-ratio:1;left:-16%;top:9%}.shoe-hero__shape--two{width:clamp(160px,24vw,360px);aspect-ratio:1;right:38%;bottom:-10%;border-color:var(--stone)}.shoe-hero__copy{position:relative;z-index:2;padding-top:24px}.shoe-hero__copy .shoe-eyebrow,.shoe-collection__intro .shoe-eyebrow,.shoe-feature__copy .shoe-eyebrow,.shoe-gallery__head .shoe-eyebrow,.shoe-studio__title .shoe-eyebrow,.shoe-final .shoe-eyebrow{margin-bottom:24px}.shoe-hero h1{font-size:clamp(104px,16.2vw,211px);line-height:.8;margin-bottom:32px}.shoe-hero__copy>p:not(.shoe-eyebrow),.shoe-collection__intro>p:not(.shoe-eyebrow),.shoe-gallery__head>p,.shoe-feature__copy>p:not(.shoe-eyebrow),.shoe-studio__title>p{max-width:360px;margin:24px 0;color:var(--moss)}.shoe-actions{display:flex;flex-wrap:wrap;gap:12px}.shoe-hero__visual{position:relative;min-height:550px}.shoe-hero__photo{position:absolute;inset:24px 0 0;overflow:hidden;border:1px solid var(--line);border-radius:999px}.shoe-media{position:relative;overflow:hidden;border-radius:inherit;background:var(--stone)}.shoe-media__layer{position:absolute;inset:-36px 0}.shoe-media img{display:block;width:100%;height:100%;object-fit:cover}.shoe-hero__photo .shoe-media{width:100%;height:100%}.shoe-hero__photo:after{content:'';position:absolute;inset:0;background:rgba(48,48,24,.14);pointer-events:none}.shoe-mark{display:block}.shoe-hero__mark{position:absolute;width:clamp(110px,15vw,180px);right:-7%;top:7%;color:var(--brass);transform:rotate(-14deg);animation:float-mark 4s ease-in-out infinite}.shoe-hero__note{position:absolute;left:-18%;bottom:12%;padding:16px 20px;border:1px solid var(--line);border-radius:999px;background:var(--paper);color:var(--moss);font:10px/1.4 'DM Mono',monospace;text-transform:uppercase}.shoe-scroll-note{position:absolute;display:inline-flex;gap:8px;left:max(32px,calc((100vw - 1240px)/2));bottom:24px;color:var(--moss);font:11px 'DM Mono',monospace}.shoe-scroll-note span{animation:arrow-bob 1.8s ease-in-out infinite}.shoe-proof{padding:32px;border-block:1px solid var(--line)}.shoe-proof div{display:flex;flex-wrap:wrap;justify-content:space-around;gap:16px 32px;max-width:1120px;margin:auto;color:var(--moss)}.shoe-proof span{font:500 11px 'DM Mono',monospace;letter-spacing:.1em}
@@ -153,4 +152,572 @@
     .shoe-landing .shoe-studio__stage { height: 360px; }
     .shoe-landing .shoe-editorial { padding-block: 76px; }
     .shoe-landing .shoe-newsletter { padding-block: 72px; }
+}
+
+/* ==========================================================================
+   Craft pass: motion, states, and accessibility
+   ========================================================================== */
+
+.shoe-landing h1,
+.shoe-landing h2,
+.shoe-landing h3 { text-wrap: balance; }
+
+.shoe-landing p { text-wrap: pretty; }
+
+/* Buttons: strong ease-out, no overshoot, real press feedback. */
+.shoe-landing .shoe-button {
+    transition: transform 160ms cubic-bezier(.23, 1, .32, 1), background-color 180ms ease, filter 180ms ease;
+}
+
+.shoe-landing .shoe-button:active { transform: scale(.97); }
+
+/* `a { color: inherit }` outranks the base button colour, so restate it. */
+.shoe-landing .shoe-button--primary,
+.shoe-landing .shoe-button--primary:hover { color: #fff; }
+
+.shoe-landing .shoe-button--primary:hover,
+.shoe-landing .shoe-button--secondary:hover,
+.shoe-landing .shoe-menu-button:hover,
+.shoe-landing .shoe-close:hover {
+    filter: none;
+    transform: none;
+}
+
+.shoe-landing .shoe-product:hover .shoe-product__photo img,
+.shoe-landing .shoe-product:hover .shoe-product__photo b,
+.shoe-landing .shoe-material:hover i,
+.shoe-landing .shoe-material:hover,
+.shoe-landing .shoe-journal a:hover i,
+.shoe-landing .shoe-text-link:hover span,
+.shoe-landing .shoe-product__copy a:hover span { transform: none; }
+
+.shoe-landing .shoe-material { transition: background-color 180ms ease; }
+.shoe-landing .shoe-material:hover { padding-inline: 8px; background: rgba(216, 216, 192, .55); }
+
+@media (hover: hover) and (pointer: fine) {
+    .shoe-landing .shoe-button--primary:hover,
+    .shoe-landing .shoe-button--secondary:hover,
+    .shoe-landing .shoe-menu-button:hover,
+    .shoe-landing .shoe-close:hover { transform: scale(1.02); }
+
+    .shoe-landing .shoe-button--primary:hover { filter: brightness(1.06); }
+
+    .shoe-landing .shoe-product:hover .shoe-product__photo img { transform: scale(1.03); }
+    .shoe-landing .shoe-product:hover .shoe-product__photo b { transform: scale(1.06); }
+    .shoe-landing .shoe-material:hover i,
+    .shoe-landing .shoe-journal a:hover i,
+    .shoe-landing .shoe-text-link:hover span,
+    .shoe-landing .shoe-product__copy a:hover span { transform: translateX(4px); }
+}
+
+.shoe-landing .shoe-nav a:after,
+.shoe-landing .shoe-footer nav a:after { transition: transform 180ms cubic-bezier(.23, 1, .32, 1); }
+
+/* Hero entrance: one quiet rise per element, once per visit. */
+.shoe-hero__copy > * { animation: shoe-rise 700ms cubic-bezier(.22, 1, .36, 1) both; }
+.shoe-hero__copy > :nth-child(2) { animation-delay: 70ms; }
+.shoe-hero__copy > :nth-child(3) { animation-delay: 140ms; }
+.shoe-hero__copy > :nth-child(4) { animation-delay: 210ms; }
+.shoe-hero__copy > :nth-child(5) { animation-delay: 280ms; }
+.shoe-hero__visual { animation: shoe-rise 900ms cubic-bezier(.22, 1, .36, 1) 120ms both; }
+
+.shoe-hero__proof {
+    margin-top: 20px !important;
+    color: var(--moss);
+    font: 10px/1.5 'DM Mono', monospace;
+    letter-spacing: .08em;
+    text-transform: uppercase;
+}
+
+@keyframes shoe-rise {
+    from { opacity: 0; transform: translateY(18px); }
+    to { opacity: 1; transform: none; }
+}
+
+/* Section reveals: fade and rise once, then stay put. */
+.shoe-landing [data-reveal] {
+    opacity: 0;
+    transform: translateY(20px);
+    transition: opacity 600ms cubic-bezier(.22, 1, .36, 1), transform 600ms cubic-bezier(.22, 1, .36, 1);
+}
+
+.shoe-landing [data-reveal].is-visible,
+.shoe-landing [data-reveal][data-revealed] {
+    opacity: 1;
+    transform: none;
+}
+
+/* Mandatory tagline moment: words warm up in reading order. */
+.shoe-tagline { border-top: 1px solid var(--line); background: var(--paper); }
+
+.shoe-tagline__inner {
+    width: min(100% - 48px, 1120px);
+    margin: auto;
+    padding-block: clamp(72px, 10vw, 128px);
+}
+
+.shoe-tagline .shoe-eyebrow { margin-bottom: 28px; }
+
+.shoe-tagline__text {
+    max-width: 920px;
+    color: var(--ink);
+    font: 400 clamp(40px, 6.4vw, 84px)/1.04 'Playfair Display', Georgia, serif;
+    letter-spacing: -.045em;
+    text-wrap: balance;
+}
+
+.shoe-tagline__word {
+    color: rgba(48, 48, 24, .28);
+    transition: color 560ms cubic-bezier(.22, 1, .36, 1);
+    transition-delay: calc(var(--i, 0) * 55ms);
+}
+
+.shoe-tagline.is-on .shoe-tagline__word { color: var(--ink); }
+
+/* Mobile menu: panel fades in, links arrive in reading order. */
+.shoe-menu-overlay { animation: shoe-menu-in 240ms cubic-bezier(.23, 1, .32, 1) both; }
+
+.shoe-menu-overlay nav a {
+    opacity: 0;
+    animation: shoe-menu-link 360ms cubic-bezier(.23, 1, .32, 1) both;
+    animation-delay: calc(60ms + var(--i, 0) * 60ms);
+}
+
+.shoe-menu-button i { transition: transform 160ms cubic-bezier(.23, 1, .32, 1); }
+
+@keyframes shoe-menu-in {
+    from { opacity: 0; }
+    to { opacity: 1; }
+}
+
+@keyframes shoe-menu-link {
+    from { opacity: 0; transform: translateY(24px); }
+    to { opacity: 1; transform: none; }
+}
+
+/* Newsletter states. */
+.shoe-newsletter__error { color: #f0a58a; }
+.shoe-newsletter__success { color: #cfe0b8; }
+.shoe-newsletter input[aria-invalid="true"] { border-color: #f0a58a; }
+
+/* Process progress: scale instead of animating width. */
+.shoe-process__progress i {
+    width: 100%;
+    transform-origin: left center;
+    transition: transform 300ms cubic-bezier(.22, 1, .36, 1);
+}
+
+@media (max-width: 767px) {
+    .shoe-landing .shoe-material:hover { padding-inline: 0; }
+    .shoe-process__progress i {
+        transform: none !important;
+        height: var(--process-progress, 0%);
+        transition: height 300ms cubic-bezier(.22, 1, .36, 1);
+    }
+
+    /* The editorial two-column shell must collapse before the product grid. */
+    .shoe-landing .shoe-collection {
+        grid-template-columns: 1fr;
+        gap: 40px;
+    }
+
+    .shoe-landing .shoe-collection__grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 40px 16px;
+    }
+
+    .shoe-landing .shoe-product--offset { margin-top: 0; }
+
+    /* Stack the hero so the photo never sits under the copy or the CTAs. */
+    .shoe-landing .shoe-hero {
+        display: grid;
+        grid-template-columns: 1fr;
+        gap: 32px;
+        min-height: auto;
+        padding: 96px 24px 72px;
+    }
+
+    .shoe-landing .shoe-hero__visual {
+        position: relative;
+        inset: auto;
+        width: 100%;
+        min-height: 340px;
+        opacity: 1;
+    }
+
+    .shoe-landing .shoe-hero__photo { inset: 0; }
+    .shoe-landing .shoe-hero__copy > p:not(.shoe-eyebrow) { max-width: 100%; }
+}
+
+@media (max-width: 480px) {
+    .shoe-landing .shoe-hero { padding-top: 88px; }
+    .shoe-landing .shoe-hero__visual { min-height: 300px; }
+    .shoe-landing .shoe-collection__grid { grid-template-columns: 1fr; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .shoe-hero__copy > *,
+    .shoe-hero__visual,
+    .shoe-menu-overlay,
+    .shoe-menu-overlay nav a { animation: none; opacity: 1; transform: none; }
+
+    .shoe-landing [data-reveal] { opacity: 1; transform: none; }
+
+    .shoe-tagline__word { color: var(--ink); transition: none; }
+}
+
+/* ==========================================================================
+   Parallax experience pass: pinned 3D hero + depth layers
+   ========================================================================== */
+
+.shoe-landing .shoe-header__progress {
+    position: absolute;
+    left: 0;
+    bottom: -1px;
+    width: 100%;
+    height: 2px;
+    background: var(--brass);
+    transform: scaleX(0);
+    transform-origin: left center;
+    pointer-events: none;
+}
+
+.shoe-landing .shoe-hero--parallax {
+    display: block;
+    height: 178vh;
+    min-height: 1180px;
+    padding: 0;
+}
+
+.shoe-landing .shoe-hero__sticky {
+    position: sticky;
+    top: 0;
+    display: grid;
+    grid-template-columns: minmax(0, .92fr) minmax(420px, 1.08fr);
+    align-items: center;
+    gap: clamp(32px, 6vw, 92px);
+    height: 100vh;
+    height: 100svh;
+    min-height: 680px;
+    padding: 112px max(32px, calc((100vw - 1240px) / 2)) 56px;
+    overflow: hidden;
+    isolation: isolate;
+    background: var(--paper);
+}
+
+.shoe-landing .shoe-hero--parallax .shoe-hero__copy {
+    position: relative;
+    z-index: 4;
+    padding-top: 0;
+    opacity: var(--hero-copy-opacity, 1);
+    transform: translate3d(0, var(--hero-y-sm, 0px), 0);
+    will-change: transform, opacity;
+}
+
+.shoe-landing .shoe-hero--parallax h1 {
+    max-width: 720px;
+    margin-bottom: 28px;
+    font-size: clamp(72px, 10.5vw, 150px);
+    line-height: .86;
+}
+
+.shoe-landing .shoe-hero__line {
+    display: block;
+    will-change: transform;
+}
+
+.shoe-landing .shoe-hero__line:nth-child(1) { transform: translate3d(0, var(--hero-y-sm, 0px), 0); }
+.shoe-landing .shoe-hero__line:nth-child(2) { transform: translate3d(0, var(--hero-y-xs, 0px), 0); }
+
+.shoe-landing .shoe-hero--parallax .shoe-hero__aura {
+    position: absolute;
+    inset: 0;
+    z-index: -1;
+    pointer-events: none;
+}
+
+.shoe-landing .shoe-hero--parallax .shoe-hero__aura-ring {
+    position: absolute;
+    display: block;
+    border: 1px solid var(--line);
+    border-radius: 50%;
+    will-change: transform;
+}
+
+.shoe-landing .shoe-hero__aura-ring--one {
+    width: clamp(420px, 48vw, 760px);
+    aspect-ratio: 1;
+    right: -6%;
+    top: 3%;
+    border-color: rgba(201, 162, 74, .5);
+    transform: translate3d(0, var(--hero-y-lg, 0px), 0);
+}
+
+.shoe-landing .shoe-hero__aura-ring--two {
+    width: clamp(300px, 34vw, 520px);
+    aspect-ratio: 1;
+    left: -8%;
+    bottom: -12%;
+    transform: translate3d(0, var(--hero-y-md, 0px), 0);
+}
+
+.shoe-landing .shoe-hero__aura-ring--three {
+    width: clamp(180px, 20vw, 300px);
+    aspect-ratio: 1;
+    right: 38%;
+    bottom: 2%;
+    border-color: rgba(96, 72, 72, .28);
+    transform: translate3d(0, var(--hero-y-xs, 0px), 0);
+}
+
+.shoe-landing .shoe-hero--parallax .shoe-hero__visual {
+    position: relative;
+    z-index: 1;
+    width: 100%;
+    min-height: clamp(420px, 64vh, 660px);
+}
+
+.shoe-landing .shoe-hero--parallax .shoe-hero__ring {
+    position: absolute;
+    inset: -1%;
+    z-index: 0;
+    border: 1px solid var(--line);
+    border-radius: 50%;
+    pointer-events: none;
+}
+
+.shoe-landing .shoe-hero--parallax .shoe-hero__photo {
+    position: absolute;
+    inset: 6% 5%;
+    z-index: 0;
+    overflow: hidden;
+    border-radius: 50%;
+    transition: opacity 650ms cubic-bezier(.22, 1, .36, 1);
+}
+
+.shoe-landing .shoe-hero__visual.is-live .shoe-hero__photo { opacity: 0; visibility: hidden; }
+
+.shoe-landing .shoe-3d-scene {
+    position: absolute;
+    inset: -9% -12% -11%;
+    z-index: 2;
+    pointer-events: none;
+    filter: saturate(.82) contrast(1.02);
+}
+
+.shoe-landing .shoe-3d-scene canvas {
+    display: block;
+    width: 100% !important;
+    height: 100% !important;
+}
+
+.shoe-landing .shoe-hero__orbit {
+    position: absolute;
+    inset: 0;
+    z-index: 3;
+    pointer-events: none;
+}
+
+.shoe-landing .shoe-hero__orbit-label {
+    position: absolute;
+    padding: 9px 13px;
+    border: 1px solid var(--line);
+    border-radius: 999px;
+    background: rgba(242, 235, 208, .9);
+    color: var(--moss);
+    font: 10px/1 'DM Mono', monospace;
+    letter-spacing: .1em;
+    text-transform: uppercase;
+    white-space: nowrap;
+    backdrop-filter: blur(6px);
+    will-change: transform;
+}
+
+.shoe-landing .shoe-hero__orbit-label--a { top: 7%; right: -2%; transform: translate3d(0, var(--hero-y-xs, 0px), 0); }
+.shoe-landing .shoe-hero__orbit-label--b { top: 44%; left: -10%; transform: translate3d(0, var(--hero-y-sm, 0px), 0); }
+.shoe-landing .shoe-hero__orbit-label--c { bottom: 11%; right: 4%; transform: translate3d(0, var(--hero-y-md, 0px), 0); }
+.shoe-landing .shoe-hero__orbit-label--d { bottom: 30%; left: 1%; transform: translate3d(0, var(--hero-y-lg, 0px), 0); }
+
+.shoe-landing .shoe-hero--parallax .shoe-hero__note {
+    left: 0;
+    top: 6%;
+    bottom: auto;
+    z-index: 4;
+}
+
+.shoe-landing .shoe-hero--parallax .shoe-scroll-note { z-index: 4; }
+
+.shoe-landing .shoe-ribbon {
+    overflow: hidden;
+    padding: 20px 0;
+    border-block: 1px solid var(--line);
+    background: var(--ivory);
+}
+
+.shoe-landing .shoe-ribbon__track {
+    display: flex;
+    align-items: center;
+    gap: 40px;
+    width: max-content;
+    will-change: transform;
+}
+
+.shoe-landing .shoe-ribbon__track span {
+    display: inline-flex;
+    align-items: center;
+    gap: 40px;
+    color: var(--ink);
+    font: 500 clamp(26px, 4vw, 58px)/1 'DM Mono', monospace;
+    letter-spacing: -.04em;
+    text-transform: uppercase;
+    white-space: nowrap;
+}
+
+.shoe-landing .shoe-ribbon__track i {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: var(--brass);
+}
+
+.shoe-landing .shoe-product__photo { position: relative; }
+
+.shoe-landing .shoe-product__layer {
+    position: absolute;
+    inset: -26px 0;
+    will-change: transform;
+}
+
+.shoe-landing .shoe-product__layer img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.shoe-landing .shoe-product__photo > span,
+.shoe-landing .shoe-product__photo > b { z-index: 2; }
+
+.shoe-landing .shoe-gallery__image { position: relative; }
+
+.shoe-landing .shoe-gallery__layer {
+    position: absolute;
+    inset: -30px 0;
+    will-change: transform;
+}
+
+.shoe-landing .shoe-gallery__layer img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+@media (max-width: 1023px) {
+    .shoe-landing .shoe-hero--parallax {
+        height: auto;
+        min-height: auto;
+    }
+
+    .shoe-landing .shoe-hero__sticky {
+        position: relative;
+        top: auto;
+        height: auto;
+        min-height: auto;
+        grid-template-columns: minmax(0, 1fr) minmax(320px, .9fr);
+        padding: 104px max(24px, calc((100vw - 1200px) / 2)) 56px;
+    }
+
+    .shoe-landing .shoe-hero--parallax .shoe-hero__visual { min-height: 420px; }
+}
+
+@media (max-width: 767px) {
+    .shoe-landing .shoe-hero--parallax {
+        display: block;
+        height: auto;
+        min-height: auto;
+        padding: 0;
+    }
+
+    .shoe-landing .shoe-hero--parallax .shoe-hero__sticky {
+        display: grid;
+        grid-template-columns: 1fr;
+        gap: 28px;
+        height: auto;
+        min-height: auto;
+        padding: 92px 24px 56px;
+    }
+
+    .shoe-landing .shoe-hero--parallax h1 { font-size: clamp(64px, 19vw, 88px); }
+
+    .shoe-landing .shoe-hero--parallax .shoe-hero__copy,
+    .shoe-landing .shoe-hero--parallax .shoe-hero__line { transform: none; opacity: 1; }
+
+    .shoe-landing .shoe-hero--parallax .shoe-hero__visual {
+        position: relative;
+        inset: auto;
+        width: 100%;
+        min-height: 300px;
+        opacity: 1;
+    }
+
+    .shoe-landing .shoe-hero--parallax .shoe-hero__photo { inset: 0; }
+
+    .shoe-landing .shoe-hero__orbit-label { display: none; }
+    .shoe-landing .shoe-hero__aura-ring { transform: none !important; }
+
+    .shoe-landing .shoe-hero--parallax .shoe-hero__aura-ring--one { width: 300px; right: -36%; top: 2%; }
+    .shoe-landing .shoe-hero--parallax .shoe-hero__aura-ring--two { width: 220px; left: -30%; bottom: -6%; }
+    .shoe-landing .shoe-hero--parallax .shoe-hero__aura-ring--three { display: none; }
+
+    .shoe-landing .shoe-hero--parallax .shoe-scroll-note {
+        position: static;
+        margin-top: 4px;
+    }
+
+    .shoe-landing .shoe-hero--parallax .shoe-hero__note {
+        left: 8px;
+        bottom: 8px;
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .shoe-landing .shoe-hero--parallax { height: auto; min-height: 100svh; }
+
+    .shoe-landing .shoe-hero__sticky {
+        position: relative;
+        top: auto;
+        height: auto;
+        min-height: 100svh;
+    }
+
+    .shoe-landing .shoe-hero__copy,
+    .shoe-landing .shoe-hero__line,
+    .shoe-landing .shoe-hero__aura-ring,
+    .shoe-landing .shoe-hero__orbit-label,
+    .shoe-landing .shoe-ribbon__track { transform: none !important; }
+}
+
+.shoe-landing .shoe-hero--parallax .shoe-hero__ground {
+    position: absolute;
+    left: 16%;
+    right: 12%;
+    bottom: 6%;
+    height: 12%;
+    z-index: 1;
+    border-radius: 50%;
+    background: radial-gradient(ellipse at center, rgba(48, 48, 24, .24) 0%, rgba(48, 48, 24, .08) 48%, transparent 72%);
+    filter: blur(8px);
+    pointer-events: none;
+}
+
+.shoe-landing .shoe-3d-scene canvas {
+    animation: shoe-scene-in 900ms cubic-bezier(.22, 1, .36, 1) both;
+}
+
+@keyframes shoe-scene-in {
+    from { opacity: 0; transform: scale(.97); }
+    to { opacity: 1; transform: none; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .shoe-landing .shoe-3d-scene canvas { animation: none; }
 }
